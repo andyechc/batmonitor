@@ -13,6 +13,9 @@ BatMonitor: an Expo (React Native + TypeScript) app that reads XiaoXiang-compati
 - Routes live in `src/app/` (Expo Router). `_layout.tsx` defines navigators. Keep everything else in `src/`. Import with the `@/` alias, which maps to `src/`.
 - `ios/` and `android/` are generated and gitignored. Never edit them. Configure native behavior in `app.json` plugins.
 - `react-native-ble-plx` has native code, so Expo Go won't work. Run a development build (`npx expo run:android` or `npx expo run:ios`).
+- `npx expo run:ios` doesn't regenerate an existing `ios/` folder. After changing `app.json` plugins or adding a native-config dependency, run `npx expo prebuild --platform ios --no-install` first. Otherwise the change never reaches `Info.plist`.
+- Icons come from `phosphor-react-native`, with mostly `duotone` weight for personality. Pass icon components (not names) as props, typed as `IconComponent` from `src/components/icons.ts`. Phosphor has no `Signal` or `BluetoothSearching`. Use `Broadcast` for signal strength.
+- The app logo is a bat whose body is a half-charged battery. Sources are `assets/logo/bat.svg` (transparent) and `assets/logo/icon.svg` (full, with background). The raster files in `assets/` (`icon.png`, `android-icon-*.png`, `splash-icon.png`, `favicon.png`) are rendered from those SVGs with `@resvg/resvg-js`. The render script lives outside the repo. Re-render after editing the SVGs, then run `npx expo prebuild --platform ios --no-install` so the iOS icon is regenerated.
 
 ## Expo agent tooling
 - Official Expo skills are installed in `.agents/skills/` (locked in `skills-lock.json`, restore with `npx skills experimental_install`). For Expo work, start with the `expo-overview` skill, which routes to the specific `expo-*` / `eas-*` skill.

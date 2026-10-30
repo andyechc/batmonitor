@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <g id="bat">
+    <path d="M470 440 C380 330 210 300 96 382 C172 392 206 430 224 472 C254 452 286 462 306 494 C326 474 356 484 374 524 C404 504 440 514 470 566 Z" fill="#1F2935" stroke="#2EE6A6" stroke-width="10" stroke-linejoin="round"/>
+    <path d="M554 440 C644 330 814 300 928 382 C852 392 818 430 800 472 C770 452 738 462 718 494 C698 474 668 484 650 524 C620 504 584 514 554 566 Z" fill="#1F2935" stroke="#2EE6A6" stroke-width="10" stroke-linejoin="round"/>
+    <path d="M440 440 L416 372 L484 418 Z" fill="#1F2935" stroke="#2EE6A6" stroke-width="10" stroke-linejoin="round"/>
+    <path d="M584 440 L608 372 L540 418 Z" fill="#1F2935" stroke="#2EE6A6" stroke-width="10" stroke-linejoin="round"/>
+    <rect x="482" y="398" width="60" height="40" rx="10" fill="#2EE6A6"/>
+    <rect x="426" y="430" width="172" height="264" rx="40" fill="#1F2935" stroke="#2EE6A6" stroke-width="12"/>
+    <clipPath id="body"><rect x="438" y="442" width="148" height="240" rx="30"/></clipPath>
+    <rect x="438" y="562" width="148" height="130" fill="#2EE6A6" clip-path="url(#body)"/>
+    <circle cx="478" cy="506" r="11" fill="#0B0F14"/>
+    <circle cx="546" cy="506" r="11" fill="#0B0F14"/>
+  </g>
+</svg>

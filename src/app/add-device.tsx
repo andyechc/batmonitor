@@ -1,6 +1,14 @@
 import { router } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+import {
+  ArrowClockwise,
+  BluetoothConnected,
+  BluetoothSlash,
+  Broadcast,
+  MagnifyingGlass,
+  WarningCircle,
+} from 'phosphor-react-native';
 
 import {
   isBluetoothOn,
@@ -84,13 +92,22 @@ export default function AddDeviceScreen() {
   return (
     <View style={styles.screen}>
       <View style={styles.header}>
-        {scanning ? <ActivityIndicator color={colors.charge} /> : null}
+        {scanning ? (
+          <ActivityIndicator color={colors.charge} />
+        ) : (
+          <BluetoothSlash size={20} color={colors.muted} weight="duotone" />
+        )}
         <Text style={styles.headerText}>
           {scanning ? 'Buscando baterías cerca…' : 'Búsqueda terminada'}
         </Text>
       </View>
 
-      {error && <Text style={styles.error}>{error}</Text>}
+      {error && (
+        <View style={styles.errorRow}>
+          <WarningCircle size={20} color={colors.danger} weight="duotone" />
+          <Text style={styles.error}>{error}</Text>
+        </View>
+      )}
 
       <FlatList
         data={found}
@@ -98,20 +115,31 @@ export default function AddDeviceScreen() {
         contentContainerStyle={styles.list}
         ListEmptyComponent={
           scanning ? undefined : (
-            <Text style={styles.empty}>
-              No encontramos baterías. Asegúrate de que el BMS esté encendido y cerca.
-            </Text>
+            <View style={styles.emptyState}>
+              <MagnifyingGlass size={44} color={colors.muted} weight="duotone" />
+              <Text style={styles.empty}>
+                No encontramos baterías. Asegúrate de que el BMS esté encendido y cerca.
+              </Text>
+            </View>
           )
         }
         renderItem={({ item }) => (
           <Pressable
             onPress={() => select(item)}
             style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}>
+            <View style={styles.cardIcon}>
+              <BluetoothConnected size={22} color={colors.info} weight="duotone" />
+            </View>
             <View style={styles.cardText}>
               <Text style={styles.cardName}>{item.name}</Text>
               <Text style={styles.cardId}>{item.id}</Text>
             </View>
-            {item.rssi !== null && <Text style={styles.rssi}>{item.rssi} dBm</Text>}
+            {item.rssi !== null && (
+              <View style={styles.signal}>
+                <Broadcast size={16} color={colors.muted} />
+                <Text style={styles.rssi}>{item.rssi} dBm</Text>
+              </View>
+            )}
           </Pressable>
         )}
       />
@@ -120,6 +148,7 @@ export default function AddDeviceScreen() {
         <Pressable
           onPress={retry}
           style={({ pressed }) => [styles.button, pressed && styles.buttonPressed]}>
+          <ArrowClockwise size={20} color={colors.text} weight="bold" />
           <Text style={styles.buttonText}>Buscar de nuevo</Text>
         </Pressable>
       )}
@@ -131,11 +160,13 @@ const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg, padding: 16, gap: 12 },
   header: { flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 8 },
   headerText: { color: colors.text, fontSize: 17, fontWeight: '600' },
-  error: { color: colors.danger, fontSize: 15, lineHeight: 21 },
+  errorRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  error: { color: colors.danger, fontSize: 15, lineHeight: 21, flex: 1 },
   list: { gap: 12, flexGrow: 1 },
   card: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: 14,
     backgroundColor: colors.surface,
     borderRadius: radius.card,
     borderWidth: 1,
@@ -143,18 +174,31 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   cardPressed: { backgroundColor: colors.surfaceHigh },
+  cardIcon: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: colors.surfaceHigh,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   cardText: { flex: 1, gap: 4 },
   cardName: { color: colors.text, fontSize: 16, fontWeight: '600' },
   cardId: { color: colors.muted, fontSize: 13, fontVariant: ['tabular-nums'] },
+  signal: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   rssi: { color: colors.muted, fontSize: 13, fontVariant: ['tabular-nums'] },
-  empty: { color: colors.muted, fontSize: 15, textAlign: 'center', marginTop: 40, lineHeight: 22 },
+  emptyState: { alignItems: 'center', gap: 12, marginTop: 40 },
+  empty: { color: colors.muted, fontSize: 15, textAlign: 'center', lineHeight: 22 },
   button: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
     backgroundColor: colors.surfaceHigh,
     borderRadius: radius.pill,
     borderWidth: 1,
     borderColor: colors.border,
     paddingVertical: 14,
-    alignItems: 'center',
   },
   buttonPressed: { opacity: 0.8 },
   buttonText: { color: colors.text, fontSize: 16, fontWeight: '600' },
