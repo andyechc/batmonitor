@@ -14,6 +14,11 @@ BatMonitor: an Expo (React Native + TypeScript) app that reads XiaoXiang-compati
 - `ios/` and `android/` are generated and gitignored. Never edit them. Configure native behavior in `app.json` plugins.
 - `react-native-ble-plx` has native code, so Expo Go won't work. Run a development build (`npx expo run:android` or `npx expo run:ios`).
 
+## Expo agent tooling
+- Official Expo skills are installed in `.agents/skills/` (locked in `skills-lock.json`, restore with `npx skills experimental_install`). For Expo work, start with the `expo-overview` skill, which routes to the specific `expo-*` / `eas-*` skill.
+- The Expo MCP server is configured in `opencode.json` as a remote server (`https://mcp.expo.dev/mcp`). It uses OAuth with an Expo account. If it shows as awaiting sign-in, the user signs in through `/mcps`.
+- Local MCP capabilities (screenshots, taps, DevTools, router sitemap) need the `expo-mcp` dev dependency and the dev server started with `EXPO_UNSTABLE_MCP_SERVER=1 npx expo start`. They work on macOS simulators only, and the MCP connection must be restarted after each dev-server start or stop.
+
 ## Commands
 - Before declaring work done, run in this order: `npm run lint`, `npm run typecheck`, `npm test`.
 - `npm test` runs Jest with the `jest-expo` preset. Protocol tests are in `src/lib/bms/protocol.test.ts`.
