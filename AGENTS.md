@@ -35,7 +35,7 @@ Verified against the reference app's decompiled code (`BMSBaseInfoCMDEntity`, `B
 - Response: `DD <status> <cmd> <len> <data> <checksum> 77`. Checksum is the low 16 bits of `~(cmd + len + sum(data)) + 1`. Requests use `A5` for read and `5A` for write.
 - Basic info (cmd `0x03`) offsets:
   - Voltage u16 /100 V at 0.
-  - Current s16 /100 A at 2. Positive is charging.
+  - Current s16 /100 A at 2. Positive means charging. This is assumed from the common JBD convention and not yet confirmed on hardware.
   - Remaining and nominal capacity u16 /100 Ah at 4 and 6.
   - Cycles u16 at 8.
   - Date bitfield at 10: `(y-2000)<<9 | m<<5 | d`.
