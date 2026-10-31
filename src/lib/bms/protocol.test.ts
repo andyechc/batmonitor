@@ -9,10 +9,16 @@ import {
   parseCellVoltages,
 } from './protocol';
 
+const CAPTURED_BASIC_INFO_RESPONSE = Uint8Array.from([
+  0xdd, 0x03, 0x00, 0x26, 0x1f, 0x3a, 0x00, 0x00, 0x0d, 0x4b, 0x10, 0x68, 0x00, 0x25, 0x32, 0xf3,
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x7d, 0x51, 0x03, 0x18, 0x03, 0x0b, 0xd0, 0x0b, 0xc5, 0x0b,
+  0xc6, 0x00, 0x00, 0x00, 0x10, 0x68, 0x0d, 0x4b, 0x00, 0x00, 0xf9, 0x2f, 0x77,
+]);
+
 function responseFrame(cmd: number, data: number[]): Uint8Array {
-  const sum = data.reduce((a, b) => a + b, cmd + data.length);
+  const sum = data.reduce((a, b) => a + b, data.length);
   const csum = (~sum + 1) & 0xffff;
-  return Uint8Array.from([0xdd, 0x00, cmd, data.length, ...data, csum >> 8, csum & 0xff, 0x77]);
+  return Uint8Array.from([0xdd, cmd, 0x00, data.length, ...data, csum >> 8, csum & 0xff, 0x77]);
 }
 
 const basicInfoData = [
@@ -46,6 +52,16 @@ describe('checksum and read commands', () => {
     const frame = responseFrame(CMD_CELL_VOLTAGES, [0x0d, 0x2c]);
     frame[frame.length - 2] ^= 0x01;
     expect(decodeFrame(frame)).toBeNull();
+  });
+});
+
+describe('captured hardware responses', () => {
+  it('decodes a real basic-info response (cmd 0x03 second, status 0x00 third)', () => {
+    const frame = decodeFrame(CAPTURED_BASIC_INFO_RESPONSE);
+    expect(frame).not.toBeNull();
+    expect(frame?.cmd).toBe(CMD_BASIC_INFO);
+    expect(frame?.status).toBe(0);
+    expect(frame?.data.length).toBe(0x26);
   });
 });
 

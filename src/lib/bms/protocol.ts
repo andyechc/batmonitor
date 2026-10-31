@@ -64,13 +64,13 @@ export function buildReadCommand(cmd: number): Uint8Array {
 export function decodeFrame(bytes: ArrayLike<number>): Frame | null {
   if (bytes.length < FRAME_OVERHEAD) return null;
   if (bytes[0] !== FRAME_START || bytes[bytes.length - 1] !== FRAME_END) return null;
-  const status = bytes[1];
-  const cmd = bytes[2];
+  const cmd = bytes[1];
+  const status = bytes[2];
   const length = bytes[3];
   if (bytes.length !== length + FRAME_OVERHEAD) return null;
   const data = Array.from(bytes).slice(4, 4 + length);
   const received = (bytes[4 + length] << 8) | bytes[5 + length];
-  if (checksum(cmd, data) !== received) return null;
+  if (checksum(0, data) !== received) return null;
   return { status, cmd, data: Uint8Array.from(data) };
 }
 

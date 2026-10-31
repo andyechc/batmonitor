@@ -41,7 +41,7 @@ BatMonitor: an Expo (React Native + TypeScript) app that reads XiaoXiang-compati
 Verified against the reference app's decompiled code (`BMSBaseInfoCMDEntity`, `BMSBatteryVoltageCMDEntity`, `BMSCommandEntity`, `BluetoothUtil`).
 - Service `0000ff00-0000-1000-8000-00805f9b34fb`. Read/notify on `0000ff01-...`, write on `0000ff02-...`.
 - Request: `DD A5 <cmd> <len> <data> <checksum 2 bytes BE> 77`.
-- Response: `DD <status> <cmd> <len> <data> <checksum> 77`. Checksum is the low 16 bits of `~(cmd + len + sum(data)) + 1`. Requests use `A5` for read and `5A` for write.
+- Response: `DD <cmd> <status> <len> <data> <checksum> 77`. Status `00` means OK. Request checksum is the low 16 bits of `~(cmd + len + sum(data)) + 1`. Response checksum leaves out cmd and status: `~(len + sum(data)) + 1`. Verified on a real capture (`DD 03 00 26 ...` → `F9 2F`). Requests use `A5` for read and `5A` for write.
 - Basic info (cmd `0x03`) offsets:
   - Voltage u16 /100 V at 0.
   - Current s16 /100 A at 2. Positive means charging. This is assumed from the common JBD convention and not yet confirmed on hardware.
@@ -65,4 +65,5 @@ Verified against the reference app's decompiled code (`BMSBaseInfoCMDEntity`, `B
 
 ## Status
 - Typecheck, lint, tests, and Android/iOS bundling pass.
-- The BLE flow has not been tested on a real BMS. Verify it on hardware before calling it done.
+- The BLE flow works on a real BMS ("Andy 72x45", 24 cells, iPhone 12 mini Release build). It reads basic info and cell voltages every 2 s. The link drops now and then (iOS reports "was disconnected") and the app reconnects after 4 s. Keep the phone close to the battery.
+- Connection notes: wait about 1 s after subscribing to FF01 before the first command, or the first response is lost. Connect timeout is 20 s.

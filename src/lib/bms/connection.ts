@@ -15,6 +15,9 @@ import {
   parseCellVoltages,
 } from './protocol';
 
+const CONNECT_TIMEOUT_MS = 20000;
+const NOTIFY_SETTLE_MS = 1000;
+
 export type ScannedBattery = { id: string; name: string; rssi: number | null };
 
 export type BmsReading = { basic: BasicInfo; cells: number[]; receivedAt: number };
@@ -85,8 +88,22 @@ export class BmsSession {
   constructor(private readonly deviceId: string) {}
 
   async connect(): Promise<void> {
-    const connected = await getManager().connectToDevice(this.deviceId);
-    this.device = await connected.discoverAllServicesAndCharacteristics();
+    const manager = getManager();
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const timeout = new Promise<never>((_, reject) => {
+      timer = setTimeout(() => {
+        manager.cancelDeviceConnection(this.deviceId).catch(() => undefined);
+        reject(new Error('No se pudo conectar con el BMS'));
+      }, CONNECT_TIMEOUT_MS);
+    });
+    const link = manager
+      .connectToDevice(this.deviceId)
+      .then((connected) => connected.discoverAllServicesAndCharacteristics());
+    try {
+      this.device = await Promise.race([link, timeout]);
+    } finally {
+      clearTimeout(timer);
+    }
     this.parser.reset();
     this.notifications = this.device.monitorCharacteristicForService(
       BMS_SERVICE_UUID,
@@ -102,6 +119,7 @@ export class BmsSession {
         }
       },
     );
+    await new Promise((resolve) => setTimeout(resolve, NOTIFY_SETTLE_MS));
   }
 
   async read(): Promise<BmsReading> {
