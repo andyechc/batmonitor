@@ -67,7 +67,7 @@ const messages = {
     'device.controlOk': 'Comando aplicado',
     'device.renameEmpty': 'Escribe un nombre',
     'device.renameOk': 'Nombre guardado',
-    'device.renameHint': 'Solo cambia el nombre dentro de la app.',
+    'device.renameHint': 'Cambia el nombre guardado en la app y en el BMS. Necesita conexión.',
     'device.stat.charge': '% carga',
   },
   en: {
@@ -133,7 +133,7 @@ const messages = {
     'device.controlOk': 'Command applied',
     'device.renameEmpty': 'Enter a name',
     'device.renameOk': 'Name saved',
-    'device.renameHint': 'This only changes the name inside the app.',
+    'device.renameHint': 'Changes the saved name and the BMS name. Requires a connection.',
     'device.stat.charge': '% charge',
   },
 } as const;

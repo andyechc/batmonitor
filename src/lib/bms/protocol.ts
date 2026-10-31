@@ -105,6 +105,16 @@ export function buildBleNameCommand(name: string): Uint8Array {
   return Uint8Array.from([0xff, 0xaa, BLE_NAME_CMD, bytes.length, ...bytes, sum & 0xff]);
 }
 
+export const CMD_BLE_NAME = BLE_NAME_CMD;
+
+/** Name-write acknowledgement: FF AA 07 <status>. Status 0 means the BMS stored the name. */
+export function parseNameResponse(bytes: ArrayLike<number>): Frame | null {
+  if (bytes.length < 4 || bytes[0] !== 0xff || bytes[1] !== 0xaa || bytes[2] !== BLE_NAME_CMD) {
+    return null;
+  }
+  return { status: bytes[3], cmd: BLE_NAME_CMD, data: Uint8Array.from(Array.from(bytes).slice(4)) };
+}
+
 export function decodeFrame(bytes: ArrayLike<number>): Frame | null {
   if (bytes.length < FRAME_OVERHEAD) return null;
   if (bytes[0] !== FRAME_START || bytes[bytes.length - 1] !== FRAME_END) return null;

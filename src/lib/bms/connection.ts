@@ -14,6 +14,7 @@ import {
   FrameParser,
   parseBasicInfo,
   parseCellVoltages,
+  parseNameResponse,
 } from './protocol';
 
 const CONNECT_TIMEOUT_MS = 20000;
@@ -124,7 +125,17 @@ export class BmsSession {
       BMS_NOTIFY_UUID,
       (error, characteristic) => {
         if (error || !characteristic?.value) return;
-        for (const frame of this.parser.push(fromBase64(characteristic.value))) {
+        const bytes = fromBase64(characteristic.value);
+        const nameAck = parseNameResponse(bytes);
+        if (nameAck) {
+          const waiter = this.waiters.get(nameAck.cmd);
+          if (waiter) {
+            this.waiters.delete(nameAck.cmd);
+            waiter(nameAck);
+          }
+          return;
+        }
+        for (const frame of this.parser.push(bytes)) {
           const waiter = this.waiters.get(frame.cmd);
           if (waiter) {
             this.waiters.delete(frame.cmd);

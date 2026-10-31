@@ -10,6 +10,7 @@ import {
   FrameParser,
   parseBasicInfo,
   parseCellVoltages,
+  parseNameResponse,
 } from './protocol';
 
 const CAPTURED_BASIC_INFO_RESPONSE = Uint8Array.from([
@@ -73,6 +74,12 @@ describe('write commands', () => {
 
   it('builds the BMS Bluetooth name frame with a one-byte checksum', () => {
     expect(Array.from(buildBleNameCommand('A'))).toEqual([0xff, 0xaa, 0x07, 0x01, 0x41, 0x49]);
+  });
+
+  it('reads the name-write acknowledgement status', () => {
+    expect(parseNameResponse(Uint8Array.from([0xff, 0xaa, 0x07, 0x00, 0x00]))?.status).toBe(0);
+    expect(parseNameResponse(Uint8Array.from([0xff, 0xaa, 0x07, 0x01, 0x00]))?.status).toBe(1);
+    expect(parseNameResponse(Uint8Array.from([0xdd, 0x03, 0x00]))).toBeNull();
   });
 
   it('encodes non-ASCII names as UTF-8', () => {

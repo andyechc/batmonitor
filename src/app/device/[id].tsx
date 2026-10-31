@@ -40,8 +40,10 @@ import { type IconComponent } from '@/components/icons';
 import { type BmsReading } from '@/lib/bms/connection';
 import {
   BALANCE_COMMAND,
+  buildBleNameCommand,
   buildSwitchCommand,
   CLEAR_PROTECTION_COMMAND,
+  CMD_BLE_NAME,
   CMD_CONTROL,
   CMD_SWITCH,
 } from '@/lib/bms/protocol';
@@ -122,9 +124,22 @@ export default function BatteryScreen() {
       setMessage(t('device.renameEmpty'));
       return;
     }
-    await renameSavedBattery(id, trimmed);
-    setRenaming(false);
-    setMessage(t('device.renameOk'));
+    if (monitor.status !== 'live') {
+      setMessage(t('ble.notConnected'));
+      return;
+    }
+    setBusy(true);
+    try {
+      const ack = await monitor.sendCommand(buildBleNameCommand(trimmed), CMD_BLE_NAME);
+      if (ack.status !== 0) throw new Error(t('ble.writeFailed'));
+      await renameSavedBattery(id, trimmed);
+      setRenaming(false);
+      setMessage(t('device.renameOk'));
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : t('ble.writeFailed'));
+    } finally {
+      setBusy(false);
+    }
   };
 
   const controlsEnabled = monitor.status === 'live' && !busy;
