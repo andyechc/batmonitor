@@ -1,6 +1,9 @@
 /// <reference types="jest" />
 import {
+  BALANCE_COMMAND,
+  buildBleNameCommand,
   buildReadCommand,
+  buildSwitchCommand,
   CMD_BASIC_INFO,
   CMD_CELL_VOLTAGES,
   decodeFrame,
@@ -52,6 +55,28 @@ describe('checksum and read commands', () => {
     const frame = responseFrame(CMD_CELL_VOLTAGES, [0x0d, 0x2c]);
     frame[frame.length - 2] ^= 0x01;
     expect(decodeFrame(frame)).toBeNull();
+  });
+});
+
+describe('write commands', () => {
+  it('turns both switches on with a zero lock byte', () => {
+    expect(Array.from(buildSwitchCommand(true, true))).toEqual([0xdd, 0x5a, 0xe1, 0x01, 0x00, 0xff, 0x1e, 0x77]);
+  });
+
+  it('sets the charge lock bit when charging is off', () => {
+    expect(Array.from(buildSwitchCommand(false, true))).toEqual([0xdd, 0x5a, 0xe1, 0x01, 0x01, 0xff, 0x1d, 0x77]);
+  });
+
+  it('builds the auto-balance control command', () => {
+    expect(Array.from(BALANCE_COMMAND)).toEqual([0xdd, 0x5a, 0x0a, 0x02, 0x07, 0x00, 0xff, 0xed, 0x77]);
+  });
+
+  it('builds the BMS Bluetooth name frame with a one-byte checksum', () => {
+    expect(Array.from(buildBleNameCommand('A'))).toEqual([0xff, 0xaa, 0x07, 0x01, 0x41, 0x49]);
+  });
+
+  it('encodes non-ASCII names as UTF-8', () => {
+    expect(Array.from(buildBleNameCommand('ñ').slice(4, 6))).toEqual([0xc3, 0xb1]);
   });
 });
 

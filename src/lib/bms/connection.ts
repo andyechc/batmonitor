@@ -42,8 +42,18 @@ export async function requestBlePermissions(): Promise<boolean> {
   return Object.values(result).every((value) => value === PermissionsAndroid.RESULTS.GRANTED);
 }
 
+async function settledBluetoothState(): Promise<State> {
+  const manager = getManager();
+  for (let attempt = 0; attempt < 25; attempt++) {
+    const state = await manager.state();
+    if (state !== State.Unknown && state !== State.Resetting) return state;
+    await new Promise((resolve) => setTimeout(resolve, 200));
+  }
+  return State.Unknown;
+}
+
 export async function isBluetoothOn(): Promise<boolean> {
-  return (await getManager().state()) === State.PoweredOn;
+  return (await settledBluetoothState()) === State.PoweredOn;
 }
 
 export function scanForBatteries(
@@ -89,6 +99,9 @@ export class BmsSession {
 
   async connect(): Promise<void> {
     const manager = getManager();
+    if ((await settledBluetoothState()) !== State.PoweredOn) {
+      throw new Error('Activa Bluetooth para conectar con la batería');
+    }
     let timer: ReturnType<typeof setTimeout> | undefined;
     const timeout = new Promise<never>((_, reject) => {
       timer = setTimeout(() => {

@@ -33,7 +33,8 @@
           "isBackgroundEnabled": false,
           "bluetoothAlwaysPermission": "BatMonitor usa Bluetooth para leer el BMS de tu batería."
         }
-      ]
+      ],
+      "expo-localization"
     ],
     "experiments": {
       "typedRoutes": true
