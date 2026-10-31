@@ -8,7 +8,14 @@ struct HomeView: View {
         Group {
             if store.batteries.isEmpty {
                 ContentUnavailableView {
-                    Label("home.empty.title", systemImage: "battery.75percent")
+                    Label {
+                        Text("home.empty.title")
+                    } icon: {
+                        Image("BatLogo")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 120, height: 120)
+                    }
                 } description: {
                     Text("home.empty.text")
                 } actions: {
