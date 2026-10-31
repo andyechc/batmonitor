@@ -1,6 +1,7 @@
 import { PermissionsAndroid, Platform } from 'react-native';
 import { BleManager, State, type Device, type Subscription } from 'react-native-ble-plx';
 
+import { t } from '../i18n';
 import {
   BMS_NOTIFY_UUID,
   BMS_SERVICE_UUID,
@@ -100,13 +101,13 @@ export class BmsSession {
   async connect(): Promise<void> {
     const manager = getManager();
     if ((await settledBluetoothState()) !== State.PoweredOn) {
-      throw new Error('Activa Bluetooth para conectar con la batería');
+      throw new Error(t('ble.bluetoothOff'));
     }
     let timer: ReturnType<typeof setTimeout> | undefined;
     const timeout = new Promise<never>((_, reject) => {
       timer = setTimeout(() => {
         manager.cancelDeviceConnection(this.deviceId).catch(() => undefined);
-        reject(new Error('No se pudo conectar con el BMS'));
+        reject(new Error(t('ble.noConnect')));
       }, CONNECT_TIMEOUT_MS);
     });
     const link = manager
@@ -139,7 +140,7 @@ export class BmsSession {
     const basicFrame = await this.request(CMD_BASIC_INFO);
     const cellFrame = await this.request(CMD_CELL_VOLTAGES);
     const basic = parseBasicInfo(basicFrame.data);
-    if (!basic) throw new Error('Respuesta de datos inválida');
+    if (!basic) throw new Error(t('ble.invalidData'));
     return { basic, cells: parseCellVoltages(cellFrame.data), receivedAt: Date.now() };
   }
 
@@ -151,13 +152,22 @@ export class BmsSession {
     await getManager().cancelDeviceConnection(this.deviceId).catch(() => undefined);
   }
 
+  /** Sends a write command (e.g. switches, balance) and resolves with the BMS response frame. */
+  command(payload: Uint8Array, cmd: number): Promise<Frame> {
+    return this.send(payload, cmd, 3000);
+  }
+
   private request(cmd: number, timeoutMs = 3000): Promise<Frame> {
+    return this.send(buildReadCommand(cmd), cmd, timeoutMs);
+  }
+
+  private send(payload: Uint8Array, cmd: number, timeoutMs: number): Promise<Frame> {
     const device = this.device;
-    if (!device) return Promise.reject(new Error('No conectado'));
+    if (!device) return Promise.reject(new Error(t('ble.notConnected')));
     return new Promise<Frame>((resolve, reject) => {
       const timer = setTimeout(() => {
         this.waiters.delete(cmd);
-        reject(new Error('El BMS no respondió'));
+        reject(new Error(t('ble.noResponse')));
       }, timeoutMs);
       this.waiters.set(cmd, (frame) => {
         clearTimeout(timer);
@@ -167,7 +177,7 @@ export class BmsSession {
         .writeCharacteristicWithoutResponseForService(
           BMS_SERVICE_UUID,
           BMS_WRITE_UUID,
-          toBase64(buildReadCommand(cmd)),
+          toBase64(payload),
         )
         .catch((error: Error) => {
           clearTimeout(timer);

@@ -9,7 +9,8 @@
     "userInterfaceStyle": "dark",
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.andyechc.batmonitor"
+      "bundleIdentifier": "com.andyechc.batmonitor",
+      "appleTeamId": "3PUM2552T9"
     },
     "android": {
       "package": "com.andyechc.batmonitor",

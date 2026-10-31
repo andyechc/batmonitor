@@ -17,6 +17,7 @@ import {
   type ScannedBattery,
 } from '@/lib/bms/connection';
 import { addSavedBattery } from '@/lib/devices';
+import { t } from '@/lib/i18n';
 import { colors, radius } from '@/theme';
 
 const SCAN_TIMEOUT_MS = 12000;
@@ -46,11 +47,11 @@ export default function AddDeviceScreen() {
 
     const begin = async () => {
       if (!(await requestBlePermissions())) {
-        fail('Concede los permisos de Bluetooth para buscar baterías.');
+        fail(t('add.needPermissions'));
         return;
       }
       if (!(await isBluetoothOn())) {
-        fail('Activa el Bluetooth para buscar baterías.');
+        fail(t('add.needBluetooth'));
         return;
       }
       if (!active) return;
@@ -98,7 +99,7 @@ export default function AddDeviceScreen() {
           <BluetoothSlash size={20} color={colors.muted} weight="duotone" />
         )}
         <Text style={styles.headerText}>
-          {scanning ? 'Buscando baterías cerca…' : 'Búsqueda terminada'}
+          {scanning ? t('add.scanning') : t('add.done')}
         </Text>
       </View>
 
@@ -118,7 +119,7 @@ export default function AddDeviceScreen() {
             <View style={styles.emptyState}>
               <MagnifyingGlass size={44} color={colors.muted} weight="duotone" />
               <Text style={styles.empty}>
-                No encontramos baterías. Asegúrate de que el BMS esté encendido y cerca.
+                {t('add.empty')}
               </Text>
             </View>
           )
@@ -149,7 +150,7 @@ export default function AddDeviceScreen() {
           onPress={retry}
           style={({ pressed }) => [styles.button, pressed && styles.buttonPressed]}>
           <ArrowClockwise size={20} color={colors.text} weight="bold" />
-          <Text style={styles.buttonText}>Buscar de nuevo</Text>
+          <Text style={styles.buttonText}>{t('add.retry')}</Text>
         </Pressable>
       )}
     </View>

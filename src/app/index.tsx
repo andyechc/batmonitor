@@ -4,6 +4,7 @@ import { BatteryHigh, CaretRight, Plus } from 'phosphor-react-native';
 
 import { colors, radius } from '@/theme';
 import { type SavedBattery, useSavedBatteries } from '@/lib/devices';
+import { t } from '@/lib/i18n';
 
 export default function HomeScreen() {
   const batteries = useSavedBatteries();
@@ -16,7 +17,7 @@ export default function HomeScreen() {
             <Pressable
               onPress={() => router.push('/add-device')}
               hitSlop={12}
-              accessibilityLabel="Añadir batería">
+              accessibilityLabel={t('home.add')}>
               <Plus size={24} color={colors.charge} weight="bold" />
             </Pressable>
           ),
@@ -56,15 +57,13 @@ function EmptyState() {
   return (
     <View style={styles.empty}>
       <Image source={require('../../assets/splash-icon.png')} style={styles.logo} />
-      <Text style={styles.emptyTitle}>Sin baterías</Text>
-      <Text style={styles.emptyText}>
-        Añade tu BMS por Bluetooth para ver su estado en tiempo real. No necesitas cuenta.
-      </Text>
+      <Text style={styles.emptyTitle}>{t('home.empty.title')}</Text>
+      <Text style={styles.emptyText}>{t('home.empty.text')}</Text>
       <Pressable
         onPress={() => router.push('/add-device')}
         style={({ pressed }) => [styles.primaryButton, pressed && styles.buttonPressed]}>
         <Plus size={20} color={colors.bg} weight="bold" />
-        <Text style={styles.primaryButtonText}>Añadir batería</Text>
+        <Text style={styles.primaryButtonText}>{t('home.add')}</Text>
       </Pressable>
     </View>
   );

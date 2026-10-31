@@ -18,6 +18,12 @@ export async function addSavedBattery(battery: Pick<SavedBattery, 'id' | 'name'>
   await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(batteries));
 }
 
+export async function renameSavedBattery(id: string, name: string): Promise<void> {
+  const batteries = await getSavedBatteries();
+  const updated = batteries.map((item) => (item.id === id ? { ...item, name } : item));
+  await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+}
+
 export async function removeSavedBattery(id: string): Promise<void> {
   const batteries = await getSavedBatteries();
   await AsyncStorage.setItem(

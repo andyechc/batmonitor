@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
 
+import { t } from '@/lib/i18n';
 import { colors } from '@/theme';
 
 type Props = { soc: number; color: string; size?: number; stroke?: number };
@@ -36,7 +37,7 @@ export function SocRing({ soc, color, size = 200, stroke = 14 }: Props) {
       </Svg>
       <View style={styles.center}>
         <Text style={[styles.value, { fontSize: size * 0.26 }]}>{Math.round(soc)}</Text>
-        <Text style={styles.unit}>% carga</Text>
+        <Text style={styles.unit}>{t('device.stat.charge')}</Text>
       </View>
     </View>
   );

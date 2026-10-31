@@ -1,3 +1,5 @@
+import { getLocales } from 'expo-localization';
+
 export type Locale = 'es' | 'en';
 
 const messages = {
@@ -58,6 +60,15 @@ const messages = {
     'ble.notConnected': 'No conectado',
     'ble.unnamed': 'Batería BMS',
     'ble.writeFailed': 'No se pudo enviar el comando',
+    'device.confirm': 'Continuar',
+    'device.confirmChargeOff': 'Con la carga desactivada la batería no se cargará. ¿Continuar?',
+    'device.confirmDischargeOff':
+      'Con la descarga desactivada se corta la energía a tus equipos. ¿Continuar?',
+    'device.controlOk': 'Comando aplicado',
+    'device.renameEmpty': 'Escribe un nombre',
+    'device.renameOk': 'Nombre guardado',
+    'device.renameHint': 'Solo cambia el nombre dentro de la app.',
+    'device.stat.charge': '% carga',
   },
   en: {
     'app.home': 'Home',
@@ -116,10 +127,26 @@ const messages = {
     'ble.notConnected': 'Not connected',
     'ble.unnamed': 'BMS battery',
     'ble.writeFailed': 'Could not send the command',
+    'device.confirm': 'Continue',
+    'device.confirmChargeOff': 'With charging off, the battery will not charge. Continue?',
+    'device.confirmDischargeOff': 'With discharge off, power to your devices is cut. Continue?',
+    'device.controlOk': 'Command applied',
+    'device.renameEmpty': 'Enter a name',
+    'device.renameOk': 'Name saved',
+    'device.renameHint': 'This only changes the name inside the app.',
+    'device.stat.charge': '% charge',
   },
 } as const;
 
 export type MessageKey = keyof (typeof messages)['es'];
+
+export function systemLocale(): Locale {
+  return getLocales()[0]?.languageCode === 'en' ? 'en' : 'es';
+}
+
+export function t(key: MessageKey, params?: Record<string, string | number>): string {
+  return translate(systemLocale(), key, params);
+}
 
 export function translate(
   locale: Locale,
