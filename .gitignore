@@ -36,9 +36,15 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
-# generated native folders
-/ios
-/android
+# Legacy Expo app (generated native folders)
+legacy/expo/ios/
+legacy/expo/android/
+
+# Xcode
+DerivedData/
+xcuserdata/
+*.xcuserstate
+build/
 
 # reference app binaries
 *.xapk

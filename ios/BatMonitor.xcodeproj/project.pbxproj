@@ -1,0 +1,515 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		3BB92FA66C139A2DCA15D5B3 /* BatteryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9924D1FD1DD0AB4ED13067CF /* BatteryStore.swift */; };
+		44737E2E255816A20138377A /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F7F7C39039A3E7DDF3069E9 /* DashboardView.swift */; };
+		4640FC9F6CBAB58B4A94AD31 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = D09E661939605782AF1C6357 /* Localizable.xcstrings */; };
+		7BDB4C53CFB782CE243A01E0 /* BatteryMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2028A6F706029BE652D4904D /* BatteryMonitor.swift */; };
+		900F35CCB6201FAB94D7E3B8 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 149006C904FC6285C1E08B8D /* Theme.swift */; };
+		92B153BC6A1496BD4234D125 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5139F34F7A65F50130AA5756 /* HomeView.swift */; };
+		9EE49B0EE4E5A79B1A3F96DA /* BMSProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CCC9AF8BCD7FA8A0A3CA432 /* BMSProtocol.swift */; };
+		B1C6A8D70C943654DE89AFE8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AD82FA820E362E5B2392A7EE /* Assets.xcassets */; };
+		B610A9E8E17E9DBDED12F89D /* BatMonitorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10034EF62804F49068D3868 /* BatMonitorApp.swift */; };
+		CAE0838E18D411F700046F93 /* BLECentral.swift in Sources */ = {isa = PBXBuildFile; fileRef = A041ED983E321E175EBC5AFC /* BLECentral.swift */; };
+		D3D22ED5EC70A113502269D7 /* BatteryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A9788D4F367EC73B2C103A7 /* BatteryDetailView.swift */; };
+		DE70D6F9527787B28AB4B5D1 /* BatteryScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3F7064A99E077F5243C5A97 /* BatteryScanner.swift */; };
+		E235FE085D18C2B91915A4EB /* Panels.swift in Sources */ = {isa = PBXBuildFile; fileRef = E29E9A990CCFDEE7FBC682B3 /* Panels.swift */; };
+		E58CB633640B20E80F326FD3 /* BMSProtocolTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D4E812A3E583D337963985 /* BMSProtocolTests.swift */; };
+		E951005B1984DD3DB79646DD /* AddBatteryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A63CF706400147AE15C58FE9 /* AddBatteryView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		EB2D63588745A81CC5F1DEB6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0C75F6716BC657C5C5B9E480 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 814A43BFA1DBDA2321AFABAF;
+			remoteInfo = BatMonitor;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		08C5D5BD5284F780DC3AA803 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		149006C904FC6285C1E08B8D /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		2028A6F706029BE652D4904D /* BatteryMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryMonitor.swift; sourceTree = "<group>"; };
+		4A9788D4F367EC73B2C103A7 /* BatteryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryDetailView.swift; sourceTree = "<group>"; };
+		5139F34F7A65F50130AA5756 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		5CCC9AF8BCD7FA8A0A3CA432 /* BMSProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMSProtocol.swift; sourceTree = "<group>"; };
+		8F7F7C39039A3E7DDF3069E9 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		915E8AA96CCF067C88F8B2BD /* BatMonitorTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = BatMonitorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9924D1FD1DD0AB4ED13067CF /* BatteryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryStore.swift; sourceTree = "<group>"; };
+		A041ED983E321E175EBC5AFC /* BLECentral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLECentral.swift; sourceTree = "<group>"; };
+		A3F7064A99E077F5243C5A97 /* BatteryScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryScanner.swift; sourceTree = "<group>"; };
+		A63CF706400147AE15C58FE9 /* AddBatteryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddBatteryView.swift; sourceTree = "<group>"; };
+		AD82FA820E362E5B2392A7EE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		C2D4E812A3E583D337963985 /* BMSProtocolTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMSProtocolTests.swift; sourceTree = "<group>"; };
+		C37708AF0CE81568E68F7437 /* BatMonitor.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = BatMonitor.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D09E661939605782AF1C6357 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		E29E9A990CCFDEE7FBC682B3 /* Panels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Panels.swift; sourceTree = "<group>"; };
+		F10034EF62804F49068D3868 /* BatMonitorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatMonitorApp.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		0EA2600FF9F87BC4B4595672 /* BatMonitorTests */ = {
+			isa = PBXGroup;
+			children = (
+				C2D4E812A3E583D337963985 /* BMSProtocolTests.swift */,
+			);
+			path = BatMonitorTests;
+			sourceTree = "<group>";
+		};
+		4A0CE6EE790EC0925EBCC24B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C37708AF0CE81568E68F7437 /* BatMonitor.app */,
+				915E8AA96CCF067C88F8B2BD /* BatMonitorTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		72CFED49C859B50115F8F7AF = {
+			isa = PBXGroup;
+			children = (
+				C8911EBC22CD1312487EA01F /* BatMonitor */,
+				0EA2600FF9F87BC4B4595672 /* BatMonitorTests */,
+				4A0CE6EE790EC0925EBCC24B /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		77F581E3EA9ADF696701BDF9 /* BLE */ = {
+			isa = PBXGroup;
+			children = (
+				2028A6F706029BE652D4904D /* BatteryMonitor.swift */,
+				A3F7064A99E077F5243C5A97 /* BatteryScanner.swift */,
+				A041ED983E321E175EBC5AFC /* BLECentral.swift */,
+			);
+			path = BLE;
+			sourceTree = "<group>";
+		};
+		883DE7DE0F982BF7D986FBEB /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				9924D1FD1DD0AB4ED13067CF /* BatteryStore.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		95971E3F37616BBF84E4A4EC /* App */ = {
+			isa = PBXGroup;
+			children = (
+				F10034EF62804F49068D3868 /* BatMonitorApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		B3442A038012E612D4F3F6F3 /* Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				5CCC9AF8BCD7FA8A0A3CA432 /* BMSProtocol.swift */,
+			);
+			path = Protocol;
+			sourceTree = "<group>";
+		};
+		C8911EBC22CD1312487EA01F /* BatMonitor */ = {
+			isa = PBXGroup;
+			children = (
+				AD82FA820E362E5B2392A7EE /* Assets.xcassets */,
+				08C5D5BD5284F780DC3AA803 /* Info.plist */,
+				D09E661939605782AF1C6357 /* Localizable.xcstrings */,
+				95971E3F37616BBF84E4A4EC /* App */,
+				77F581E3EA9ADF696701BDF9 /* BLE */,
+				E255E687B1B39ABB8FCC31B1 /* Components */,
+				883DE7DE0F982BF7D986FBEB /* Models */,
+				B3442A038012E612D4F3F6F3 /* Protocol */,
+				E3A415E07418D567EDE8C60C /* Views */,
+			);
+			path = BatMonitor;
+			sourceTree = "<group>";
+		};
+		E255E687B1B39ABB8FCC31B1 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				E29E9A990CCFDEE7FBC682B3 /* Panels.swift */,
+				149006C904FC6285C1E08B8D /* Theme.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		E3A415E07418D567EDE8C60C /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A63CF706400147AE15C58FE9 /* AddBatteryView.swift */,
+				4A9788D4F367EC73B2C103A7 /* BatteryDetailView.swift */,
+				8F7F7C39039A3E7DDF3069E9 /* DashboardView.swift */,
+				5139F34F7A65F50130AA5756 /* HomeView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		814A43BFA1DBDA2321AFABAF /* BatMonitor */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1CB5E2BCC2C391FCDB3F9DC6 /* Build configuration list for PBXNativeTarget "BatMonitor" */;
+			buildPhases = (
+				6770CF8CA857E8966E0614F8 /* Sources */,
+				850FFCCB0CACC86704E8DA25 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BatMonitor;
+			packageProductDependencies = (
+			);
+			productName = BatMonitor;
+			productReference = C37708AF0CE81568E68F7437 /* BatMonitor.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A0D022A39C08F91BDADE2572 /* BatMonitorTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 40552DA79D18985460B8A6B9 /* Build configuration list for PBXNativeTarget "BatMonitorTests" */;
+			buildPhases = (
+				6209C7C47D9A3A3F2AFA3E09 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				66D5FF8224435FE79D03B88B /* PBXTargetDependency */,
+			);
+			name = BatMonitorTests;
+			packageProductDependencies = (
+			);
+			productName = BatMonitorTests;
+			productReference = 915E8AA96CCF067C88F8B2BD /* BatMonitorTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0C75F6716BC657C5C5B9E480 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					814A43BFA1DBDA2321AFABAF = {
+						DevelopmentTeam = 3PUM2552T9;
+						ProvisioningStyle = Automatic;
+					};
+					A0D022A39C08F91BDADE2572 = {
+						DevelopmentTeam = 3PUM2552T9;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = E46CF93E996CA82B3A2D4987 /* Build configuration list for PBXProject "BatMonitor" */;
+			developmentRegion = es;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+				es,
+			);
+			mainGroup = 72CFED49C859B50115F8F7AF;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 4A0CE6EE790EC0925EBCC24B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				814A43BFA1DBDA2321AFABAF /* BatMonitor */,
+				A0D022A39C08F91BDADE2572 /* BatMonitorTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		850FFCCB0CACC86704E8DA25 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B1C6A8D70C943654DE89AFE8 /* Assets.xcassets in Resources */,
+				4640FC9F6CBAB58B4A94AD31 /* Localizable.xcstrings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6209C7C47D9A3A3F2AFA3E09 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E58CB633640B20E80F326FD3 /* BMSProtocolTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6770CF8CA857E8966E0614F8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E951005B1984DD3DB79646DD /* AddBatteryView.swift in Sources */,
+				CAE0838E18D411F700046F93 /* BLECentral.swift in Sources */,
+				9EE49B0EE4E5A79B1A3F96DA /* BMSProtocol.swift in Sources */,
+				B610A9E8E17E9DBDED12F89D /* BatMonitorApp.swift in Sources */,
+				D3D22ED5EC70A113502269D7 /* BatteryDetailView.swift in Sources */,
+				7BDB4C53CFB782CE243A01E0 /* BatteryMonitor.swift in Sources */,
+				DE70D6F9527787B28AB4B5D1 /* BatteryScanner.swift in Sources */,
+				3BB92FA66C139A2DCA15D5B3 /* BatteryStore.swift in Sources */,
+				44737E2E255816A20138377A /* DashboardView.swift in Sources */,
+				92B153BC6A1496BD4234D125 /* HomeView.swift in Sources */,
+				E235FE085D18C2B91915A4EB /* Panels.swift in Sources */,
+				900F35CCB6201FAB94D7E3B8 /* Theme.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		66D5FF8224435FE79D03B88B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 814A43BFA1DBDA2321AFABAF /* BatMonitor */;
+			targetProxy = EB2D63588745A81CC5F1DEB6 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		16694497A36AAFE9BDD1A0EF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.andyechc.BatMonitorTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BatMonitor.app/BatMonitor";
+			};
+			name = Debug;
+		};
+		23C85FAF054DC675BB1144EE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.andyechc.BatMonitorTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BatMonitor.app/BatMonitor";
+			};
+			name = Release;
+		};
+		3546F372ABA4315A06BACDF2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = BatMonitor/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = NO;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.andyechc.batmonitor;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		9094A9DD50E5D80682C04FFD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 3PUM2552T9;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		DB225EF43AC72802E29B153C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = BatMonitor/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = NO;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.andyechc.batmonitor;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		EB1F335BAC433616AD053F37 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 3PUM2552T9;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1CB5E2BCC2C391FCDB3F9DC6 /* Build configuration list for PBXNativeTarget "BatMonitor" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DB225EF43AC72802E29B153C /* Debug */,
+				3546F372ABA4315A06BACDF2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		40552DA79D18985460B8A6B9 /* Build configuration list for PBXNativeTarget "BatMonitorTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				16694497A36AAFE9BDD1A0EF /* Debug */,
+				23C85FAF054DC675BB1144EE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		E46CF93E996CA82B3A2D4987 /* Build configuration list for PBXProject "BatMonitor" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EB1F335BAC433616AD053F37 /* Debug */,
+				9094A9DD50E5D80682C04FFD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 0C75F6716BC657C5C5B9E480 /* Project object */;
+}

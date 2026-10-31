@@ -1,0 +1,1238 @@
+{
+  "sourceLanguage": "es",
+  "strings": {
+    "app.home": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inicio"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Home"
+          }
+        }
+      }
+    },
+    "home.empty.title": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sin baterías"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No batteries"
+          }
+        }
+      }
+    },
+    "home.empty.text": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Añade tu BMS por Bluetooth para ver su estado en tiempo real. No necesitas cuenta."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add your BMS over Bluetooth to see its live status. No account needed."
+          }
+        }
+      }
+    },
+    "home.add": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Añadir batería"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add battery"
+          }
+        }
+      }
+    },
+    "add.title": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Añadir batería"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add battery"
+          }
+        }
+      }
+    },
+    "add.scanning": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buscando baterías cerca…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Searching for nearby batteries…"
+          }
+        }
+      }
+    },
+    "add.done": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Búsqueda terminada"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search finished"
+          }
+        }
+      }
+    },
+    "add.empty": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No encontramos baterías. Asegúrate de que el BMS esté encendido y cerca."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No batteries found. Make sure the BMS is on and nearby."
+          }
+        }
+      }
+    },
+    "add.retry": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buscar de nuevo"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search again"
+          }
+        }
+      }
+    },
+    "add.needPermissions": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Concede los permisos de Bluetooth para buscar baterías."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grant Bluetooth permissions to search for batteries."
+          }
+        }
+      }
+    },
+    "add.needBluetooth": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activa el Bluetooth para buscar baterías."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turn on Bluetooth to search for batteries."
+          }
+        }
+      }
+    },
+    "device.connecting": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conectando con la batería…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connecting to the battery…"
+          }
+        }
+      }
+    },
+    "device.live": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En vivo"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Live"
+          }
+        }
+      }
+    },
+    "device.connectingPill": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conectando…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connecting…"
+          }
+        }
+      }
+    },
+    "device.noConnection": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sin conexión"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No connection"
+          }
+        }
+      }
+    },
+    "device.remove": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminar batería"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove battery"
+          }
+        }
+      }
+    },
+    "device.removeTitle": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminar batería"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove battery"
+          }
+        }
+      }
+    },
+    "device.removeConfirm": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Quitar %@ de la app?"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove %@ from the app?"
+          }
+        }
+      }
+    },
+    "device.cancel": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancelar"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel"
+          }
+        }
+      }
+    },
+    "device.delete": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eliminar"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove"
+          }
+        }
+      }
+    },
+    "device.rename": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cambiar nombre"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rename"
+          }
+        }
+      }
+    },
+    "device.renameTitle": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nombre de la batería"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Battery name"
+          }
+        }
+      }
+    },
+    "device.save": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guardar"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save"
+          }
+        }
+      }
+    },
+    "device.controls": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Controles"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Controls"
+          }
+        }
+      }
+    },
+    "device.balance": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Balance automático"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Auto balance"
+          }
+        }
+      }
+    },
+    "device.clearProtection": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Limpiar protecciones"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear protections"
+          }
+        }
+      }
+    },
+    "device.chargeSwitch": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Carga"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Charge"
+          }
+        }
+      }
+    },
+    "device.dischargeSwitch": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Descarga"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Discharge"
+          }
+        }
+      }
+    },
+    "device.on": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activada"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On"
+          }
+        }
+      }
+    },
+    "device.off": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desactivada"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Off"
+          }
+        }
+      }
+    },
+    "device.noProtections": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sin protecciones activas"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No active protections"
+          }
+        }
+      }
+    },
+    "device.state.charging": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cargando"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Charging"
+          }
+        }
+      }
+    },
+    "device.state.discharging": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Descargando"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Discharging"
+          }
+        }
+      }
+    },
+    "device.state.idle": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En reposo"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Idle"
+          }
+        }
+      }
+    },
+    "device.stat.voltage": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voltaje"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voltage"
+          }
+        }
+      }
+    },
+    "device.stat.current": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Corriente"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Current"
+          }
+        }
+      }
+    },
+    "device.stat.power": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Potencia"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Power"
+          }
+        }
+      }
+    },
+    "device.stat.cycles": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ciclos"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cycles"
+          }
+        }
+      }
+    },
+    "device.stat.maxTemp": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Temp. máx."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Max temp."
+          }
+        }
+      }
+    },
+    "device.stat.imbalance": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desbalance"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Imbalance"
+          }
+        }
+      }
+    },
+    "device.cells": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Celdas"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cells"
+          }
+        }
+      }
+    },
+    "device.temperatures": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Temperaturas"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Temperatures"
+          }
+        }
+      }
+    },
+    "device.protections": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Protecciones"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Protections"
+          }
+        }
+      }
+    },
+    "device.status": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estado"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Status"
+          }
+        }
+      }
+    },
+    "device.balancingCells": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Celdas en balanceo"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Balancing cells"
+          }
+        }
+      }
+    },
+    "device.firmware": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Firmware"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Firmware"
+          }
+        }
+      }
+    },
+    "device.manufactured": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fabricación"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Manufactured"
+          }
+        }
+      }
+    },
+    "device.sensor": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sensor"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sensor"
+          }
+        }
+      }
+    },
+    "ble.bluetoothOff": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activa Bluetooth para conectar con la batería"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turn on Bluetooth to connect to the battery"
+          }
+        }
+      }
+    },
+    "ble.noConnect": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo conectar con el BMS"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not connect to the BMS"
+          }
+        }
+      }
+    },
+    "ble.noResponse": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El BMS no respondió"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The BMS did not respond"
+          }
+        }
+      }
+    },
+    "ble.invalidData": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Respuesta de datos inválida"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Invalid data response"
+          }
+        }
+      }
+    },
+    "ble.notConnected": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No conectado"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not connected"
+          }
+        }
+      }
+    },
+    "ble.unnamed": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Batería BMS"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "BMS battery"
+          }
+        }
+      }
+    },
+    "ble.writeFailed": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo enviar el comando"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not send the command"
+          }
+        }
+      }
+    },
+    "device.confirm": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continuar"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continue"
+          }
+        }
+      }
+    },
+    "device.confirmChargeOff": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Con la carga desactivada la batería no se cargará. ¿Continuar?"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "With charging off, the battery will not charge. Continue?"
+          }
+        }
+      }
+    },
+    "device.confirmDischargeOff": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Con la descarga desactivada se corta la energía a tus equipos. ¿Continuar?"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "With discharge off, power to your devices is cut. Continue?"
+          }
+        }
+      }
+    },
+    "device.controlOk": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comando aplicado"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Command applied"
+          }
+        }
+      }
+    },
+    "device.renameEmpty": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escribe un nombre"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enter a name"
+          }
+        }
+      }
+    },
+    "device.renameOk": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nombre guardado"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Name saved"
+          }
+        }
+      }
+    },
+    "device.renameHint": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cambia el nombre guardado en la app y en el BMS. Necesita conexión."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Changes the saved name and the BMS name. Requires a connection."
+          }
+        }
+      }
+    },
+    "device.stat.charge": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "% carga"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "% charge"
+          }
+        }
+      }
+    },
+    "protection.0": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sobretensión de celda"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cell overvoltage"
+          }
+        }
+      }
+    },
+    "protection.1": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Subtensión de celda"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cell undervoltage"
+          }
+        }
+      }
+    },
+    "protection.2": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sobretensión de batería"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Battery overvoltage"
+          }
+        }
+      }
+    },
+    "protection.3": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Subtensión de batería"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Battery undervoltage"
+          }
+        }
+      }
+    },
+    "protection.4": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sobretemperatura en carga"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Overtemperature while charging"
+          }
+        }
+      }
+    },
+    "protection.5": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Baja temperatura en carga"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Low temperature while charging"
+          }
+        }
+      }
+    },
+    "protection.6": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sobretemperatura en descarga"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Overtemperature while discharging"
+          }
+        }
+      }
+    },
+    "protection.7": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Baja temperatura en descarga"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Low temperature while discharging"
+          }
+        }
+      }
+    },
+    "protection.8": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sobrecorriente en carga"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Overcurrent while charging"
+          }
+        }
+      }
+    },
+    "protection.9": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sobrecorriente en descarga"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Overcurrent while discharging"
+          }
+        }
+      }
+    },
+    "protection.10": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cortocircuito"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Short circuit"
+          }
+        }
+      }
+    },
+    "protection.11": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Error de IC"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "IC error"
+          }
+        }
+      }
+    },
+    "protection.12": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "MOS bloqueado por software"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "MOS locked by software"
+          }
+        }
+      }
+    },
+    "ble.unauthorized": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Permiso de Bluetooth denegado. Actívalo en Ajustes."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bluetooth permission denied. Enable it in Settings."
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}
