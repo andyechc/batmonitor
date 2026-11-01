@@ -76,7 +76,7 @@ struct BatteryDetailView: View {
                     overview
                 }
                 .padding(.horizontal, 16)
-                .padding(.bottom, 32)
+                .padding(.bottom, 120)
             }
             .scrollIndicators(.hidden)
             .tabItem { Label(DetailTab.overview.title, systemImage: "speedometer") }
@@ -87,7 +87,7 @@ struct BatteryDetailView: View {
                     cells
                 }
                 .padding(.horizontal, 16)
-                .padding(.bottom, 32)
+                .padding(.bottom, 120)
             }
             .scrollIndicators(.hidden)
             .tabItem { Label(DetailTab.cells.title, systemImage: "battery.100") }
@@ -98,7 +98,7 @@ struct BatteryDetailView: View {
                     status
                 }
                 .padding(.horizontal, 16)
-                .padding(.bottom, 32)
+                .padding(.bottom, 120)
             }
             .scrollIndicators(.hidden)
             .tabItem { Label(DetailTab.status.title, systemImage: "shield.lefthalf.filled") }
@@ -109,7 +109,7 @@ struct BatteryDetailView: View {
                     control
                 }
                 .padding(.horizontal, 16)
-                .padding(.bottom, 32)
+                .padding(.bottom, 120)
             }
             .scrollIndicators(.hidden)
             .tabItem { Label(DetailTab.control.title, systemImage: "slider.horizontal.3") }

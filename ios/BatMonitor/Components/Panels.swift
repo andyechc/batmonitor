@@ -116,29 +116,43 @@ struct FluidBatteryView: View {
                 .fill(color)
                 .frame(width: 40, height: 9)
             ZStack {
-                if level >= 1 {
-                    RoundedRectangle(cornerRadius: 15, style: .continuous)
-                        .fill(color.opacity(0.85))
-                        .padding(7)
-                } else {
-                    WaveShape(level: level, phase: phase)
-                        .fill(color.opacity(0.85))
-                        .padding(7)
-                        .clipShape(RoundedRectangle(cornerRadius: 15, style: .continuous))
-                }
+                filledShape(level: level, phase: phase)
+                    .padding(7)
+                    .clipShape(RoundedRectangle(cornerRadius: 15, style: .continuous))
                 RoundedRectangle(cornerRadius: 20, style: .continuous)
                     .strokeBorder(color, lineWidth: 3)
-                Text("\(soc)%")
-                    .font(.system(size: 28, weight: .bold))
-                    .monospacedDigit()
-                    .contentTransition(.numericText(value: Double(soc)))
-                    .foregroundStyle(.white)
+                percentText(color: .white)
+                percentText(color: Color(red: 0.02, green: 0.03, blue: 0.05))
+                    .mask(
+                        filledShape(level: level, phase: phase)
+                            .padding(7)
+                            .clipShape(RoundedRectangle(cornerRadius: 15, style: .continuous))
+                    )
             }
             .frame(width: 120, height: 190)
         }
         .shadow(color: charging ? color.opacity(0.45) : .clear, radius: 14)
         .accessibilityLabel(Text("device.stat.charge"))
         .accessibilityValue("\(soc)%")
+    }
+
+    @ViewBuilder
+    private func filledShape(level: Double, phase: Double) -> some View {
+        if level >= 1 {
+            RoundedRectangle(cornerRadius: 15, style: .continuous)
+                .fill(color.opacity(0.85))
+        } else {
+            WaveShape(level: level, phase: phase)
+                .fill(color.opacity(0.85))
+        }
+    }
+
+    private func percentText(color: Color) -> some View {
+        Text("\(soc)%")
+            .font(.system(size: 28, weight: .bold))
+            .monospacedDigit()
+            .contentTransition(.numericText(value: Double(soc)))
+            .foregroundStyle(color)
     }
 }
 
