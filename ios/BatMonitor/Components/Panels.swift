@@ -80,6 +80,8 @@ struct SocRing: View {
                 Text("\(soc)")
                     .font(.system(size: size * 0.26, weight: .bold))
                     .monospacedDigit()
+                    .contentTransition(.numericText(value: Double(soc)))
+                    .animation(.smooth, value: soc)
                 Text("device.stat.charge")
                     .font(.subheadline)
                     .foregroundStyle(Theme.muted)
@@ -113,6 +115,7 @@ struct CellBarsView: View {
                             Capsule()
                                 .fill(color)
                                 .frame(width: geometry.size.width * ratio)
+                                .animation(.smooth, value: ratio)
                         }
                     }
                     .frame(height: 10)

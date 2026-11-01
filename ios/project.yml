@@ -2,7 +2,7 @@ name: BatMonitor
 options:
   bundleIdPrefix: com.andyechc
   deploymentTarget:
-    iOS: "17.0"
+    iOS: "26.0"
   developmentLanguage: es
   createIntermediateGroups: true
 settings:

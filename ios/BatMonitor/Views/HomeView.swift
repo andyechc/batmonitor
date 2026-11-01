@@ -24,13 +24,21 @@ struct HomeView: View {
                 }
             } else {
                 List {
-                    ForEach(store.batteries) { battery in
-                        NavigationLink(value: battery) {
-                            BatteryRow(battery: battery)
+                    Section {
+                        ForEach(store.batteries) { battery in
+                            NavigationLink(value: battery) {
+                                BatteryRow(battery: battery)
+                            }
+                            .contextMenu {
+                                Button(role: .destructive) {
+                                    store.remove(id: battery.id)
+                                } label: {
+                                    Label("device.delete", systemImage: "trash")
+                                }
+                            }
                         }
-                        .listRowBackground(Theme.surface)
+                        .onDelete { store.remove(at: $0) }
                     }
-                    .onDelete { store.remove(at: $0) }
                 }
                 .scrollContentBackground(.hidden)
             }
@@ -58,13 +66,18 @@ private struct BatteryRow: View {
     var body: some View {
         HStack(spacing: 14) {
             Image(systemName: "battery.75percent")
-                .font(.title2)
+                .font(.title3)
                 .foregroundStyle(Theme.charge)
-                .frame(width: 48, height: 48)
-                .background(Theme.surfaceHigh, in: Circle())
-            Text(battery.name)
-                .font(.headline)
+                .frame(width: 44, height: 44)
+                .background(Theme.surfaceHigh, in: .circle)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(battery.name)
+                    .font(.headline)
+                Text("device.tapToMonitor")
+                    .font(.footnote)
+                    .foregroundStyle(Theme.muted)
+            }
         }
-        .padding(.vertical, 6)
+        .padding(.vertical, 4)
     }
 }
