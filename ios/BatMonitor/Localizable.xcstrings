@@ -2000,6 +2000,22 @@
           }
         }
       }
+    },
+    "add.nearby": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dispositivos cercanos"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nearby devices"
+          }
+        }
+      }
     }
   },
   "version": "1.0"
