@@ -665,9 +665,9 @@ struct StatusBadge: View {
     private var palette: (color: Color, icon: String, label: String) {
         switch status {
         case .live:
-            (Theme.charge, "bluetooth", String(localized: "device.live"))
+            (Theme.charge, "checkmark.circle.fill", String(localized: "device.live"))
         case .connecting:
-            (Theme.info, "bluetooth", String(localized: "device.connectingPill"))
+            (Theme.info, "arrow.triangle.2.circlepath", String(localized: "device.connectingPill"))
         case .error:
             (Theme.danger, "exclamationmark.triangle", message ?? String(localized: "device.noConnection"))
         }

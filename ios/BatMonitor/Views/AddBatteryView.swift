@@ -28,9 +28,9 @@ struct AddBatteryView: View {
                                 select(device)
                             } label: {
                                 HStack(spacing: 14) {
-                                    Image(systemName: "bluetooth")
+                                    Image(systemName: "battery.75percent")
                                         .font(.title3)
-                                        .foregroundStyle(Theme.info)
+                                        .foregroundStyle(Theme.charge)
                                         .frame(width: 44, height: 44)
                                         .background(Theme.surfaceHigh, in: Circle())
                                     VStack(alignment: .leading, spacing: 2) {
@@ -104,7 +104,7 @@ struct AddBatteryView: View {
                 ProgressView()
                     .controlSize(.small)
             } else {
-                Image(systemName: "bluetooth")
+                Image(systemName: "checkmark.circle.fill")
                     .foregroundStyle(Theme.muted)
             }
             Text(LocalizedStringKey(scanner.isScanning ? "add.scanning" : "add.done"))
