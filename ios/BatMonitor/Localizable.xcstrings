@@ -1968,6 +1968,38 @@
           }
         }
       }
+    },
+    "device.timeToFull": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Completa en %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Full in %@"
+          }
+        }
+      }
+    },
+    "device.fullyCharged": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Carga completa"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fully charged"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

@@ -70,26 +70,54 @@ struct BatteryDetailView: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: 16) {
-                switch tab {
-                case .overview: overview
-                case .cells: cells
-                case .status: status
-                case .control: control
+        TabView(selection: $tab) {
+            ScrollView {
+                VStack(spacing: 16) {
+                    overview
                 }
+                .padding(.horizontal, 16)
+                .padding(.bottom, 32)
             }
-            .padding(.horizontal, 16)
-            .padding(.bottom, 32)
-            .animation(.smooth, value: tab)
+            .scrollIndicators(.hidden)
+            .tabItem { Label(DetailTab.overview.title, systemImage: "speedometer") }
+            .tag(DetailTab.overview)
+
+            ScrollView {
+                VStack(spacing: 16) {
+                    cells
+                }
+                .padding(.horizontal, 16)
+                .padding(.bottom, 32)
+            }
+            .scrollIndicators(.hidden)
+            .tabItem { Label(DetailTab.cells.title, systemImage: "battery.100") }
+            .tag(DetailTab.cells)
+
+            ScrollView {
+                VStack(spacing: 16) {
+                    status
+                }
+                .padding(.horizontal, 16)
+                .padding(.bottom, 32)
+            }
+            .scrollIndicators(.hidden)
+            .tabItem { Label(DetailTab.status.title, systemImage: "shield.lefthalf.filled") }
+            .tag(DetailTab.status)
+
+            ScrollView {
+                VStack(spacing: 16) {
+                    control
+                }
+                .padding(.horizontal, 16)
+                .padding(.bottom, 32)
+            }
+            .scrollIndicators(.hidden)
+            .tabItem { Label(DetailTab.control.title, systemImage: "slider.horizontal.3") }
+            .tag(DetailTab.control)
         }
-        .scrollIndicators(.hidden)
         .background(Theme.background)
         .navigationTitle(currentName)
         .navigationBarTitleDisplayMode(.inline)
-        .safeAreaInset(edge: .top, spacing: 0) {
-            tabPicker
-        }
         .toolbar { moreMenu }
         .task { await monitor.run() }
         .sheet(isPresented: $renaming) {
@@ -129,20 +157,6 @@ struct BatteryDetailView: View {
             }
         }
         .sensoryFeedback(.success, trigger: successTrigger)
-    }
-
-    // MARK: - Tabs
-
-    private var tabPicker: some View {
-        Picker("device.tabs", selection: $tab) {
-            ForEach(DetailTab.allCases) { item in
-                Text(item.title).tag(item)
-            }
-        }
-        .pickerStyle(.segmented)
-        .labelsHidden()
-        .padding(.horizontal, 16)
-        .padding(.vertical, 10)
     }
 
     // MARK: - Overview
@@ -234,10 +248,35 @@ struct BatteryDetailView: View {
                     .foregroundStyle(Theme.muted)
                     .monospacedDigit()
                     .contentTransition(.numericText())
+                if basic.soc >= 100 {
+                    Label("device.fullyCharged", systemImage: "checkmark.circle.fill")
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(Theme.charge)
+                } else if charging, let eta = timeToFull(basic: basic) {
+                    HStack(spacing: 6) {
+                        Image(systemName: "timer")
+                        Text(String(format: String(localized: "device.timeToFull"), eta))
+                    }
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(accent)
+                    .contentTransition(.numericText())
+                }
             }
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 12)
+    }
+
+    /// Estimated remaining charge time from missing Ah over charge current.
+    private func timeToFull(basic: BMSBasicInfo) -> String? {
+        let missing = basic.nominalCapacity - basic.remainingCapacity
+        guard basic.current > 0.05, missing > 0 else { return nil }
+        let totalMinutes = Int((missing / basic.current * 60).rounded())
+        guard totalMinutes >= 1 else { return nil }
+        if totalMinutes >= 60 {
+            return "\(totalMinutes / 60) h \(totalMinutes % 60) min"
+        }
+        return "\(totalMinutes) min"
     }
 
     private func protectionSummary(_ basic: BMSBasicInfo) -> some View {

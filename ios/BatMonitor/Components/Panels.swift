@@ -101,7 +101,7 @@ struct FluidBatteryView: View {
 
     var body: some View {
         let level = Double(min(100, max(0, soc))) / 100
-        if charging && !reduceMotion {
+        if charging && level < 1 && !reduceMotion {
             TimelineView(.animation(minimumInterval: 1 / 30)) { context in
                 battery(level: level, phase: context.date.timeIntervalSinceReferenceDate * 2.2)
             }
@@ -111,24 +111,30 @@ struct FluidBatteryView: View {
     }
 
     private func battery(level: Double, phase: Double) -> some View {
-        HStack(spacing: 5) {
+        VStack(spacing: 5) {
+            RoundedRectangle(cornerRadius: 4, style: .continuous)
+                .fill(color)
+                .frame(width: 40, height: 9)
             ZStack {
-                WaveShape(level: level, phase: phase)
-                    .fill(color.opacity(0.85))
-                    .padding(7)
-                    .clipShape(RoundedRectangle(cornerRadius: 15, style: .continuous))
+                if level >= 1 {
+                    RoundedRectangle(cornerRadius: 15, style: .continuous)
+                        .fill(color.opacity(0.85))
+                        .padding(7)
+                } else {
+                    WaveShape(level: level, phase: phase)
+                        .fill(color.opacity(0.85))
+                        .padding(7)
+                        .clipShape(RoundedRectangle(cornerRadius: 15, style: .continuous))
+                }
                 RoundedRectangle(cornerRadius: 20, style: .continuous)
                     .strokeBorder(color, lineWidth: 3)
                 Text("\(soc)%")
-                    .font(.system(size: 30, weight: .bold))
+                    .font(.system(size: 28, weight: .bold))
                     .monospacedDigit()
                     .contentTransition(.numericText(value: Double(soc)))
                     .foregroundStyle(.white)
             }
-            .frame(width: 190, height: 96)
-            RoundedRectangle(cornerRadius: 4, style: .continuous)
-                .fill(color)
-                .frame(width: 9, height: 40)
+            .frame(width: 120, height: 190)
         }
         .shadow(color: charging ? color.opacity(0.45) : .clear, radius: 14)
         .accessibilityLabel(Text("device.stat.charge"))
