@@ -115,7 +115,6 @@ struct BatteryDetailView: View {
             .tabItem { Label(DetailTab.control.title, systemImage: "slider.horizontal.3") }
             .tag(DetailTab.control)
         }
-        .tint(.white)
         .background(Theme.background)
         .navigationTitle(currentName)
         .navigationBarTitleDisplayMode(.inline)

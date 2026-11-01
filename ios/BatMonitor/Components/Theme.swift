@@ -23,7 +23,7 @@ enum Theme {
 
     /// Rajdhani for figures: squared, techno letterforms give the readings
     /// a device-display feel that system rounded cannot.
-    static func numeric(size: CGFloat, bold: Bool = false) -> Font {
+    static func numeric(size: CGFloat, bold: Bool = true) -> Font {
         .custom(bold ? "Rajdhani-Bold" : "Rajdhani-SemiBold", size: size)
     }
 }
