@@ -21,10 +21,10 @@ enum Theme {
     static let danger = Color(hex: 0xFF5E6C)
     static let info = Color(hex: 0x5AA9FF)
 
-    /// Rajdhani for figures: squared, techno letterforms give the readings
-    /// a device-display feel that system rounded cannot.
+    /// M PLUS 1p ExtraBold for figures: a Japanese gothic with a techno
+    /// edge. Used at full weight everywhere numbers appear.
     static func numeric(size: CGFloat, bold: Bool = true) -> Font {
-        .custom(bold ? "Rajdhani-Bold" : "Rajdhani-SemiBold", size: size)
+        .custom("MPLUS1p-ExtraBold", size: size)
     }
 }
 

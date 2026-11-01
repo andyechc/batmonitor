@@ -28,6 +28,7 @@ targets:
         UILaunchScreen: {}
         UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
         NSBluetoothAlwaysUsageDescription: BatMonitor usa Bluetooth para leer el BMS de tu batería.
+        UIAppFonts: [MPLUS1p-ExtraBold.ttf]
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.andyechc.batmonitor

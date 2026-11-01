@@ -27,6 +27,10 @@
 	<string>1</string>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>BatMonitor usa Bluetooth para leer el BMS de tu batería.</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>MPLUS1p-ExtraBold.ttf</string>
+	</array>
 	<key>UILaunchScreen</key>
 	<dict/>
 	<key>UISupportedInterfaceOrientations</key>
