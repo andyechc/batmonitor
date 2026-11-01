@@ -3,6 +3,7 @@ import SwiftUI
 struct HomeView: View {
     @Environment(BatteryStore.self) private var store
     @State private var showingAdd = false
+    @State private var pendingDelete: SavedBattery?
 
     var body: some View {
         Group {
@@ -31,13 +32,22 @@ struct HomeView: View {
                             }
                             .contextMenu {
                                 Button(role: .destructive) {
-                                    store.remove(id: battery.id)
+                                    pendingDelete = battery
                                 } label: {
-                                    Label("device.delete", systemImage: "trash")
+                                    Label {
+                                        Text("device.delete")
+                                    } icon: {
+                                        Image(systemName: "trash")
+                                            .foregroundStyle(Theme.danger)
+                                    }
                                 }
                             }
                         }
-                        .onDelete { store.remove(at: $0) }
+                        .onDelete { offsets in
+                            if let first = offsets.first {
+                                pendingDelete = store.batteries[first]
+                            }
+                        }
                     }
                 }
                 .scrollContentBackground(.hidden)
@@ -56,6 +66,16 @@ struct HomeView: View {
         }
         .sheet(isPresented: $showingAdd) {
             AddBatteryView()
+        }
+        .sheet(item: $pendingDelete) { battery in
+            ConfirmSheet(
+                icon: "trash",
+                title: "device.removeTitle",
+                message: String(format: String(localized: "device.removeConfirm"), battery.name),
+                confirmTitle: "device.delete"
+            ) {
+                store.remove(id: battery.id)
+            }
         }
     }
 }

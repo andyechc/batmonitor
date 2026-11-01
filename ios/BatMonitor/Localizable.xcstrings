@@ -1488,6 +1488,486 @@
           }
         }
       }
+    },
+    "device.info": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Más información"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "More info"
+          }
+        }
+      }
+    },
+    "device.gotIt": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entendido"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Got it"
+          }
+        }
+      }
+    },
+    "help.soc.title": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nivel de carga"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Charge level"
+          }
+        }
+      }
+    },
+    "help.soc.body": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Porcentaje de carga que calcula el BMS. Sube mientras la batería carga y baja mientras la usas."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Charge percentage calculated by the BMS. It rises while charging and falls while you use the battery."
+          }
+        }
+      }
+    },
+    "help.voltage.title": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voltaje total"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Total voltage"
+          }
+        }
+      }
+    },
+    "help.voltage.body": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suma del voltaje de todas las celdas. Sube al cargar y baja al descargar."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Combined voltage of all cells. It rises while charging and falls while discharging."
+          }
+        }
+      }
+    },
+    "help.current.title": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Corriente"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Current"
+          }
+        }
+      }
+    },
+    "help.current.body": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Corriente en este momento. Positiva mientras carga, negativa mientras alimenta tus equipos."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Current right now. Positive while charging, negative while powering your devices."
+          }
+        }
+      }
+    },
+    "help.power.title": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Potencia"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Power"
+          }
+        }
+      }
+    },
+    "help.power.body": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Energía que entra o sale en este momento: voltaje por corriente."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Energy flowing in or out right now: voltage times current."
+          }
+        }
+      }
+    },
+    "help.cycles.title": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ciclos"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cycles"
+          }
+        }
+      }
+    },
+    "help.cycles.body": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ciclos completos de carga y descarga que registra el BMS."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Full charge and discharge cycles recorded by the BMS."
+          }
+        }
+      }
+    },
+    "help.maxtemp.title": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Temperatura máxima"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maximum temperature"
+          }
+        }
+      }
+    },
+    "help.maxtemp.body": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La lectura más alta de los sensores de temperatura del paquete."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The highest reading from the pack temperature sensors."
+          }
+        }
+      }
+    },
+    "help.imbalance.title": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desbalance"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Imbalance"
+          }
+        }
+      }
+    },
+    "help.imbalance.body": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diferencia entre la celda más alta y la más baja. Un valor bajo significa celdas equilibradas."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gap between the highest and lowest cell. A low value means balanced cells."
+          }
+        }
+      }
+    },
+    "help.cells.title": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Celdas"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cells"
+          }
+        }
+      }
+    },
+    "help.cells.body": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voltaje de cada celda. Celdas parejas significan un paquete sano."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voltage of each cell. Even cells mean a healthy pack."
+          }
+        }
+      }
+    },
+    "help.temperatures.title": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Temperaturas"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Temperatures"
+          }
+        }
+      }
+    },
+    "help.temperatures.body": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lecturas de los sensores de temperatura que vigila el BMS."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Readings from the temperature sensors watched by the BMS."
+          }
+        }
+      }
+    },
+    "help.protections.title": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Protecciones"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Protections"
+          }
+        }
+      }
+    },
+    "help.protections.body": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alarmas activas del BMS, como sobretensión o sobretemperatura. Si hay alguna, revisa la batería antes de usarla."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Active BMS alarms, such as overvoltage or overtemperature. If any is on, check the battery before use."
+          }
+        }
+      }
+    },
+    "help.charge.title": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Carga"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Charge"
+          }
+        }
+      }
+    },
+    "help.charge.body": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Interruptor de carga del BMS. Apagado, la batería no acepta carga."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "BMS charge switch. When off, the battery does not accept charge."
+          }
+        }
+      }
+    },
+    "help.discharge.title": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Descarga"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Discharge"
+          }
+        }
+      }
+    },
+    "help.discharge.body": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Interruptor de descarga del BMS. Apagado, la batería no entrega energía a tus equipos."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "BMS discharge switch. When off, the battery delivers no power to your devices."
+          }
+        }
+      }
+    },
+    "help.balance.title": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Balance automático"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Auto balance"
+          }
+        }
+      }
+    },
+    "help.balance.body": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El BMS iguala el voltaje de las celdas. Tarda un rato y es seguro dejarlo trabajar."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The BMS evens out cell voltages. It takes a while and is safe to leave running."
+          }
+        }
+      }
+    },
+    "help.clear.title": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Limpiar protecciones"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear protections"
+          }
+        }
+      }
+    },
+    "help.clear.body": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Borra las alarmas registradas por el BMS después de resolver la causa."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clears the alarms stored by the BMS after you fix the cause."
+          }
+        }
+      }
     }
   },
   "version": "1.0"

@@ -28,8 +28,8 @@ struct BatteryDetailView: View {
     @State private var busy = false
     @State private var message: String?
     @State private var renaming = false
-    @State private var confirmRemove = false
-    @State private var pendingOff: SwitchTarget?
+    @State private var pendingConfirm: PendingConfirm?
+    @State private var selectedInfo: InfoTopic?
     @State private var successTrigger = 0
 
     enum SwitchTarget: Identifiable {
@@ -37,6 +37,19 @@ struct BatteryDetailView: View {
         case discharge
 
         var id: Self { self }
+    }
+
+    enum PendingConfirm: Identifiable {
+        case turnOff(SwitchTarget)
+        case remove
+
+        var id: String {
+            switch self {
+            case .turnOff(.charge): "off-charge"
+            case .turnOff(.discharge): "off-discharge"
+            case .remove: "remove"
+            }
+        }
     }
 
     init(battery: SavedBattery) {
@@ -50,6 +63,10 @@ struct BatteryDetailView: View {
 
     private var isLive: Bool {
         monitor.status == .live && !busy
+    }
+
+    private func showInfo(_ topic: InfoTopic) {
+        selectedInfo = topic
     }
 
     var body: some View {
@@ -83,32 +100,33 @@ struct BatteryDetailView: View {
                 successTrigger += 1
             }
         }
-        .confirmationDialog(
-            offTitle,
-            isPresented: isConfirmingOff,
-            titleVisibility: .visible
-        ) {
-            Button("device.confirm", role: .destructive) {
-                if let target = pendingOff {
+        .sheet(item: $selectedInfo) { topic in
+            InfoSheet(topic: topic)
+        }
+        .sheet(item: $pendingConfirm) { item in
+            switch item {
+            case .turnOff(let target):
+                ConfirmSheet(
+                    icon: "power",
+                    title: target == .discharge ? "device.dischargeSwitch" : "device.chargeSwitch",
+                    message: target == .discharge
+                        ? String(localized: "device.confirmDischargeOff")
+                        : String(localized: "device.confirmChargeOff"),
+                    confirmTitle: "device.confirm"
+                ) {
                     Task { await applySwitch(target) }
                 }
+            case .remove:
+                ConfirmSheet(
+                    icon: "trash",
+                    title: "device.removeTitle",
+                    message: String(format: String(localized: "device.removeConfirm"), currentName),
+                    confirmTitle: "device.delete"
+                ) {
+                    store.remove(id: battery.id)
+                    dismiss()
+                }
             }
-            Button("device.cancel", role: .cancel) {}
-        } message: {
-            Text(LocalizedStringKey(pendingOff == .discharge ? "device.confirmDischargeOff" : "device.confirmChargeOff"))
-        }
-        .confirmationDialog(
-            "device.removeTitle",
-            isPresented: $confirmRemove,
-            titleVisibility: .visible
-        ) {
-            Button("device.delete", role: .destructive) {
-                store.remove(id: battery.id)
-                dismiss()
-            }
-            Button("device.cancel", role: .cancel) {}
-        } message: {
-            Text(String(format: String(localized: "device.removeConfirm"), currentName))
         }
         .sensoryFeedback(.success, trigger: successTrigger)
     }
@@ -132,33 +150,59 @@ struct BatteryDetailView: View {
     @ViewBuilder
     private var overview: some View {
         if let reading = monitor.reading {
-            HeroCard(reading: reading, status: monitor.status, message: monitor.message)
+            hero(reading: reading)
 
             LazyVGrid(columns: twoColumns, spacing: 12) {
                 StatTile(
                     label: "device.stat.voltage",
                     value: String(format: "%.2f", reading.basic.totalVoltage),
                     unit: "V",
-                    icon: "bolt"
+                    icon: "bolt",
+                    info: .voltage,
+                    onInfo: showInfo
                 )
                 StatTile(
                     label: "device.stat.current",
                     value: String(format: "%+.2f", reading.basic.current),
                     unit: "A",
                     icon: "waveform.path.ecg",
-                    accent: accent(for: reading.basic.current)
+                    accent: accent(for: reading.basic.current),
+                    info: .current,
+                    onInfo: showInfo
                 )
                 StatTile(
                     label: "device.stat.power",
                     value: String(format: "%.0f", abs(reading.basic.totalVoltage * reading.basic.current)),
                     unit: "W",
                     icon: "gauge.with.dots.needle.67percent",
-                    accent: accent(for: reading.basic.current)
+                    accent: accent(for: reading.basic.current),
+                    info: .power,
+                    onInfo: showInfo
                 )
                 StatTile(
                     label: "device.stat.cycles",
                     value: "\(reading.basic.cycles)",
-                    icon: "arrow.triangle.2.circlepath"
+                    icon: "arrow.triangle.2.circlepath",
+                    info: .cycles,
+                    onInfo: showInfo
+                )
+                StatTile(
+                    label: "device.stat.maxTemp",
+                    value: reading.basic.temperatures.max().map { String(format: "%.1f", $0) } ?? "—",
+                    unit: reading.basic.temperatures.isEmpty ? nil : "°C",
+                    icon: "thermometer.medium",
+                    info: .maxTemp,
+                    onInfo: showInfo
+                )
+                StatTile(
+                    label: "device.stat.imbalance",
+                    value: reading.cells.isEmpty
+                        ? "—"
+                        : String(format: "%.0f", (reading.cells.max()! - reading.cells.min()!) * 1000),
+                    unit: reading.cells.isEmpty ? nil : "mV",
+                    icon: "scalemass",
+                    info: .imbalance,
+                    onInfo: showInfo
                 )
             }
 
@@ -166,6 +210,34 @@ struct BatteryDetailView: View {
         } else {
             ConnectingView(status: monitor.status, message: monitor.message)
         }
+    }
+
+    /// Hero without a card: the battery floats directly on the background.
+    private func hero(reading: BatteryReading) -> some View {
+        let basic = reading.basic
+        let charging = basic.current > 0.05
+        let accent = accent(for: basic.current)
+        return VStack(spacing: 18) {
+            StatusBadge(status: monitor.status, message: monitor.message)
+            FluidBatteryView(soc: basic.soc, charging: charging, color: accent)
+            VStack(spacing: 6) {
+                HStack(spacing: 6) {
+                    Image(systemName: charging ? "bolt.fill" : basic.current < -0.05 ? "arrow.down" : "pause.fill")
+                    Text(stateKey(for: basic.current))
+                    InfoButton(topic: .soc, action: showInfo)
+                }
+                .font(.title3.weight(.semibold))
+                .foregroundStyle(accent)
+                .contentTransition(.opacity)
+                Text(String(format: "%.2f de %.0f Ah", basic.remainingCapacity, basic.nominalCapacity))
+                    .font(.subheadline)
+                    .foregroundStyle(Theme.muted)
+                    .monospacedDigit()
+                    .contentTransition(.numericText())
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 12)
     }
 
     private func protectionSummary(_ basic: BMSBasicInfo) -> some View {
@@ -213,12 +285,22 @@ struct BatteryDetailView: View {
                 }
             }
 
-            Card(title: "\(String(localized: "device.cells")) · \(reading.cells.count)", icon: "battery.100") {
+            Card(
+                title: "\(String(localized: "device.cells")) · \(reading.cells.count)",
+                icon: "battery.100",
+                info: .cells,
+                onInfo: showInfo
+            ) {
                 CellBarsView(cells: reading.cells)
             }
 
             if !reading.basic.temperatures.isEmpty {
-                Card(title: String(localized: "device.temperatures"), icon: "thermometer.medium") {
+                Card(
+                    title: String(localized: "device.temperatures"),
+                    icon: "thermometer.medium",
+                    info: .temperatures,
+                    onInfo: showInfo
+                ) {
                     ForEach(Array(reading.basic.temperatures.enumerated()), id: \.offset) { index, temperature in
                         LabeledValueRow(
                             label: "\(String(localized: "device.sensor")) \(index + 1)",
@@ -254,7 +336,12 @@ struct BatteryDetailView: View {
     @ViewBuilder
     private var status: some View {
         if let basic = monitor.reading?.basic {
-            Card(title: String(localized: "device.protections"), icon: "shield.lefthalf.filled") {
+            Card(
+                title: String(localized: "device.protections"),
+                icon: "shield.lefthalf.filled",
+                info: .protections,
+                onInfo: showInfo
+            ) {
                 let active = basic.protections.filter(\.active)
                 if active.isEmpty {
                     Label("device.noProtections", systemImage: "checkmark.circle.fill")
@@ -287,37 +374,40 @@ struct BatteryDetailView: View {
     private var control: some View {
         if let basic = monitor.reading?.basic {
             Card(title: String(localized: "device.switches"), icon: "power") {
-                Toggle(isOn: switchBinding(.charge, on: basic.chargeOn)) {
-                    Label("device.chargeSwitch", systemImage: "bolt.fill")
-                }
-                .disabled(!isLive)
-                Toggle(isOn: switchBinding(.discharge, on: basic.dischargeOn)) {
-                    Label("device.dischargeSwitch", systemImage: "arrow.down")
-                }
-                .disabled(!isLive)
+                switchRow(
+                    target: .charge,
+                    label: "device.chargeSwitch",
+                    systemImage: "bolt.fill",
+                    on: basic.chargeOn,
+                    info: .charge
+                )
+                switchRow(
+                    target: .discharge,
+                    label: "device.dischargeSwitch",
+                    systemImage: "arrow.down",
+                    on: basic.dischargeOn,
+                    info: .discharge
+                )
             }
             .tint(Theme.charge)
 
             Card(title: String(localized: "device.maintenance"), icon: "wrench.and.screwdriver") {
-                Button {
+                actionRow(
+                    label: "device.balance",
+                    systemImage: "scale.3d",
+                    info: .balance,
+                    enabled: isLive
+                ) {
                     Task { await perform { try await monitor.balance() } }
-                } label: {
-                    Label("device.balance", systemImage: "scale.3d")
-                        .frame(maxWidth: .infinity)
                 }
-                .buttonStyle(.bordered)
-                .controlSize(.large)
-                .disabled(!isLive)
-
-                Button {
+                actionRow(
+                    label: "device.clearProtection",
+                    systemImage: "shield.slash",
+                    info: .clear,
+                    enabled: isLive
+                ) {
                     Task { await perform { try await monitor.clearProtection() } }
-                } label: {
-                    Label("device.clearProtection", systemImage: "shield.slash")
-                        .frame(maxWidth: .infinity)
                 }
-                .buttonStyle(.bordered)
-                .controlSize(.large)
-                .disabled(!isLive)
 
                 if busy {
                     ProgressView()
@@ -348,15 +438,61 @@ struct BatteryDetailView: View {
             }
 
             Button(role: .destructive) {
-                confirmRemove = true
+                pendingConfirm = .remove
             } label: {
-                Label("device.remove", systemImage: "trash")
-                    .frame(maxWidth: .infinity)
+                Label {
+                    Text("device.remove")
+                } icon: {
+                    Image(systemName: "trash")
+                        .foregroundStyle(Theme.danger)
+                }
+                .frame(maxWidth: .infinity)
             }
             .buttonStyle(.bordered)
             .controlSize(.large)
         } else {
             ConnectingView(status: monitor.status, message: monitor.message)
+        }
+    }
+
+    private func switchRow(
+        target: SwitchTarget,
+        label: LocalizedStringKey,
+        systemImage: String,
+        on: Bool,
+        info: InfoTopic
+    ) -> some View {
+        HStack {
+            Label(label, systemImage: systemImage)
+                .foregroundStyle(Theme.muted)
+            InfoButton(topic: info, action: showInfo)
+            Spacer()
+            Toggle("", isOn: switchBinding(target, on: on))
+                .labelsHidden()
+                .disabled(!isLive || busy)
+        }
+    }
+
+    private func actionRow(
+        label: LocalizedStringKey,
+        systemImage: String,
+        info: InfoTopic,
+        enabled: Bool,
+        action: @escaping () -> Void
+    ) -> some View {
+        HStack {
+            Button(action: action) {
+                HStack {
+                    Label(label, systemImage: systemImage)
+                        .foregroundStyle(Theme.muted)
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .font(.footnote.weight(.semibold))
+                        .foregroundStyle(Theme.muted)
+                }
+            }
+            .disabled(!enabled || busy)
+            InfoButton(topic: info, action: showInfo)
         }
     }
 
@@ -384,9 +520,14 @@ struct BatteryDetailView: View {
                 .disabled(!isLive)
                 Divider()
                 Button(role: .destructive) {
-                    confirmRemove = true
+                    pendingConfirm = .remove
                 } label: {
-                    Label("device.remove", systemImage: "trash")
+                    Label {
+                        Text("device.remove")
+                    } icon: {
+                        Image(systemName: "trash")
+                            .foregroundStyle(Theme.danger)
+                    }
                 }
             } label: {
                 Image(systemName: "ellipsis.circle")
@@ -397,17 +538,6 @@ struct BatteryDetailView: View {
 
     // MARK: - Actions
 
-    private var isConfirmingOff: Binding<Bool> {
-        Binding(
-            get: { pendingOff != nil },
-            set: { if !$0 { pendingOff = nil } }
-        )
-    }
-
-    private var offTitle: LocalizedStringKey {
-        pendingOff == .discharge ? "device.dischargeSwitch" : "device.chargeSwitch"
-    }
-
     private func switchBinding(_ target: SwitchTarget, on: Bool) -> Binding<Bool> {
         Binding(
             get: { on },
@@ -415,7 +545,7 @@ struct BatteryDetailView: View {
                 if newValue {
                     Task { await applySwitch(target) }
                 } else {
-                    pendingOff = target
+                    pendingConfirm = .turnOff(target)
                 }
             }
         )
@@ -446,40 +576,6 @@ struct BatteryDetailView: View {
     }
 
     private func accent(for current: Double) -> Color {
-        current > 0.05 ? Theme.charge : current < -0.05 ? Theme.discharge : Theme.info
-    }
-}
-
-private struct HeroCard: View {
-    let reading: BatteryReading
-    let status: BatteryMonitor.Status
-    let message: String?
-
-    var body: some View {
-        let basic = reading.basic
-        let accent = accentColor(for: basic.current)
-        VStack(spacing: 18) {
-            StatusBadge(status: status, message: message)
-            SocRing(soc: basic.soc, color: accent, size: 196)
-            VStack(spacing: 6) {
-                Text(stateKey(for: basic.current))
-                    .font(.title3.weight(.semibold))
-                    .foregroundStyle(accent)
-                    .contentTransition(.opacity)
-                Text(String(format: "%.2f de %.0f Ah", basic.remainingCapacity, basic.nominalCapacity))
-                    .font(.subheadline)
-                    .foregroundStyle(Theme.muted)
-                    .monospacedDigit()
-                    .contentTransition(.numericText())
-            }
-        }
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, 24)
-        .padding(.horizontal, 18)
-        .panel()
-    }
-
-    private func accentColor(for current: Double) -> Color {
         current > 0.05 ? Theme.charge : current < -0.05 ? Theme.discharge : Theme.info
     }
 

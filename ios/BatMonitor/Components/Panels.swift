@@ -3,6 +3,8 @@ import SwiftUI
 struct Card<Content: View>: View {
     var title: String?
     var icon: String?
+    var info: InfoTopic?
+    var onInfo: (InfoTopic) -> Void = { _ in }
     @ViewBuilder var content: Content
 
     var body: some View {
@@ -13,6 +15,10 @@ struct Card<Content: View>: View {
                         Image(systemName: icon)
                     }
                     Text(title)
+                    if let info {
+                        Spacer()
+                        InfoButton(topic: info, action: onInfo)
+                    }
                 }
                 .font(.footnote.weight(.semibold))
                 .textCase(.uppercase)
@@ -26,12 +32,33 @@ struct Card<Content: View>: View {
     }
 }
 
+/// Small "i" button that opens an explanation sheet. The muted color keeps
+/// it secondary to the value it annotates.
+struct InfoButton: View {
+    let topic: InfoTopic
+    var action: (InfoTopic) -> Void
+
+    var body: some View {
+        Button {
+            action(topic)
+        } label: {
+            Image(systemName: "info.circle")
+                .font(.footnote)
+                .foregroundStyle(Theme.muted)
+                .accessibilityLabel(Text("device.info"))
+        }
+        .buttonStyle(.plain)
+    }
+}
+
 struct StatTile: View {
     let label: LocalizedStringKey
     let value: String
     var unit: String?
     let icon: String
     var accent: Color = .primary
+    var info: InfoTopic?
+    var onInfo: (InfoTopic) -> Void = { _ in }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -41,6 +68,10 @@ struct StatTile: View {
                 Text(label)
                     .font(.footnote)
                     .foregroundStyle(Theme.muted)
+                if let info {
+                    Spacer()
+                    InfoButton(topic: info, action: onInfo)
+                }
             }
             HStack(alignment: .firstTextBaseline, spacing: 4) {
                 Text(value)
@@ -60,34 +91,72 @@ struct StatTile: View {
     }
 }
 
-struct SocRing: View {
+/// Battery drawn in code: rounded body, terminal cap, and a liquid fill
+/// whose wave only animates while charging, so idle screens stay still.
+struct FluidBatteryView: View {
     let soc: Int
+    let charging: Bool
     let color: Color
-    var size: CGFloat = 200
-    var lineWidth: CGFloat = 14
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
-        let progress = CGFloat(min(100, max(0, soc))) / 100
-        ZStack {
-            Circle()
-                .stroke(Theme.surfaceHigh, lineWidth: lineWidth)
-            Circle()
-                .trim(from: 0, to: progress)
-                .stroke(color, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
-                .rotationEffect(.degrees(-90))
-                .animation(.easeOut(duration: 0.4), value: progress)
-            VStack(spacing: -4) {
-                Text("\(soc)")
-                    .font(.system(size: size * 0.26, weight: .bold))
+        let level = Double(min(100, max(0, soc))) / 100
+        if charging && !reduceMotion {
+            TimelineView(.animation(minimumInterval: 1 / 30)) { context in
+                battery(level: level, phase: context.date.timeIntervalSinceReferenceDate * 2.2)
+            }
+        } else {
+            battery(level: level, phase: 0.8)
+        }
+    }
+
+    private func battery(level: Double, phase: Double) -> some View {
+        HStack(spacing: 5) {
+            ZStack {
+                WaveShape(level: level, phase: phase)
+                    .fill(color.opacity(0.85))
+                    .padding(7)
+                    .clipShape(RoundedRectangle(cornerRadius: 15, style: .continuous))
+                RoundedRectangle(cornerRadius: 20, style: .continuous)
+                    .strokeBorder(color, lineWidth: 3)
+                Text("\(soc)%")
+                    .font(.system(size: 30, weight: .bold))
                     .monospacedDigit()
                     .contentTransition(.numericText(value: Double(soc)))
-                    .animation(.smooth, value: soc)
-                Text("device.stat.charge")
-                    .font(.subheadline)
-                    .foregroundStyle(Theme.muted)
+                    .foregroundStyle(.white)
             }
+            .frame(width: 190, height: 96)
+            RoundedRectangle(cornerRadius: 4, style: .continuous)
+                .fill(color)
+                .frame(width: 9, height: 40)
         }
-        .frame(width: size, height: size)
+        .shadow(color: charging ? color.opacity(0.45) : .clear, radius: 14)
+        .accessibilityLabel(Text("device.stat.charge"))
+        .accessibilityValue("\(soc)%")
+    }
+}
+
+private struct WaveShape: Shape {
+    var level: Double
+    var phase: Double
+
+    var animatableData: Double {
+        get { phase }
+        set { phase = newValue }
+    }
+
+    func path(in rect: CGRect) -> Path {
+        let baseY = rect.height * (1 - CGFloat(level))
+        var path = Path()
+        path.move(to: CGPoint(x: rect.minX, y: rect.maxY))
+        for x in stride(from: rect.minX, through: rect.maxX, by: 3) {
+            let y = baseY + sin((x - rect.minX) / 22 + CGFloat(phase)) * 5
+                + sin((x - rect.minX) / 11 + CGFloat(phase) * 1.7) * 3
+            path.addLine(to: CGPoint(x: x, y: y))
+        }
+        path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
+        path.closeSubpath()
+        return path
     }
 }
 

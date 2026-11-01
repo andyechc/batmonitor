@@ -18,6 +18,7 @@
 		CAE0838E18D411F700046F93 /* BLECentral.swift in Sources */ = {isa = PBXBuildFile; fileRef = A041ED983E321E175EBC5AFC /* BLECentral.swift */; };
 		D3D22ED5EC70A113502269D7 /* BatteryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A9788D4F367EC73B2C103A7 /* BatteryDetailView.swift */; };
 		DE70D6F9527787B28AB4B5D1 /* BatteryScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3F7064A99E077F5243C5A97 /* BatteryScanner.swift */; };
+		DFFF315D4E5CA1D1A828B196 /* Sheets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2004494A5339C198292EFF5C /* Sheets.swift */; };
 		E235FE085D18C2B91915A4EB /* Panels.swift in Sources */ = {isa = PBXBuildFile; fileRef = E29E9A990CCFDEE7FBC682B3 /* Panels.swift */; };
 		E58CB633640B20E80F326FD3 /* BMSProtocolTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D4E812A3E583D337963985 /* BMSProtocolTests.swift */; };
 		E8A6F07C8D2A49ABE4B913E8 /* RenameSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C866DB75ED4A56E55289CFF1 /* RenameSheet.swift */; };
@@ -37,6 +38,7 @@
 /* Begin PBXFileReference section */
 		08C5D5BD5284F780DC3AA803 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		149006C904FC6285C1E08B8D /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		2004494A5339C198292EFF5C /* Sheets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sheets.swift; sourceTree = "<group>"; };
 		2028A6F706029BE652D4904D /* BatteryMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryMonitor.swift; sourceTree = "<group>"; };
 		4A9788D4F367EC73B2C103A7 /* BatteryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryDetailView.swift; sourceTree = "<group>"; };
 		5139F34F7A65F50130AA5756 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -148,6 +150,7 @@
 				4A9788D4F367EC73B2C103A7 /* BatteryDetailView.swift */,
 				5139F34F7A65F50130AA5756 /* HomeView.swift */,
 				C866DB75ED4A56E55289CFF1 /* RenameSheet.swift */,
+				2004494A5339C198292EFF5C /* Sheets.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -267,6 +270,7 @@
 				92B153BC6A1496BD4234D125 /* HomeView.swift in Sources */,
 				E235FE085D18C2B91915A4EB /* Panels.swift in Sources */,
 				E8A6F07C8D2A49ABE4B913E8 /* RenameSheet.swift in Sources */,
+				DFFF315D4E5CA1D1A828B196 /* Sheets.swift in Sources */,
 				900F35CCB6201FAB94D7E3B8 /* Theme.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
