@@ -56,6 +56,7 @@ struct RenameSheet: View {
             }
             .onAppear { focused = true }
         }
+        .tint(Theme.charge)
         .presentationDetents([.medium])
         .presentationDragIndicator(.visible)
     }

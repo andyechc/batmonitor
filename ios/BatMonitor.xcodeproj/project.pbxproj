@@ -15,12 +15,14 @@
 		9EE49B0EE4E5A79B1A3F96DA /* BMSProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CCC9AF8BCD7FA8A0A3CA432 /* BMSProtocol.swift */; };
 		B1C6A8D70C943654DE89AFE8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AD82FA820E362E5B2392A7EE /* Assets.xcassets */; };
 		B610A9E8E17E9DBDED12F89D /* BatMonitorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10034EF62804F49068D3868 /* BatMonitorApp.swift */; };
+		C5A2DDB2AC800165D0C8DE89 /* Rajdhani-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 654E2A9B519102C4FF4D0EDD /* Rajdhani-SemiBold.ttf */; };
 		CAE0838E18D411F700046F93 /* BLECentral.swift in Sources */ = {isa = PBXBuildFile; fileRef = A041ED983E321E175EBC5AFC /* BLECentral.swift */; };
 		D3D22ED5EC70A113502269D7 /* BatteryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A9788D4F367EC73B2C103A7 /* BatteryDetailView.swift */; };
 		DE70D6F9527787B28AB4B5D1 /* BatteryScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3F7064A99E077F5243C5A97 /* BatteryScanner.swift */; };
 		DFFF315D4E5CA1D1A828B196 /* Sheets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2004494A5339C198292EFF5C /* Sheets.swift */; };
 		E235FE085D18C2B91915A4EB /* Panels.swift in Sources */ = {isa = PBXBuildFile; fileRef = E29E9A990CCFDEE7FBC682B3 /* Panels.swift */; };
 		E58CB633640B20E80F326FD3 /* BMSProtocolTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D4E812A3E583D337963985 /* BMSProtocolTests.swift */; };
+		E6D8869AEFE3F46188A75EF8 /* Rajdhani-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0C64686CCF59630BD574787F /* Rajdhani-Bold.ttf */; };
 		E8A6F07C8D2A49ABE4B913E8 /* RenameSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C866DB75ED4A56E55289CFF1 /* RenameSheet.swift */; };
 		E951005B1984DD3DB79646DD /* AddBatteryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A63CF706400147AE15C58FE9 /* AddBatteryView.swift */; };
 /* End PBXBuildFile section */
@@ -37,12 +39,14 @@
 
 /* Begin PBXFileReference section */
 		08C5D5BD5284F780DC3AA803 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		0C64686CCF59630BD574787F /* Rajdhani-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Rajdhani-Bold.ttf"; sourceTree = "<group>"; };
 		149006C904FC6285C1E08B8D /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		2004494A5339C198292EFF5C /* Sheets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sheets.swift; sourceTree = "<group>"; };
 		2028A6F706029BE652D4904D /* BatteryMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryMonitor.swift; sourceTree = "<group>"; };
 		4A9788D4F367EC73B2C103A7 /* BatteryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryDetailView.swift; sourceTree = "<group>"; };
 		5139F34F7A65F50130AA5756 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		5CCC9AF8BCD7FA8A0A3CA432 /* BMSProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMSProtocol.swift; sourceTree = "<group>"; };
+		654E2A9B519102C4FF4D0EDD /* Rajdhani-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Rajdhani-SemiBold.ttf"; sourceTree = "<group>"; };
 		915E8AA96CCF067C88F8B2BD /* BatMonitorTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = BatMonitorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9924D1FD1DD0AB4ED13067CF /* BatteryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryStore.swift; sourceTree = "<group>"; };
 		A041ED983E321E175EBC5AFC /* BLECentral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLECentral.swift; sourceTree = "<group>"; };
@@ -118,6 +122,15 @@
 			path = Protocol;
 			sourceTree = "<group>";
 		};
+		C7F666D9ED81144FA525A094 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				0C64686CCF59630BD574787F /* Rajdhani-Bold.ttf */,
+				654E2A9B519102C4FF4D0EDD /* Rajdhani-SemiBold.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
 		C8911EBC22CD1312487EA01F /* BatMonitor */ = {
 			isa = PBXGroup;
 			children = (
@@ -129,9 +142,18 @@
 				E255E687B1B39ABB8FCC31B1 /* Components */,
 				883DE7DE0F982BF7D986FBEB /* Models */,
 				B3442A038012E612D4F3F6F3 /* Protocol */,
+				DD6B98E1EA51F73DE09E1707 /* Resources */,
 				E3A415E07418D567EDE8C60C /* Views */,
 			);
 			path = BatMonitor;
+			sourceTree = "<group>";
+		};
+		DD6B98E1EA51F73DE09E1707 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				C7F666D9ED81144FA525A094 /* Fonts */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		E255E687B1B39ABB8FCC31B1 /* Components */ = {
@@ -241,6 +263,8 @@
 			files = (
 				B1C6A8D70C943654DE89AFE8 /* Assets.xcassets in Resources */,
 				4640FC9F6CBAB58B4A94AD31 /* Localizable.xcstrings in Resources */,
+				E6D8869AEFE3F46188A75EF8 /* Rajdhani-Bold.ttf in Resources */,
+				C5A2DDB2AC800165D0C8DE89 /* Rajdhani-SemiBold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

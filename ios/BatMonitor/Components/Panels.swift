@@ -75,7 +75,7 @@ struct StatTile: View {
             }
             HStack(alignment: .firstTextBaseline, spacing: 4) {
                 Text(value)
-                    .font(.system(size: 26, weight: .bold))
+                    .font(Theme.numeric(size: 29, bold: true))
                     .monospacedDigit()
                     .foregroundStyle(accent)
                 if let unit {
@@ -150,7 +150,7 @@ struct FluidBatteryView: View {
 
     private func percentText(color: Color) -> some View {
         Text("\(soc)%")
-            .font(.system(size: 28, weight: .bold))
+            .font(Theme.numeric(size: 34, bold: true))
             .monospacedDigit()
             .contentTransition(.numericText(value: Double(soc)))
             .foregroundStyle(color)
@@ -210,7 +210,7 @@ struct CellBarsView: View {
                     }
                     .frame(height: 10)
                     Text(String(format: "%.3f V", voltage))
-                        .font(.subheadline)
+                        .font(Theme.numeric(size: 17))
                         .monospacedDigit()
                         .frame(width: 84, alignment: .trailing)
                 }

@@ -79,6 +79,7 @@ struct InfoSheet: View {
                 .controlSize(.large)
                 .frame(maxWidth: .infinity)
         }
+        .tint(Theme.charge)
         .padding(24)
         .presentationDetents([.medium])
         .presentationDragIndicator(.visible)
@@ -120,6 +121,7 @@ struct ConfirmSheet: View {
                 .controlSize(.large)
                 .frame(maxWidth: .infinity)
         }
+        .tint(Theme.charge)
         .padding(24)
         .presentationDetents([.medium])
         .presentationDragIndicator(.visible)

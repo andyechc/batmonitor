@@ -115,6 +115,7 @@ struct BatteryDetailView: View {
             .tabItem { Label(DetailTab.control.title, systemImage: "slider.horizontal.3") }
             .tag(DetailTab.control)
         }
+        .tint(.white)
         .background(Theme.background)
         .navigationTitle(currentName)
         .navigationBarTitleDisplayMode(.inline)
@@ -244,7 +245,7 @@ struct BatteryDetailView: View {
                 .foregroundStyle(accent)
                 .contentTransition(.opacity)
                 Text(String(format: "%.2f de %.0f Ah", basic.remainingCapacity, basic.nominalCapacity))
-                    .font(.subheadline)
+                    .font(Theme.numeric(size: 16))
                     .foregroundStyle(Theme.muted)
                     .monospacedDigit()
                     .contentTransition(.numericText())
@@ -257,7 +258,7 @@ struct BatteryDetailView: View {
                         Image(systemName: "timer")
                         Text(String(format: String(localized: "device.timeToFull"), eta))
                     }
-                    .font(.subheadline.weight(.semibold))
+                    .font(Theme.numeric(size: 17))
                     .foregroundStyle(accent)
                     .contentTransition(.numericText())
                 }
@@ -360,7 +361,7 @@ struct BatteryDetailView: View {
                 .foregroundStyle(Theme.muted)
             HStack(alignment: .firstTextBaseline, spacing: 3) {
                 Text(value)
-                    .font(.title2.weight(.semibold))
+                    .font(Theme.numeric(size: 25))
                     .monospacedDigit()
                     .contentTransition(.numericText())
                 Text(unit)
@@ -543,18 +544,33 @@ struct BatteryDetailView: View {
                 Button {
                     renaming = true
                 } label: {
-                    Label("device.rename", systemImage: "pencil")
+                    Label {
+                        Text("device.rename")
+                    } icon: {
+                        Image(systemName: "pencil")
+                            .foregroundStyle(.white)
+                    }
                 }
                 Button {
                     Task { await perform { try await monitor.balance() } }
                 } label: {
-                    Label("device.balance", systemImage: "scale.3d")
+                    Label {
+                        Text("device.balance")
+                    } icon: {
+                        Image(systemName: "scale.3d")
+                            .foregroundStyle(.white)
+                    }
                 }
                 .disabled(!isLive)
                 Button {
                     Task { await perform { try await monitor.clearProtection() } }
                 } label: {
-                    Label("device.clearProtection", systemImage: "shield.slash")
+                    Label {
+                        Text("device.clearProtection")
+                    } icon: {
+                        Image(systemName: "shield.slash")
+                            .foregroundStyle(.white)
+                    }
                 }
                 .disabled(!isLive)
                 Divider()
@@ -570,6 +586,7 @@ struct BatteryDetailView: View {
                 }
             } label: {
                 Image(systemName: "ellipsis.circle")
+                    .foregroundStyle(.white)
                     .accessibilityLabel(Text("device.more"))
             }
         }
@@ -684,7 +701,7 @@ struct LabeledValueRow: View {
                 .foregroundStyle(Theme.muted)
             Spacer()
             Text(value)
-                .font(.body.weight(.medium))
+                .font(Theme.numeric(size: 19))
                 .monospacedDigit()
                 .contentTransition(.numericText())
         }

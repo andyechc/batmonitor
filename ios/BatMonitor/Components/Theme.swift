@@ -20,6 +20,12 @@ enum Theme {
     static let discharge = Color(hex: 0xFFB547)
     static let danger = Color(hex: 0xFF5E6C)
     static let info = Color(hex: 0x5AA9FF)
+
+    /// Rajdhani for figures: squared, techno letterforms give the readings
+    /// a device-display feel that system rounded cannot.
+    static func numeric(size: CGFloat, bold: Bool = false) -> Font {
+        .custom(bold ? "Rajdhani-Bold" : "Rajdhani-SemiBold", size: size)
+    }
 }
 
 extension View {
