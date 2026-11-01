@@ -125,6 +125,7 @@ struct FluidBatteryView: View {
                 percentText(color: Color(red: 0.02, green: 0.03, blue: 0.05))
                     .mask(
                         filledShape(level: level, phase: phase)
+                            .frame(width: 120, height: 190)
                             .padding(7)
                             .clipShape(RoundedRectangle(cornerRadius: 15, style: .continuous))
                     )
