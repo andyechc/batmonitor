@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		3BB92FA66C139A2DCA15D5B3 /* BatteryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9924D1FD1DD0AB4ED13067CF /* BatteryStore.swift */; };
 		4640FC9F6CBAB58B4A94AD31 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = D09E661939605782AF1C6357 /* Localizable.xcstrings */; };
+		7A94FB6C6E3839313BBE3425 /* BatteryDashboardSkeleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1869B497D62956967569E2B8 /* BatteryDashboardSkeleton.swift */; };
 		7BDB4C53CFB782CE243A01E0 /* BatteryMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2028A6F706029BE652D4904D /* BatteryMonitor.swift */; };
 		81C502959A9380069180F75B /* DemoBatteryState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70EF237E0E9FF892C4BCD5C5 /* DemoBatteryState.swift */; };
 		900F35CCB6201FAB94D7E3B8 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 149006C904FC6285C1E08B8D /* Theme.swift */; };
@@ -43,6 +44,7 @@
 		04D28B02650FDDD967990B04 /* BMSLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMSLoader.swift; sourceTree = "<group>"; };
 		08C5D5BD5284F780DC3AA803 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		149006C904FC6285C1E08B8D /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		1869B497D62956967569E2B8 /* BatteryDashboardSkeleton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryDashboardSkeleton.swift; sourceTree = "<group>"; };
 		2004494A5339C198292EFF5C /* Sheets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sheets.swift; sourceTree = "<group>"; };
 		2028A6F706029BE652D4904D /* BatteryMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryMonitor.swift; sourceTree = "<group>"; };
 		4A9788D4F367EC73B2C103A7 /* BatteryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryDetailView.swift; sourceTree = "<group>"; };
@@ -164,6 +166,7 @@
 		E255E687B1B39ABB8FCC31B1 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				1869B497D62956967569E2B8 /* BatteryDashboardSkeleton.swift */,
 				04D28B02650FDDD967990B04 /* BMSLoader.swift */,
 				E29E9A990CCFDEE7FBC682B3 /* Panels.swift */,
 				149006C904FC6285C1E08B8D /* Theme.swift */,
@@ -294,6 +297,7 @@
 				DAD06F4AEA6F2160E507E542 /* BMSLoader.swift in Sources */,
 				9EE49B0EE4E5A79B1A3F96DA /* BMSProtocol.swift in Sources */,
 				B610A9E8E17E9DBDED12F89D /* BatMonitorApp.swift in Sources */,
+				7A94FB6C6E3839313BBE3425 /* BatteryDashboardSkeleton.swift in Sources */,
 				D3D22ED5EC70A113502269D7 /* BatteryDetailView.swift in Sources */,
 				7BDB4C53CFB782CE243A01E0 /* BatteryMonitor.swift in Sources */,
 				DE70D6F9527787B28AB4B5D1 /* BatteryScanner.swift in Sources */,

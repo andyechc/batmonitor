@@ -694,9 +694,12 @@ private struct ConnectingView: View {
     let message: String?
 
     var body: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 20) {
             if status == .connecting {
-                BMSLoader(title: "device.connecting", detail: "device.connectingHint", centered: true)
+                Text("device.connecting")
+                    .font(.headline)
+                    .foregroundStyle(Theme.muted)
+                BatteryDashboardSkeleton()
             } else {
                 StatusBadge(status: status, message: message)
                 if status == .error {
@@ -706,8 +709,9 @@ private struct ConnectingView: View {
                 }
             }
         }
-        .frame(maxWidth: .infinity, minHeight: 420, alignment: .center)
-        .padding(.vertical, 32)
+        .frame(maxWidth: .infinity, minHeight: 620, alignment: .center)
+        .accessibilityElement(children: status == .connecting ? .ignore : .contain)
+        .accessibilityLabel(status == .connecting ? Text("device.connectingHint") : Text("device.noConnection"))
     }
 }
 

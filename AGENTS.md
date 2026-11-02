@@ -44,7 +44,7 @@ Verified against the reference app's decompiled code and a real battery ("Andy 7
 - Navigation bars use native ultra-thin material; cards use distinct filled surfaces without outlines. BatMonitor green is the single brand accent, amber marks discharge/warnings, red marks errors/destructive actions, and neutral tones cover idle/secondary data.
 - Home uses cached real readings with an explicit last-reading time. The demo battery is labeled as simulated and never starts BLE or writes to a real BMS.
 - Detail screen has bottom tabs (summary, cells, status, control), a code-drawn animated battery, and a test-state selector for demo only.
-- Add-battery uses the shared `BMSLoader`, a native search field matching name/Bluetooth UUID/RSSI, and ascending numeric RSSI order. Connection and scan loading share the same loader treatment.
+- Add-battery uses the shared `BMSLoader`, a native search field matching name/Bluetooth UUID/RSSI, and ascending numeric RSSI order. Battery connection uses one dashboard skeleton and centered status text, not stacked spinners.
 - The battery liquid animation follows current direction while charging or discharging, pauses at 100%, and respects Reduce Motion.
 - The rename writes the name to the BMS first and saves it locally only after the BMS acknowledges.
 

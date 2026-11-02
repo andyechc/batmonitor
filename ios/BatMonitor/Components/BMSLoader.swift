@@ -6,15 +6,13 @@ struct BMSLoader: View {
     let title: LocalizedStringKey
     var detail: LocalizedStringKey?
     var compact = false
-    var centered = false
 
     var body: some View {
         HStack(spacing: 12) {
-            if centered { Spacer(minLength: 0) }
             ProgressView()
                 .controlSize(compact ? .small : .regular)
                 .tint(Theme.charge)
-            VStack(alignment: centered ? .center : .leading, spacing: 3) {
+            VStack(alignment: .leading, spacing: 3) {
                 Text(title)
                     .font(compact ? .subheadline.weight(.medium) : .body.weight(.semibold))
                     .foregroundStyle(.primary)
@@ -24,9 +22,9 @@ struct BMSLoader: View {
                         .foregroundStyle(Theme.muted)
                 }
             }
-            if centered { Spacer(minLength: 0) }
+            Spacer(minLength: 0)
         }
-        .frame(maxWidth: .infinity, alignment: centered ? .center : .leading)
+        .frame(maxWidth: .infinity, alignment: .leading)
         .accessibilityElement(children: .combine)
     }
 }
