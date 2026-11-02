@@ -161,7 +161,7 @@ private struct BatterySummaryCard: View {
                         Text("V")
                             .foregroundStyle(Theme.muted)
                     }
-                    .font(Theme.numeric(size: 20))
+                    .font(Theme.numeric(size: 17))
                     HStack(spacing: 5) {
                         Image(systemName: "arrow.left.arrow.right")
                             .foregroundStyle(Theme.muted)
@@ -170,17 +170,19 @@ private struct BatterySummaryCard: View {
                         Text("A")
                             .foregroundStyle(Theme.muted)
                     }
-                    .font(Theme.numeric(size: 20))
+                    .font(Theme.numeric(size: 17))
                     Spacer(minLength: 8)
                     HStack(alignment: .firstTextBaseline, spacing: 3) {
                         Text("\(snapshot.soc)")
-                            .font(Theme.numeric(size: 20))
+                            .font(Theme.numeric(size: 17))
                             .contentTransition(.numericText(value: Double(snapshot.soc)))
                         Text("%")
-                            .font(Theme.numeric(size: 20))
+                            .font(Theme.numeric(size: 17))
                             .foregroundStyle(Theme.muted)
                     }
                 }
+                .lineLimit(1)
+                .minimumScaleFactor(0.75)
 
                 ProgressView(value: Double(snapshot.soc), total: 100)
                     .tint(Theme.charge)
