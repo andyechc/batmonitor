@@ -156,10 +156,7 @@ private struct BatterySummaryCard: View {
                     VStack(alignment: .leading, spacing: 2) {
                         HStack(alignment: .firstTextBaseline, spacing: 3) {
                             Text("\(snapshot.soc)")
-                                .font(Theme.numeric(size: 40))
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.7)
-                                .fixedSize(horizontal: true, vertical: false)
+                                .font(Theme.numeric(size: 20))
                                 .contentTransition(.numericText(value: Double(snapshot.soc)))
                             Text("%")
                                 .font(Theme.numeric(size: 20))
