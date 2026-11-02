@@ -31,17 +31,17 @@ struct BatteryDashboardSkeleton: View {
         VStack(spacing: 14) {
             block(Capsule(), width: 92, height: 25)
 
-            VStack(spacing: 5) {
-                block(RoundedRectangle(cornerRadius: 4), width: 38, height: 9)
-                block(RoundedRectangle(cornerRadius: 20, style: .continuous), width: 120, height: 170, fill: Theme.surface)
+            HStack(spacing: 5) {
+                block(RoundedRectangle(cornerRadius: 20, style: .continuous), width: 190, height: 100, fill: Theme.surface)
                     .overlay {
                         RoundedRectangle(cornerRadius: 20, style: .continuous)
                             .strokeBorder(Theme.border, lineWidth: 3)
-                            .frame(width: 120, height: 170)
+                            .frame(width: 190, height: 100)
                     }
                     .overlay {
                         block(Capsule(), width: 70, height: 20)
                     }
+                block(RoundedRectangle(cornerRadius: 4), width: 9, height: 40)
             }
 
             block(Capsule(), width: 118, height: 16)
