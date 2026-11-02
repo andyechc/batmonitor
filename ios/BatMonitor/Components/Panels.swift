@@ -182,6 +182,20 @@ private struct WaveShape: Shape {
     }
 }
 
+/// Primary action: near-black text on the brand green fill. The dark text
+/// (not white) is what gives the required contrast on the bright green.
+struct PrimaryButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(.body.weight(.semibold))
+            .foregroundStyle(Theme.background)
+            .padding(.horizontal, 22)
+            .padding(.vertical, 13)
+            .background(Theme.charge, in: Capsule())
+            .opacity(configuration.isPressed ? 0.75 : 1)
+    }
+}
+
 /// Secondary action: white text on a filled neutral surface. Used for
 /// non-primary buttons so the brand green stays reserved for primary
 /// actions and live values.

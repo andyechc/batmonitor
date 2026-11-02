@@ -132,22 +132,6 @@ struct BatteryDetailView: View {
             .tag(DetailTab.control)
         }
         .background(Theme.background)
-        .safeAreaInset(edge: .top, spacing: 0) {
-            if isDemo {
-                HStack(spacing: 8) {
-                    Image(systemName: "play.rectangle")
-                    Text("demo.previewLabel")
-                    Spacer()
-                    Text(demoState.title)
-                        .foregroundStyle(Theme.neutral)
-                }
-                .font(.caption.weight(.semibold))
-                .foregroundStyle(Theme.muted)
-                .padding(.horizontal, 16)
-                .padding(.vertical, 9)
-                .background(Theme.surface)
-            }
-        }
         .navigationTitle(currentName)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { moreMenu }

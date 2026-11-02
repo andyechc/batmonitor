@@ -21,7 +21,7 @@ struct HomeView: View {
                 } actions: {
                     VStack(spacing: 12) {
                         Button("home.add") { showingAdd = true }
-                            .buttonStyle(.borderedProminent)
+                            .buttonStyle(PrimaryButtonStyle())
                             .accessibilityIdentifier("addBattery")
                         Button {
                             path.append(SavedBattery.demo)
