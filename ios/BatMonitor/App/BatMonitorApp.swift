@@ -6,12 +6,7 @@ struct BatMonitorApp: App {
 
     var body: some Scene {
         WindowGroup {
-            NavigationStack {
-                HomeView()
-                    .navigationDestination(for: SavedBattery.self) { battery in
-                        BatteryDetailView(battery: battery)
-                    }
-            }
+            HomeView()
             .environment(store)
             .preferredColorScheme(.dark)
             .tint(Theme.charge)

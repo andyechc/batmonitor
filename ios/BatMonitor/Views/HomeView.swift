@@ -4,9 +4,11 @@ struct HomeView: View {
     @Environment(BatteryStore.self) private var store
     @State private var showingAdd = false
     @State private var pendingDelete: SavedBattery?
+    @State private var path: [SavedBattery] = []
 
     var body: some View {
-        Group {
+        NavigationStack(path: $path) {
+            Group {
             if store.batteries.isEmpty {
                 ContentUnavailableView {
                     Label {
@@ -23,7 +25,9 @@ struct HomeView: View {
                     VStack(spacing: 12) {
                         Button("home.add") { showingAdd = true }
                             .buttonStyle(.borderedProminent)
-                        NavigationLink(value: SavedBattery.demo) {
+                        Button {
+                            path.append(SavedBattery.demo)
+                        } label: {
                             Label("demo.open", systemImage: "play.rectangle")
                         }
                         .buttonStyle(.bordered)
@@ -33,12 +37,15 @@ struct HomeView: View {
                 List {
                     Section {
                         ForEach(store.batteries) { battery in
-                            NavigationLink(value: battery) {
+                            Button {
+                                path.append(battery)
+                            } label: {
                                 BatterySummaryCard(
                                     battery: battery,
                                     snapshot: store.snapshot(id: battery.id)
                                 )
                             }
+                            .buttonStyle(.plain)
                             .listRowBackground(Color.clear)
                             .listRowSeparator(.hidden)
                             .contextMenu {
@@ -66,9 +73,12 @@ struct HomeView: View {
                     }
 
                     Section {
-                        NavigationLink(value: SavedBattery.demo) {
+                        Button {
+                            path.append(SavedBattery.demo)
+                        } label: {
                             DemoBatteryRow()
                         }
+                        .buttonStyle(.plain)
                         .listRowBackground(Color.clear)
                         .listRowSeparator(.hidden)
                     } header: {
@@ -85,6 +95,9 @@ struct HomeView: View {
         }
         .background(Theme.background)
         .navigationTitle("app.home")
+        .navigationDestination(for: SavedBattery.self) { battery in
+            BatteryDetailView(battery: battery)
+        }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button {
@@ -107,6 +120,7 @@ struct HomeView: View {
                 secondaryButton: .cancel(Text("device.cancel"))
             )
         }
+        }
     }
 }
 
@@ -123,14 +137,18 @@ private struct BatterySummaryCard: View {
                     .frame(width: 44, height: 44)
                     .background(Theme.surfaceHigh, in: Circle())
                 VStack(alignment: .leading, spacing: 3) {
-                    Text(battery.name)
-                        .font(.headline)
-                        .foregroundStyle(.primary)
+                    HStack(spacing: 6) {
+                        Text(battery.name)
+                            .font(.headline)
+                            .foregroundStyle(.primary)
+                        Image(systemName: "chevron.right")
+                            .font(.footnote.weight(.semibold))
+                            .foregroundStyle(Theme.muted)
+                    }
                     Text("device.directBluetooth")
                         .font(.footnote)
                         .foregroundStyle(Theme.muted)
                 }
-                Spacer(minLength: 8)
             }
 
             if let snapshot {
@@ -139,10 +157,7 @@ private struct BatterySummaryCard: View {
                     VStack(alignment: .leading, spacing: 3) {
                         HStack(alignment: .firstTextBaseline, spacing: 2) {
                             Text("\(snapshot.soc)")
-                                .font(Theme.numeric(size: 40))
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.7)
-                                .fixedSize(horizontal: true, vertical: false)
+                                .font(Theme.numeric(size: 20))
                                 .contentTransition(.numericText(value: Double(snapshot.soc)))
                             Text("%")
                                 .font(Theme.numeric(size: 20))
