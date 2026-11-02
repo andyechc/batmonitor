@@ -10,10 +10,12 @@
 		3BB92FA66C139A2DCA15D5B3 /* BatteryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9924D1FD1DD0AB4ED13067CF /* BatteryStore.swift */; };
 		4640FC9F6CBAB58B4A94AD31 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = D09E661939605782AF1C6357 /* Localizable.xcstrings */; };
 		7BDB4C53CFB782CE243A01E0 /* BatteryMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2028A6F706029BE652D4904D /* BatteryMonitor.swift */; };
+		81C502959A9380069180F75B /* DemoBatteryState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70EF237E0E9FF892C4BCD5C5 /* DemoBatteryState.swift */; };
 		900F35CCB6201FAB94D7E3B8 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 149006C904FC6285C1E08B8D /* Theme.swift */; };
 		92B153BC6A1496BD4234D125 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5139F34F7A65F50130AA5756 /* HomeView.swift */; };
 		9EE49B0EE4E5A79B1A3F96DA /* BMSProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CCC9AF8BCD7FA8A0A3CA432 /* BMSProtocol.swift */; };
 		B1C6A8D70C943654DE89AFE8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AD82FA820E362E5B2392A7EE /* Assets.xcassets */; };
+		B228B42D0ED0E2B4B0C14E70 /* DemoBatteryStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67AF7D84F3D82D9E458B54E /* DemoBatteryStateTests.swift */; };
 		B610A9E8E17E9DBDED12F89D /* BatMonitorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10034EF62804F49068D3868 /* BatMonitorApp.swift */; };
 		CAE0838E18D411F700046F93 /* BLECentral.swift in Sources */ = {isa = PBXBuildFile; fileRef = A041ED983E321E175EBC5AFC /* BLECentral.swift */; };
 		D3D22ED5EC70A113502269D7 /* BatteryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A9788D4F367EC73B2C103A7 /* BatteryDetailView.swift */; };
@@ -44,6 +46,7 @@
 		4A9788D4F367EC73B2C103A7 /* BatteryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryDetailView.swift; sourceTree = "<group>"; };
 		5139F34F7A65F50130AA5756 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		5CCC9AF8BCD7FA8A0A3CA432 /* BMSProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMSProtocol.swift; sourceTree = "<group>"; };
+		70EF237E0E9FF892C4BCD5C5 /* DemoBatteryState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoBatteryState.swift; sourceTree = "<group>"; };
 		7619BCF5782EB8A5507B3BD0 /* MPLUS1p-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MPLUS1p-ExtraBold.ttf"; sourceTree = "<group>"; };
 		915E8AA96CCF067C88F8B2BD /* BatMonitorTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = BatMonitorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9924D1FD1DD0AB4ED13067CF /* BatteryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryStore.swift; sourceTree = "<group>"; };
@@ -56,6 +59,7 @@
 		C866DB75ED4A56E55289CFF1 /* RenameSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenameSheet.swift; sourceTree = "<group>"; };
 		D09E661939605782AF1C6357 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		E29E9A990CCFDEE7FBC682B3 /* Panels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Panels.swift; sourceTree = "<group>"; };
+		E67AF7D84F3D82D9E458B54E /* DemoBatteryStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoBatteryStateTests.swift; sourceTree = "<group>"; };
 		F10034EF62804F49068D3868 /* BatMonitorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatMonitorApp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -64,6 +68,7 @@
 			isa = PBXGroup;
 			children = (
 				C2D4E812A3E583D337963985 /* BMSProtocolTests.swift */,
+				E67AF7D84F3D82D9E458B54E /* DemoBatteryStateTests.swift */,
 			);
 			path = BatMonitorTests;
 			sourceTree = "<group>";
@@ -100,6 +105,7 @@
 			isa = PBXGroup;
 			children = (
 				9924D1FD1DD0AB4ED13067CF /* BatteryStore.swift */,
+				70EF237E0E9FF892C4BCD5C5 /* DemoBatteryState.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -272,6 +278,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E58CB633640B20E80F326FD3 /* BMSProtocolTests.swift in Sources */,
+				B228B42D0ED0E2B4B0C14E70 /* DemoBatteryStateTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -287,6 +294,7 @@
 				7BDB4C53CFB782CE243A01E0 /* BatteryMonitor.swift in Sources */,
 				DE70D6F9527787B28AB4B5D1 /* BatteryScanner.swift in Sources */,
 				3BB92FA66C139A2DCA15D5B3 /* BatteryStore.swift in Sources */,
+				81C502959A9380069180F75B /* DemoBatteryState.swift in Sources */,
 				92B153BC6A1496BD4234D125 /* HomeView.swift in Sources */,
 				E235FE085D18C2B91915A4EB /* Panels.swift in Sources */,
 				E8A6F07C8D2A49ABE4B913E8 /* RenameSheet.swift in Sources */,

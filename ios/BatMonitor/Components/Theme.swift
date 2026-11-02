@@ -16,10 +16,10 @@ enum Theme {
     static let surfaceHigh = Color(hex: 0x161D27)
     static let border = Color(hex: 0x1F2935)
     static let muted = Color(hex: 0x7D8BA0)
+    static let neutral = Color(hex: 0xD8DEE8)
     static let charge = Color(hex: 0x2EE6A6)
     static let discharge = Color(hex: 0xFFB547)
-    static let danger = Color(hex: 0xFF5E6C)
-    static let info = Color(hex: 0x5AA9FF)
+    static let danger = Color(hex: 0xFF453A)
 
     /// M PLUS 1p ExtraBold for figures: a Japanese gothic with a techno
     /// edge. Used at full weight everywhere numbers appear.

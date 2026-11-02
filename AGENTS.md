@@ -6,8 +6,9 @@ BatMonitor: a native app that reads XiaoXiang-compatible BMS batteries over BLE.
 - `ios/`: native iOS app. `project.yml` (XcodeGen) generates `BatMonitor.xcodeproj`. After changing `project.yml`, run `xcodegen generate` in `ios/`. The `.xcodeproj` is committed.
   - `BatMonitor/Protocol/BMSProtocol.swift`: pure Swift framing, checksums, command builders, and parsers. No Bluetooth dependency.
   - `BatMonitor/BLE/`: `BLECentral` (CoreBluetooth wrapper), `BatteryMonitor` (poll and reconnect loop), `BatteryScanner` (discovery).
-  - `BatMonitor/Models/BatteryStore.swift`: saved batteries in UserDefaults (`batmonitor.batteries.v2`).
-  - `BatMonitor/Views/`: Home, Add battery sheet, Battery detail, Dashboard. `Components/` holds theme and panels.
+  - `BatMonitor/Models/BatteryStore.swift`: saved batteries in UserDefaults (`batmonitor.batteries.v2`) and last real readings (`batmonitor.snapshots.v1`).
+  - `BatMonitor/Models/DemoBatteryState.swift`: clearly labeled, BLE-free UI fixture for charging, discharging, idle, connecting, disconnected, and protection states. Select it from Home, then `...` on its detail screen.
+  - `BatMonitor/Views/`: Home, Add battery sheet, Battery detail, rename and shared confirmation/info sheets. `Components/` holds theme, panels, cell bars, and the drawn fluid battery.
   - `BatMonitor/Localizable.xcstrings`: all strings, Spanish source plus English. The system language chooses the locale.
   - `BatMonitorTests/`: protocol tests, run with `xcodebuild test`.
 - `legacy/expo/`: the previous React Native app, kept for reference only. It is not built or maintained. Its `ios/` and `node_modules/` are local leftovers and ignored.
@@ -40,10 +41,12 @@ Verified against the reference app's decompiled code and a real battery ("Andy 7
 
 ## Design
 - Dark theme, colors in `Components/Theme.swift`. Icons are SF Symbols. Navigation and sheets use system styling, which gets Liquid Glass on iOS 26.
-- Battery screen: status pill, live dashboard, controls card (charge and discharge switches with confirmation on turning off, auto balance, clear protections, rename), and remove.
+- Home uses cached real readings with an explicit last-reading time. The demo battery is labeled as simulated and never starts BLE or writes to a real BMS.
+- Detail screen has bottom tabs (summary, cells, status, control), a code-drawn animated battery, and a test-state selector for demo only.
+- Palette: BatMonitor green is the sole brand accent; amber is discharge/warning, red is error/destructive, neutrals are idle and secondary information.
 - The rename writes the name to the BMS first and saves it locally only after the BMS acknowledges.
 
 ## Status
-- Protocol tests: 12 passing.
+- Protocol and demo fixture tests: 17 passing.
 - Release build installed on the test iPhone and launches.
 - Still to confirm on hardware: switches, balance, clear protections (their responses), and the BMS name write (the scan still showed the old name after a rename).

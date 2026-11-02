@@ -20,16 +20,27 @@ struct HomeView: View {
                 } description: {
                     Text("home.empty.text")
                 } actions: {
-                    Button("home.add") { showingAdd = true }
-                        .buttonStyle(.borderedProminent)
+                    VStack(spacing: 12) {
+                        Button("home.add") { showingAdd = true }
+                            .buttonStyle(.borderedProminent)
+                        NavigationLink(value: SavedBattery.demo) {
+                            Label("demo.open", systemImage: "play.rectangle")
+                        }
+                        .buttonStyle(.bordered)
+                    }
                 }
             } else {
                 List {
                     Section {
                         ForEach(store.batteries) { battery in
                             NavigationLink(value: battery) {
-                                BatteryRow(battery: battery)
+                                BatterySummaryCard(
+                                    battery: battery,
+                                    snapshot: store.snapshot(id: battery.id)
+                                )
                             }
+                            .listRowBackground(Color.clear)
+                            .listRowSeparator(.hidden)
                             .contextMenu {
                                 Button(role: .destructive) {
                                     pendingDelete = battery
@@ -48,8 +59,27 @@ struct HomeView: View {
                                 pendingDelete = store.batteries[first]
                             }
                         }
+                    } header: {
+                        Text("home.devices")
+                            .font(.footnote)
+                            .foregroundStyle(Theme.muted)
+                    }
+
+                    Section {
+                        NavigationLink(value: SavedBattery.demo) {
+                            DemoBatteryRow()
+                        }
+                        .listRowBackground(Color.clear)
+                        .listRowSeparator(.hidden)
+                    } header: {
+                        Text("demo.section")
+                            .font(.footnote)
+                            .foregroundStyle(Theme.muted)
+                    } footer: {
+                        Text("demo.safetyHint")
                     }
                 }
+                .listStyle(.plain)
                 .scrollContentBackground(.hidden)
             }
         }
@@ -80,24 +110,116 @@ struct HomeView: View {
     }
 }
 
-private struct BatteryRow: View {
+private struct BatterySummaryCard: View {
     let battery: SavedBattery
+    let snapshot: BatterySnapshot?
 
     var body: some View {
-        HStack(spacing: 14) {
-            Image(systemName: "battery.75percent")
+        VStack(alignment: .leading, spacing: 16) {
+            HStack(spacing: 12) {
+                Image(systemName: "battery.75percent")
+                    .font(.title3)
+                    .foregroundStyle(Theme.charge)
+                    .frame(width: 44, height: 44)
+                    .background(Theme.surfaceHigh, in: Circle())
+                VStack(alignment: .leading, spacing: 3) {
+                    Text(battery.name)
+                        .font(.headline)
+                        .foregroundStyle(.primary)
+                    Text("device.directBluetooth")
+                        .font(.footnote)
+                        .foregroundStyle(Theme.muted)
+                }
+                Spacer(minLength: 8)
+            }
+
+            if let snapshot {
+                Divider().overlay(Theme.border)
+                HStack(alignment: .center, spacing: 18) {
+                    VStack(alignment: .leading, spacing: 2) {
+                        HStack(alignment: .firstTextBaseline, spacing: 3) {
+                            Text("\(snapshot.soc)")
+                                .font(Theme.numeric(size: 34))
+                                .contentTransition(.numericText(value: Double(snapshot.soc)))
+                            Text("%")
+                                .font(.subheadline.weight(.semibold))
+                                .foregroundStyle(Theme.muted)
+                        }
+                        Text("device.stat.charge")
+                            .font(.caption)
+                            .foregroundStyle(Theme.muted)
+                        ProgressView(value: Double(snapshot.soc), total: 100)
+                            .tint(Theme.charge)
+                            .frame(width: 92)
+                    }
+
+                    Rectangle()
+                        .fill(Theme.border)
+                        .frame(width: 1, height: 36)
+
+                    VStack(alignment: .leading, spacing: 4) {
+                        HStack(spacing: 5) {
+                            Image(systemName: "bolt")
+                                .foregroundStyle(Theme.charge)
+                            Text(String(format: "%.2f V", snapshot.voltage))
+                                .foregroundStyle(.primary)
+                        }
+                        .font(Theme.numeric(size: 17))
+                        HStack(spacing: 5) {
+                            Image(systemName: "arrow.left.arrow.right")
+                                .foregroundStyle(Theme.muted)
+                            Text(String(format: "%+.2f A", snapshot.current))
+                                .foregroundStyle(currentColor(snapshot.current))
+                        }
+                        .font(Theme.numeric(size: 16))
+                    }
+                    Spacer(minLength: 0)
+                }
+
+                Text(String(format: String(localized: "device.lastReading"), snapshot.receivedAt.formatted(.relative(presentation: .named))))
+                    .font(.caption2)
+                    .foregroundStyle(Theme.muted)
+            } else {
+                HStack(spacing: 8) {
+                    Image(systemName: "dot.radiowaves.left.and.right")
+                        .foregroundStyle(Theme.charge)
+                    Text("device.noRecentReading")
+                        .font(.subheadline)
+                        .foregroundStyle(Theme.muted)
+                }
+            }
+        }
+        .padding(18)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .panel(cornerRadius: 22)
+        .contentShape(.rect)
+    }
+
+    private func currentColor(_ current: Double) -> Color {
+        current > 0.05 ? Theme.charge : current < -0.05 ? Theme.discharge : Theme.muted
+    }
+}
+
+private struct DemoBatteryRow: View {
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: "play.rectangle")
                 .font(.title3)
-                .foregroundStyle(Theme.charge)
+                .foregroundStyle(Theme.muted)
                 .frame(width: 44, height: 44)
-                .background(Theme.surfaceHigh, in: .circle)
-            VStack(alignment: .leading, spacing: 2) {
-                Text(battery.name)
+                .background(Theme.surfaceHigh, in: Circle())
+            VStack(alignment: .leading, spacing: 3) {
+                Text("demo.batteryName")
                     .font(.headline)
-                Text("device.tapToMonitor")
+                    .foregroundStyle(.primary)
+                Text("demo.rowHint")
                     .font(.footnote)
                     .foregroundStyle(Theme.muted)
             }
+            Spacer()
         }
-        .padding(.vertical, 4)
+        .padding(16)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .panel(cornerRadius: 22)
     }
 }

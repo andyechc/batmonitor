@@ -30,6 +30,7 @@ struct BatteryDetailView: View {
     @State private var renaming = false
     @State private var pendingConfirm: PendingConfirm?
     @State private var selectedInfo: InfoTopic?
+    @State private var demoState: DemoBatteryState = .charging
     @State private var successTrigger = 0
 
     enum SwitchTarget: Identifiable {
@@ -58,11 +59,26 @@ struct BatteryDetailView: View {
     }
 
     private var currentName: String {
-        store.battery(id: battery.id)?.name ?? battery.name
+        if isDemo { return String(localized: "demo.batteryName") }
+        return store.battery(id: battery.id)?.name ?? battery.name
+    }
+
+    private var isDemo: Bool { battery.isDemo == true }
+
+    private var displayReading: BatteryReading? {
+        isDemo ? demoState.reading : monitor.reading
+    }
+
+    private var displayStatus: BatteryMonitor.Status {
+        isDemo ? demoState.status : monitor.status
+    }
+
+    private var displayMessage: String? {
+        isDemo ? demoState.message : monitor.message
     }
 
     private var isLive: Bool {
-        monitor.status == .live && !busy
+        !isDemo && monitor.status == .live && !busy
     }
 
     private func showInfo(_ topic: InfoTopic) {
@@ -116,10 +132,33 @@ struct BatteryDetailView: View {
             .tag(DetailTab.control)
         }
         .background(Theme.background)
+        .safeAreaInset(edge: .top, spacing: 0) {
+            if isDemo {
+                HStack(spacing: 8) {
+                    Image(systemName: "play.rectangle")
+                    Text("demo.previewLabel")
+                    Spacer()
+                    Text(demoState.title)
+                        .foregroundStyle(Theme.neutral)
+                }
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(Theme.muted)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 9)
+                .background(Theme.surface)
+            }
+        }
         .navigationTitle(currentName)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { moreMenu }
-        .task { await monitor.run() }
+        .task {
+            if !isDemo { await monitor.run() }
+        }
+        .onChange(of: monitor.reading) { _, reading in
+            guard !isDemo, let reading else { return }
+            store.record(reading, for: battery.id)
+        }
+        .animation(.smooth(duration: 0.35), value: demoState)
         .sheet(isPresented: $renaming) {
             RenameSheet(currentName: currentName) { name in
                 try await monitor.rename(to: name)
@@ -163,7 +202,7 @@ struct BatteryDetailView: View {
 
     @ViewBuilder
     private var overview: some View {
-        if let reading = monitor.reading {
+        if let reading = displayReading {
             hero(reading: reading)
 
             LazyVGrid(columns: twoColumns, spacing: 12) {
@@ -222,7 +261,7 @@ struct BatteryDetailView: View {
 
             protectionSummary(reading.basic)
         } else {
-            ConnectingView(status: monitor.status, message: monitor.message)
+            ConnectingView(status: displayStatus, message: displayMessage)
         }
     }
 
@@ -232,7 +271,7 @@ struct BatteryDetailView: View {
         let charging = basic.current > 0.05
         let accent = accent(for: basic.current)
         return VStack(spacing: 18) {
-            StatusBadge(status: monitor.status, message: monitor.message)
+            StatusBadge(status: displayStatus, message: displayMessage)
             FluidBatteryView(soc: basic.soc, charging: charging, color: accent)
             VStack(spacing: 6) {
                 HStack(spacing: 6) {
@@ -310,7 +349,7 @@ struct BatteryDetailView: View {
 
     @ViewBuilder
     private var cells: some View {
-        if let reading = monitor.reading {
+        if let reading = displayReading {
             let low = reading.cells.min() ?? 0
             let high = reading.cells.max() ?? 0
 
@@ -349,7 +388,7 @@ struct BatteryDetailView: View {
                 }
             }
         } else {
-            ConnectingView(status: monitor.status, message: monitor.message)
+            ConnectingView(status: displayStatus, message: displayMessage)
         }
     }
 
@@ -374,7 +413,7 @@ struct BatteryDetailView: View {
 
     @ViewBuilder
     private var status: some View {
-        if let basic = monitor.reading?.basic {
+        if let basic = displayReading?.basic {
             Card(
                 title: String(localized: "device.protections"),
                 icon: "shield.lefthalf.filled",
@@ -403,7 +442,7 @@ struct BatteryDetailView: View {
                 LabeledValueRow(label: String(localized: "device.balancingCells"), value: "\(basic.balancing.filter { $0 }.count)")
             }
         } else {
-            ConnectingView(status: monitor.status, message: monitor.message)
+            ConnectingView(status: displayStatus, message: displayMessage)
         }
     }
 
@@ -411,7 +450,7 @@ struct BatteryDetailView: View {
 
     @ViewBuilder
     private var control: some View {
-        if let basic = monitor.reading?.basic {
+        if let basic = displayReading?.basic {
             Card(title: String(localized: "device.switches"), icon: "power") {
                 switchRow(
                     target: .charge,
@@ -460,37 +499,39 @@ struct BatteryDetailView: View {
                 }
             }
 
-            Card(title: String(localized: "device.name"), icon: "character.cursor.ibeam") {
-                Button {
-                    renaming = true
-                } label: {
-                    HStack {
-                        Text(currentName)
-                            .font(.body.weight(.medium))
-                            .foregroundStyle(.primary)
-                        Spacer()
-                        Image(systemName: "pencil")
-                            .foregroundStyle(Theme.muted)
+            if !isDemo {
+                Card(title: String(localized: "device.name"), icon: "character.cursor.ibeam") {
+                    Button {
+                        renaming = true
+                    } label: {
+                        HStack {
+                            Text(currentName)
+                                .font(.body.weight(.medium))
+                                .foregroundStyle(.primary)
+                            Spacer()
+                            Image(systemName: "pencil")
+                                .foregroundStyle(Theme.muted)
+                        }
                     }
+                    .buttonStyle(.plain)
                 }
-                .buttonStyle(.plain)
-            }
 
-            Button(role: .destructive) {
-                pendingConfirm = .remove
-            } label: {
-                Label {
-                    Text("device.remove")
-                } icon: {
-                    Image(systemName: "trash")
-                        .foregroundStyle(Theme.danger)
+                Button(role: .destructive) {
+                    pendingConfirm = .remove
+                } label: {
+                    Label {
+                        Text("device.remove")
+                    } icon: {
+                        Image(systemName: "trash")
+                            .foregroundStyle(Theme.danger)
+                    }
+                    .frame(maxWidth: .infinity)
                 }
-                .frame(maxWidth: .infinity)
+                .buttonStyle(.bordered)
+                .controlSize(.large)
             }
-            .buttonStyle(.bordered)
-            .controlSize(.large)
         } else {
-            ConnectingView(status: monitor.status, message: monitor.message)
+            ConnectingView(status: displayStatus, message: displayMessage)
         }
     }
 
@@ -540,47 +581,56 @@ struct BatteryDetailView: View {
     private var moreMenu: some ToolbarContent {
         ToolbarItem(placement: .primaryAction) {
             Menu {
-                Button {
-                    renaming = true
-                } label: {
-                    Label {
-                        Text("device.rename")
-                    } icon: {
-                        Image(systemName: "pencil")
-                            .foregroundStyle(.white)
+                if isDemo {
+                    Picker("demo.selector", selection: $demoState) {
+                        ForEach(DemoBatteryState.allCases) { state in
+                            Label(state.title, systemImage: state.icon)
+                                .tag(state)
+                        }
                     }
-                }
-                Button {
-                    Task { await perform { try await monitor.balance() } }
-                } label: {
-                    Label {
-                        Text("device.balance")
-                    } icon: {
-                        Image(systemName: "scale.3d")
-                            .foregroundStyle(.white)
+                } else {
+                    Button {
+                        renaming = true
+                    } label: {
+                        Label {
+                            Text("device.rename")
+                        } icon: {
+                            Image(systemName: "pencil")
+                                .foregroundStyle(.white)
+                        }
                     }
-                }
-                .disabled(!isLive)
-                Button {
-                    Task { await perform { try await monitor.clearProtection() } }
-                } label: {
-                    Label {
-                        Text("device.clearProtection")
-                    } icon: {
-                        Image(systemName: "shield.slash")
-                            .foregroundStyle(.white)
+                    Button {
+                        Task { await perform { try await monitor.balance() } }
+                    } label: {
+                        Label {
+                            Text("device.balance")
+                        } icon: {
+                            Image(systemName: "scale.3d")
+                                .foregroundStyle(.white)
+                        }
                     }
-                }
-                .disabled(!isLive)
-                Divider()
-                Button(role: .destructive) {
-                    pendingConfirm = .remove
-                } label: {
-                    Label {
-                        Text("device.remove")
-                    } icon: {
-                        Image(systemName: "trash")
-                            .foregroundStyle(Theme.danger)
+                    .disabled(!isLive)
+                    Button {
+                        Task { await perform { try await monitor.clearProtection() } }
+                    } label: {
+                        Label {
+                            Text("device.clearProtection")
+                        } icon: {
+                            Image(systemName: "shield.slash")
+                                .foregroundStyle(.white)
+                        }
+                    }
+                    .disabled(!isLive)
+                    Divider()
+                    Button(role: .destructive) {
+                        pendingConfirm = .remove
+                    } label: {
+                        Label {
+                            Text("device.remove")
+                        } icon: {
+                            Image(systemName: "trash")
+                                .foregroundStyle(Theme.danger)
+                        }
                     }
                 }
             } label: {
@@ -607,7 +657,7 @@ struct BatteryDetailView: View {
     }
 
     private func applySwitch(_ target: SwitchTarget) async {
-        guard let basic = monitor.reading?.basic else { return }
+        guard let basic = displayReading?.basic, !isDemo else { return }
         let charge = target == .charge ? !basic.chargeOn : basic.chargeOn
         let discharge = target == .discharge ? !basic.dischargeOn : basic.dischargeOn
         await perform { try await monitor.setSwitches(charge: charge, discharge: discharge) }
@@ -631,7 +681,7 @@ struct BatteryDetailView: View {
     }
 
     private func accent(for current: Double) -> Color {
-        current > 0.05 ? Theme.charge : current < -0.05 ? Theme.discharge : Theme.info
+        current > 0.05 ? Theme.charge : current < -0.05 ? Theme.discharge : Theme.neutral
     }
 
     private func stateKey(for current: Double) -> LocalizedStringKey {
@@ -683,7 +733,7 @@ struct StatusBadge: View {
         case .live:
             (Theme.charge, "checkmark.circle.fill", String(localized: "device.live"))
         case .connecting:
-            (Theme.info, "arrow.triangle.2.circlepath", String(localized: "device.connectingPill"))
+            (Theme.muted, "arrow.triangle.2.circlepath", String(localized: "device.connectingPill"))
         case .error:
             (Theme.danger, "exclamationmark.triangle", message ?? String(localized: "device.noConnection"))
         }

@@ -192,7 +192,7 @@ struct CellBarsView: View {
         VStack(spacing: 10) {
             ForEach(Array(cells.enumerated()), id: \.offset) { index, voltage in
                 let ratio = balanced ? 1.0 : 0.2 + 0.8 * ((voltage - low) / span)
-                let color = balanced ? Theme.info : voltage == high ? Theme.charge : voltage == low ? Theme.discharge : Theme.info
+                let color = balanced ? Theme.neutral : voltage == high ? Theme.charge : voltage == low ? Theme.discharge : Theme.neutral
                 HStack(spacing: 12) {
                     Text("C\(index + 1)")
                         .font(.footnote)

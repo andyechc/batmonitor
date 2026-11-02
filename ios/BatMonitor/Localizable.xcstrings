@@ -2016,6 +2016,120 @@
           }
         }
       }
+    },
+    "home.devices": {
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "Tus baterías" } },
+        "en": { "stringUnit": { "state": "translated", "value": "Your batteries" } }
+      }
+    },
+    "device.directBluetooth": {
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "Conexión Bluetooth directa" } },
+        "en": { "stringUnit": { "state": "translated", "value": "Direct Bluetooth connection" } }
+      }
+    },
+    "device.noRecentReading": {
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "Conecta para obtener la primera lectura" } },
+        "en": { "stringUnit": { "state": "translated", "value": "Connect to get the first reading" } }
+      }
+    },
+    "device.lastReading": {
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "Última lectura %@" } },
+        "en": { "stringUnit": { "state": "translated", "value": "Last reading %@" } }
+      }
+    },
+    "demo.open": {
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "Abrir demostración" } },
+        "en": { "stringUnit": { "state": "translated", "value": "Open demo" } }
+      }
+    },
+    "demo.section": {
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "Vista de prueba" } },
+        "en": { "stringUnit": { "state": "translated", "value": "UI preview" } }
+      }
+    },
+    "demo.sectionHint": {
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "Cambia entre carga, descarga, reposo y fallos desde el menú de la batería." } },
+        "en": { "stringUnit": { "state": "translated", "value": "Switch between charging, discharging, idle and fault states from the battery menu." } }
+      }
+    },
+    "demo.batteryName": {
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "Batería de prueba" } },
+        "en": { "stringUnit": { "state": "translated", "value": "Test battery" } }
+      }
+    },
+    "demo.rowHint": {
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "Vista de estados de la interfaz" } },
+        "en": { "stringUnit": { "state": "translated", "value": "Preview interface states" } }
+      }
+    },
+    "demo.previewLabel": {
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "Vista de prueba · datos simulados" } },
+        "en": { "stringUnit": { "state": "translated", "value": "Preview · simulated data" } }
+      }
+    },
+    "demo.selector": {
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "Simular estado de batería" } },
+        "en": { "stringUnit": { "state": "translated", "value": "Simulate battery state" } }
+      }
+    },
+    "demo.state.charging": {
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "Cargando" } },
+        "en": { "stringUnit": { "state": "translated", "value": "Charging" } }
+      }
+    },
+    "demo.state.discharging": {
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "Descargando" } },
+        "en": { "stringUnit": { "state": "translated", "value": "Discharging" } }
+      }
+    },
+    "demo.state.idle": {
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "En reposo" } },
+        "en": { "stringUnit": { "state": "translated", "value": "Idle" } }
+      }
+    },
+    "demo.state.connecting": {
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "Conectando" } },
+        "en": { "stringUnit": { "state": "translated", "value": "Connecting" } }
+      }
+    },
+    "demo.state.disconnected": {
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "Desconectada" } },
+        "en": { "stringUnit": { "state": "translated", "value": "Disconnected" } }
+      }
+    },
+    "demo.state.protection": {
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "Protección activa" } },
+        "en": { "stringUnit": { "state": "translated", "value": "Protection active" } }
+      }
+    },
+    "demo.disconnectedMessage": {
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "BMS no disponible · modo de prueba" } },
+        "en": { "stringUnit": { "state": "translated", "value": "BMS unavailable · preview state" } }
+      }
+    },
+    "demo.safetyHint": {
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "Datos simulados; no se conecta ni modifica una batería real." } },
+        "en": { "stringUnit": { "state": "translated", "value": "Simulated data; no real battery is connected or changed." } }
+      }
     }
   },
   "version": "1.0"
