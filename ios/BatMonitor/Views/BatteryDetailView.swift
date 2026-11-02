@@ -296,7 +296,7 @@ struct BatteryDetailView: View {
                         Image(systemName: "timer")
                         Text(String(format: String(localized: "device.timeToFull"), eta))
                     }
-                    .font(Theme.numeric(size: 17))
+                    .font(Theme.numeric(size: 20))
                     .foregroundStyle(accent)
                     .contentTransition(.numericText())
                 }

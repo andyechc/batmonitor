@@ -112,10 +112,7 @@ struct FluidBatteryView: View {
     }
 
     private func battery(level: Double, phase: Double) -> some View {
-        VStack(spacing: 5) {
-            RoundedRectangle(cornerRadius: 4, style: .continuous)
-                .fill(color)
-                .frame(width: 40, height: 9)
+        HStack(spacing: 5) {
             ZStack {
                 filledShape(level: level, phase: phase)
                     .padding(7)
@@ -126,12 +123,15 @@ struct FluidBatteryView: View {
                 percentText(color: Color(red: 0.02, green: 0.03, blue: 0.05))
                     .mask(
                         filledShape(level: level, phase: phase)
-                            .frame(width: 120, height: 190)
+                            .frame(width: 190, height: 100)
                             .padding(7)
                             .clipShape(RoundedRectangle(cornerRadius: 15, style: .continuous))
                     )
             }
-            .frame(width: 120, height: 190)
+            .frame(width: 190, height: 100)
+            RoundedRectangle(cornerRadius: 4, style: .continuous)
+                .fill(color)
+                .frame(width: 9, height: 40)
         }
         .shadow(color: abs(current) > 0.05 ? color.opacity(0.35) : .clear, radius: 14)
         .accessibilityLabel(Text("device.stat.charge"))
