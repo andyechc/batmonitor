@@ -696,7 +696,7 @@ private struct ConnectingView: View {
     var body: some View {
         VStack(spacing: 16) {
             if status == .connecting {
-                BMSLoader(title: "device.connecting", detail: "device.connectingHint")
+                BMSLoader(title: "device.connecting", detail: "device.connectingHint", centered: true)
             } else {
                 StatusBadge(status: status, message: message)
                 if status == .error {
@@ -706,8 +706,8 @@ private struct ConnectingView: View {
                 }
             }
         }
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, 60)
+        .frame(maxWidth: .infinity, minHeight: 420, alignment: .center)
+        .padding(.vertical, 32)
     }
 }
 
