@@ -581,40 +581,44 @@ struct BatteryDetailView: View {
     private var moreMenu: some ToolbarContent {
         ToolbarItem(placement: .primaryAction) {
             Menu {
-                if isDemo {
-                    Picker("demo.selector", selection: $demoState) {
-                        ForEach(DemoBatteryState.allCases) { state in
-                            Label(state.title, systemImage: state.icon).tag(state)
+                Group {
+                    if isDemo {
+                        Picker("demo.selector", selection: $demoState) {
+                            ForEach(DemoBatteryState.allCases) { state in
+                                Label(state.title, systemImage: state.icon).tag(state)
+                            }
+                        }
+                        .pickerStyle(.inline)
+                    } else {
+                        Button {
+                            renaming = true
+                        } label: {
+                            Label("device.rename", systemImage: "pencil")
+                        }
+                        Button {
+                            Task { await perform { try await monitor.balance() } }
+                        } label: {
+                            Label("device.balance", systemImage: "scale.3d")
+                        }
+                        .disabled(!isLive)
+                        Button {
+                            Task { await perform { try await monitor.clearProtection() } }
+                        } label: {
+                            Label("device.clearProtection", systemImage: "shield.slash")
+                        }
+                        .disabled(!isLive)
+                        Divider()
+                        Button(role: .destructive) {
+                            pendingConfirm = .remove
+                        } label: {
+                            Label("device.remove", systemImage: "trash")
                         }
                     }
-                    .pickerStyle(.inline)
-                } else {
-                    Button {
-                        renaming = true
-                    } label: {
-                        Label("device.rename", systemImage: "pencil")
-                    }
-                    Button {
-                        Task { await perform { try await monitor.balance() } }
-                    } label: {
-                        Label("device.balance", systemImage: "scale.3d")
-                    }
-                    .disabled(!isLive)
-                    Button {
-                        Task { await perform { try await monitor.clearProtection() } }
-                    } label: {
-                        Label("device.clearProtection", systemImage: "shield.slash")
-                    }
-                    .disabled(!isLive)
-                    Divider()
-                    Button(role: .destructive) {
-                        pendingConfirm = .remove
-                    } label: {
-                        Label("device.remove", systemImage: "trash")
-                    }
                 }
+                .tint(.white)
             } label: {
-                Image(systemName: "line.3.horizontal")
+                Image(systemName: "slider.horizontal.3")
+                    .foregroundStyle(.white)
                     .accessibilityLabel(Text("device.more"))
             }
         }
