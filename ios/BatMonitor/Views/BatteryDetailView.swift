@@ -272,7 +272,7 @@ struct BatteryDetailView: View {
         let accent = accent(for: basic.current)
         return VStack(spacing: 18) {
             StatusBadge(status: displayStatus, message: displayMessage)
-            FluidBatteryView(soc: basic.soc, charging: charging, color: accent)
+            FluidBatteryView(soc: basic.soc, current: basic.current, color: accent)
             VStack(spacing: 6) {
                 HStack(spacing: 6) {
                     Image(systemName: charging ? "bolt.fill" : basic.current < -0.05 ? "arrow.down" : "pause.fill")
@@ -695,13 +695,15 @@ private struct ConnectingView: View {
 
     var body: some View {
         VStack(spacing: 16) {
-            StatusBadge(status: status, message: message)
             if status == .connecting {
-                ProgressView()
-                    .controlSize(.large)
-                Text("device.connecting")
-                    .font(.subheadline)
-                    .foregroundStyle(Theme.muted)
+                BMSLoader(title: "device.connecting", detail: "device.connectingHint")
+            } else {
+                StatusBadge(status: status, message: message)
+                if status == .error {
+                    Text("device.retryHint")
+                        .font(.footnote)
+                        .foregroundStyle(Theme.muted)
+                }
             }
         }
         .frame(maxWidth: .infinity)

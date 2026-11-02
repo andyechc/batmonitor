@@ -4,6 +4,22 @@ struct AddBatteryView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(BatteryStore.self) private var store
     @State private var scanner = BatteryScanner()
+    @State private var searchQuery = ""
+
+    private var filteredDevices: [ScannedDevice] {
+        let tokens = searchQuery
+            .split(whereSeparator: \.isWhitespace)
+            .map(String.init)
+        guard !tokens.isEmpty else { return scanner.found }
+
+        return scanner.found.filter { device in
+            let searchable = "\(device.name) \(device.id.uuidString) \(device.rssi) dBm"
+                .folding(options: [.diacriticInsensitive, .caseInsensitive], locale: .current)
+            return tokens.allSatisfy { token in
+                searchable.contains(token.folding(options: [.diacriticInsensitive, .caseInsensitive], locale: .current))
+            }
+        }
+    }
 
     var body: some View {
         NavigationStack {
@@ -21,9 +37,9 @@ struct AddBatteryView: View {
                     }
                 }
 
-                if !scanner.found.isEmpty {
+                if !filteredDevices.isEmpty {
                     Section {
-                        ForEach(scanner.found) { device in
+                        ForEach(filteredDevices) { device in
                             Button {
                                 select(device)
                             } label: {
@@ -66,6 +82,14 @@ struct AddBatteryView: View {
                     }
                 }
 
+                if !scanner.isScanning && !scanner.found.isEmpty && !searchQuery.isEmpty && filteredDevices.isEmpty {
+                    Section {
+                        Text("add.noSearchResults")
+                            .foregroundStyle(Theme.muted)
+                            .listRowBackground(Theme.surface)
+                    }
+                }
+
                 if !scanner.isScanning {
                     Section {
                         Button("add.retry") {
@@ -82,11 +106,21 @@ struct AddBatteryView: View {
             }
             .scrollContentBackground(.hidden)
             .background(Theme.background)
+            .searchable(text: $searchQuery, prompt: Text("add.searchPrompt"))
+            .textInputAutocapitalization(.never)
+            .autocorrectionDisabled()
             .navigationTitle("add.title")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("device.cancel") { dismiss() }
+                    Button { dismiss() } label: {
+                        Image(systemName: "xmark")
+                            .font(.body.weight(.semibold))
+                            .foregroundStyle(.white)
+                            .frame(width: 44, height: 44)
+                            .contentShape(Rectangle())
+                    }
+                    .accessibilityLabel(Text("device.cancel"))
                 }
             }
             .task { await scanner.start() }
@@ -99,18 +133,18 @@ struct AddBatteryView: View {
     /// Plain status line, deliberately not a card: it is information,
     /// not an action.
     private var statusRow: some View {
-        HStack(spacing: 10) {
+        Group {
             if scanner.isScanning {
-                ProgressView()
-                    .controlSize(.small)
+                BMSLoader(title: "add.scanning", detail: "add.scanHint", compact: true)
             } else {
-                Image(systemName: "checkmark.circle.fill")
-                    .foregroundStyle(Theme.muted)
+                HStack(spacing: 8) {
+                    Image(systemName: "checkmark.circle.fill")
+                        .foregroundStyle(Theme.charge)
+                    Text("add.done")
+                        .font(.subheadline.weight(.medium))
+                        .foregroundStyle(Theme.muted)
+                }
             }
-            Text(LocalizedStringKey(scanner.isScanning ? "add.scanning" : "add.done"))
-                .font(.subheadline.weight(.medium))
-                .foregroundStyle(Theme.muted)
-            Spacer()
         }
     }
 

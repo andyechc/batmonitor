@@ -31,6 +31,5 @@ enum Theme {
 extension View {
     func panel(cornerRadius: CGFloat = 24) -> some View {
         background(Theme.surface, in: RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
-            .overlay(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous).stroke(Theme.border))
     }
 }

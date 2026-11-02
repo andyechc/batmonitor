@@ -19,6 +19,7 @@
 		B610A9E8E17E9DBDED12F89D /* BatMonitorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F10034EF62804F49068D3868 /* BatMonitorApp.swift */; };
 		CAE0838E18D411F700046F93 /* BLECentral.swift in Sources */ = {isa = PBXBuildFile; fileRef = A041ED983E321E175EBC5AFC /* BLECentral.swift */; };
 		D3D22ED5EC70A113502269D7 /* BatteryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A9788D4F367EC73B2C103A7 /* BatteryDetailView.swift */; };
+		DAD06F4AEA6F2160E507E542 /* BMSLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D28B02650FDDD967990B04 /* BMSLoader.swift */; };
 		DE70D6F9527787B28AB4B5D1 /* BatteryScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3F7064A99E077F5243C5A97 /* BatteryScanner.swift */; };
 		DFFF315D4E5CA1D1A828B196 /* Sheets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2004494A5339C198292EFF5C /* Sheets.swift */; };
 		E235FE085D18C2B91915A4EB /* Panels.swift in Sources */ = {isa = PBXBuildFile; fileRef = E29E9A990CCFDEE7FBC682B3 /* Panels.swift */; };
@@ -39,6 +40,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		04D28B02650FDDD967990B04 /* BMSLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMSLoader.swift; sourceTree = "<group>"; };
 		08C5D5BD5284F780DC3AA803 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		149006C904FC6285C1E08B8D /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		2004494A5339C198292EFF5C /* Sheets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sheets.swift; sourceTree = "<group>"; };
@@ -162,6 +164,7 @@
 		E255E687B1B39ABB8FCC31B1 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				04D28B02650FDDD967990B04 /* BMSLoader.swift */,
 				E29E9A990CCFDEE7FBC682B3 /* Panels.swift */,
 				149006C904FC6285C1E08B8D /* Theme.swift */,
 			);
@@ -288,6 +291,7 @@
 			files = (
 				E951005B1984DD3DB79646DD /* AddBatteryView.swift in Sources */,
 				CAE0838E18D411F700046F93 /* BLECentral.swift in Sources */,
+				DAD06F4AEA6F2160E507E542 /* BMSLoader.swift in Sources */,
 				9EE49B0EE4E5A79B1A3F96DA /* BMSProtocol.swift in Sources */,
 				B610A9E8E17E9DBDED12F89D /* BatMonitorApp.swift in Sources */,
 				D3D22ED5EC70A113502269D7 /* BatteryDetailView.swift in Sources */,

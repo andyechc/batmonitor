@@ -38,5 +38,7 @@ final class BatteryScanner {
     private func add(_ device: ScannedDevice) {
         guard !found.contains(where: { $0.id == device.id }) else { return }
         found.append(device)
+        // Sort numerically from lower RSSI (more negative) to higher RSSI.
+        found.sort { $0.rssi < $1.rssi }
     }
 }

@@ -92,18 +92,19 @@ struct StatTile: View {
 }
 
 /// Battery drawn in code: rounded body, terminal cap, and a liquid fill
-/// whose wave only animates while charging, so idle screens stay still.
+/// whose wave follows current direction while charging or discharging.
 struct FluidBatteryView: View {
     let soc: Int
-    let charging: Bool
+    let current: Double
     let color: Color
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         let level = Double(min(100, max(0, soc))) / 100
-        if charging && level < 1 && !reduceMotion {
+        if abs(current) > 0.05 && level < 1 && !reduceMotion {
             TimelineView(.animation(minimumInterval: 1 / 30)) { context in
-                battery(level: level, phase: context.date.timeIntervalSinceReferenceDate * 2.2)
+                let direction = current > 0 ? 1.0 : -1.0
+                battery(level: level, phase: context.date.timeIntervalSinceReferenceDate * 2.2 * direction)
             }
         } else {
             battery(level: level, phase: 0.8)
@@ -132,7 +133,7 @@ struct FluidBatteryView: View {
             }
             .frame(width: 120, height: 190)
         }
-        .shadow(color: charging ? color.opacity(0.45) : .clear, radius: 14)
+        .shadow(color: abs(current) > 0.05 ? color.opacity(0.35) : .clear, radius: 14)
         .accessibilityLabel(Text("device.stat.charge"))
         .accessibilityValue("\(soc)%")
     }

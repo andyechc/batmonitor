@@ -2130,6 +2130,36 @@
         "es": { "stringUnit": { "state": "translated", "value": "Datos simulados; no se conecta ni modifica una batería real." } },
         "en": { "stringUnit": { "state": "translated", "value": "Simulated data; no real battery is connected or changed." } }
       }
+    },
+    "add.searchPrompt": {
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "Nombre, ID Bluetooth o dBm" } },
+        "en": { "stringUnit": { "state": "translated", "value": "Name, Bluetooth ID or dBm" } }
+      }
+    },
+    "add.noSearchResults": {
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "No hay baterías que coincidan con la búsqueda." } },
+        "en": { "stringUnit": { "state": "translated", "value": "No batteries match this search." } }
+      }
+    },
+    "add.scanHint": {
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "Buscando BMS cercanos por Bluetooth" } },
+        "en": { "stringUnit": { "state": "translated", "value": "Looking for nearby BMS devices over Bluetooth" } }
+      }
+    },
+    "device.connectingHint": {
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "Estableciendo conexión Bluetooth directa" } },
+        "en": { "stringUnit": { "state": "translated", "value": "Establishing a direct Bluetooth connection" } }
+      }
+    },
+    "device.retryHint": {
+      "localizations": {
+        "es": { "stringUnit": { "state": "translated", "value": "Reintentaremos la conexión automáticamente." } },
+        "en": { "stringUnit": { "state": "translated", "value": "The app will retry the connection automatically." } }
+      }
     }
   },
   "version": "1.0"
