@@ -616,6 +616,7 @@ struct BatteryDetailView: View {
                     } label: {
                         Label {
                             Text("device.remove")
+                                .foregroundStyle(Theme.danger)
                         } icon: {
                             Image(systemName: "trash")
                                 .foregroundStyle(Theme.danger)
