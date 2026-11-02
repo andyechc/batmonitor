@@ -28,6 +28,7 @@ struct BatteryDetailView: View {
     @State private var busy = false
     @State private var message: String?
     @State private var renaming = false
+    @State private var showingActions = false
     @State private var pendingConfirm: PendingConfirm?
     @State private var selectedInfo: InfoTopic?
     @State private var demoState: DemoBatteryState = .charging
@@ -169,6 +170,36 @@ struct BatteryDetailView: View {
         }
         .sheet(item: $selectedInfo) { topic in
             InfoSheet(topic: topic)
+        }
+        .sheet(isPresented: $showingActions) {
+            DetailActionsSheet(
+                isDemo: isDemo,
+                isLive: isLive,
+                demoState: demoState,
+                onSelectDemo: { demoState = $0 },
+                onRename: {
+                    showingActions = false
+                    Task {
+                        try? await Task.sleep(nanoseconds: 350_000_000)
+                        renaming = true
+                    }
+                },
+                onBalance: {
+                    showingActions = false
+                    Task { await perform { try await monitor.balance() } }
+                },
+                onClear: {
+                    showingActions = false
+                    Task { await perform { try await monitor.clearProtection() } }
+                },
+                onRemove: {
+                    showingActions = false
+                    Task {
+                        try? await Task.sleep(nanoseconds: 350_000_000)
+                        pendingConfirm = .remove
+                    }
+                }
+            )
         }
         .sheet(item: $pendingConfirm) { item in
             switch item {
@@ -580,59 +611,8 @@ struct BatteryDetailView: View {
 
     private var moreMenu: some ToolbarContent {
         ToolbarItem(placement: .primaryAction) {
-            Menu {
-                if isDemo {
-                    Picker("demo.selector", selection: $demoState) {
-                        ForEach(DemoBatteryState.allCases) { state in
-                            Label(state.title, systemImage: state.icon)
-                                .tag(state)
-                        }
-                    }
-                } else {
-                    Button {
-                        renaming = true
-                    } label: {
-                        Label {
-                            Text("device.rename")
-                        } icon: {
-                            Image(systemName: "pencil")
-                                .foregroundStyle(.white)
-                        }
-                    }
-                    Button {
-                        Task { await perform { try await monitor.balance() } }
-                    } label: {
-                        Label {
-                            Text("device.balance")
-                        } icon: {
-                            Image(systemName: "scale.3d")
-                                .foregroundStyle(.white)
-                        }
-                    }
-                    .disabled(!isLive)
-                    Button {
-                        Task { await perform { try await monitor.clearProtection() } }
-                    } label: {
-                        Label {
-                            Text("device.clearProtection")
-                        } icon: {
-                            Image(systemName: "shield.slash")
-                                .foregroundStyle(.white)
-                        }
-                    }
-                    .disabled(!isLive)
-                    Divider()
-                    Button(role: .destructive) {
-                        pendingConfirm = .remove
-                    } label: {
-                        Label {
-                            Text("device.remove")
-                        } icon: {
-                            Image(systemName: "trash")
-                                .foregroundStyle(Theme.danger)
-                        }
-                    }
-                }
+            Button {
+                showingActions = true
             } label: {
                 Image(systemName: "ellipsis.circle")
                     .foregroundStyle(.white)
