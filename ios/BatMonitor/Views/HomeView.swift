@@ -152,7 +152,7 @@ private struct BatterySummaryCard: View {
 
             if let snapshot {
                 Divider().overlay(Theme.border)
-                HStack(alignment: .top, spacing: 12) {
+                HStack(alignment: .bottom, spacing: 12) {
                     VStack(alignment: .leading, spacing: 2) {
                         HStack(alignment: .firstTextBaseline, spacing: 3) {
                             Text("\(snapshot.soc)")
@@ -162,9 +162,6 @@ private struct BatterySummaryCard: View {
                                 .font(Theme.numeric(size: 20))
                                 .foregroundStyle(Theme.muted)
                         }
-                        Text("device.stat.charge")
-                            .font(.caption)
-                            .foregroundStyle(Theme.muted)
                     }
                     Spacer(minLength: 8)
                     VStack(alignment: .trailing, spacing: 4) {
