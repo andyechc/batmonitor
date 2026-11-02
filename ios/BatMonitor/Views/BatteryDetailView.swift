@@ -696,9 +696,6 @@ private struct ConnectingView: View {
     var body: some View {
         VStack(spacing: 20) {
             if status == .connecting {
-                Text("device.connecting")
-                    .font(.headline)
-                    .foregroundStyle(Theme.muted)
                 BatteryDashboardSkeleton()
             } else {
                 StatusBadge(status: status, message: message)
