@@ -581,15 +581,16 @@ struct BatteryDetailView: View {
     private var moreMenu: some ToolbarContent {
         ToolbarItem(placement: .primaryAction) {
             Menu {
-                Group {
-                    if isDemo {
-                        Picker("demo.selector", selection: $demoState) {
-                            ForEach(DemoBatteryState.allCases) { state in
-                                Label(state.title, systemImage: state.icon).tag(state)
-                            }
+                if isDemo {
+                    Picker("demo.selector", selection: $demoState) {
+                        ForEach(DemoBatteryState.allCases) { state in
+                            Label(state.title, systemImage: state.icon).tag(state)
                         }
-                        .pickerStyle(.inline)
-                    } else {
+                    }
+                    .pickerStyle(.inline)
+                    .tint(.white)
+                } else {
+                    Group {
                         Button {
                             renaming = true
                         } label: {
@@ -607,15 +608,15 @@ struct BatteryDetailView: View {
                             Label("device.clearProtection", systemImage: "shield.slash")
                         }
                         .disabled(!isLive)
-                        Divider()
-                        Button(role: .destructive) {
-                            pendingConfirm = .remove
-                        } label: {
-                            Label("device.remove", systemImage: "trash")
-                        }
+                    }
+                    .tint(.white)
+                    Divider()
+                    Button(role: .destructive) {
+                        pendingConfirm = .remove
+                    } label: {
+                        Label("device.remove", systemImage: "trash")
                     }
                 }
-                .tint(.white)
             } label: {
                 Image(systemName: "slider.horizontal.3")
                     .foregroundStyle(.white)
