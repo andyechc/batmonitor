@@ -28,7 +28,6 @@ struct BatteryDetailView: View {
     @State private var busy = false
     @State private var message: String?
     @State private var renaming = false
-    @State private var showingActions = false
     @State private var pendingConfirm: PendingConfirm?
     @State private var selectedInfo: InfoTopic?
     @State private var demoState: DemoBatteryState = .charging
@@ -170,36 +169,6 @@ struct BatteryDetailView: View {
         }
         .sheet(item: $selectedInfo) { topic in
             InfoSheet(topic: topic)
-        }
-        .sheet(isPresented: $showingActions) {
-            DetailActionsSheet(
-                isDemo: isDemo,
-                isLive: isLive,
-                demoState: demoState,
-                onSelectDemo: { demoState = $0 },
-                onRename: {
-                    showingActions = false
-                    Task {
-                        try? await Task.sleep(nanoseconds: 350_000_000)
-                        renaming = true
-                    }
-                },
-                onBalance: {
-                    showingActions = false
-                    Task { await perform { try await monitor.balance() } }
-                },
-                onClear: {
-                    showingActions = false
-                    Task { await perform { try await monitor.clearProtection() } }
-                },
-                onRemove: {
-                    showingActions = false
-                    Task {
-                        try? await Task.sleep(nanoseconds: 350_000_000)
-                        pendingConfirm = .remove
-                    }
-                }
-            )
         }
         .alert(item: $pendingConfirm) { item in
             switch item {
@@ -611,11 +580,41 @@ struct BatteryDetailView: View {
 
     private var moreMenu: some ToolbarContent {
         ToolbarItem(placement: .primaryAction) {
-            Button {
-                showingActions = true
+            Menu {
+                if isDemo {
+                    Picker("demo.selector", selection: $demoState) {
+                        ForEach(DemoBatteryState.allCases) { state in
+                            Label(state.title, systemImage: state.icon).tag(state)
+                        }
+                    }
+                    .pickerStyle(.inline)
+                } else {
+                    Button {
+                        renaming = true
+                    } label: {
+                        Label("device.rename", systemImage: "pencil")
+                    }
+                    Button {
+                        Task { await perform { try await monitor.balance() } }
+                    } label: {
+                        Label("device.balance", systemImage: "scale.3d")
+                    }
+                    .disabled(!isLive)
+                    Button {
+                        Task { await perform { try await monitor.clearProtection() } }
+                    } label: {
+                        Label("device.clearProtection", systemImage: "shield.slash")
+                    }
+                    .disabled(!isLive)
+                    Divider()
+                    Button(role: .destructive) {
+                        pendingConfirm = .remove
+                    } label: {
+                        Label("device.remove", systemImage: "trash")
+                    }
+                }
             } label: {
                 Image(systemName: "ellipsis.circle")
-                    .foregroundStyle(.white)
                     .accessibilityLabel(Text("device.more"))
             }
         }
