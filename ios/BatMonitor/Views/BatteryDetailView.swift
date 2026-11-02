@@ -544,7 +544,7 @@ struct BatteryDetailView: View {
     ) -> some View {
         HStack {
             Label(label, systemImage: systemImage)
-                .foregroundStyle(Theme.muted)
+                .foregroundStyle(isLive && !busy ? .primary : Theme.muted)
             InfoButton(topic: info, action: showInfo)
             Spacer()
             Toggle("", isOn: switchBinding(target, on: on))
@@ -564,7 +564,7 @@ struct BatteryDetailView: View {
             Button(action: action) {
                 HStack {
                     Label(label, systemImage: systemImage)
-                        .foregroundStyle(Theme.muted)
+                        .foregroundStyle(enabled && !busy ? .primary : Theme.muted)
                     Spacer()
                     Image(systemName: "chevron.right")
                         .font(.footnote.weight(.semibold))

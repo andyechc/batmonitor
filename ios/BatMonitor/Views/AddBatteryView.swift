@@ -95,10 +95,8 @@ struct AddBatteryView: View {
                         Button("add.retry") {
                             Task { await scanner.start() }
                         }
-                        .buttonStyle(.bordered)
-                        .controlSize(.large)
+                        .buttonStyle(SecondaryButtonStyle())
                         .frame(maxWidth: .infinity)
-                        .tint(Theme.charge)
                         .listRowBackground(Color.clear)
                         .listRowSeparator(.hidden)
                     }

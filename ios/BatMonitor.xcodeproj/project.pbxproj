@@ -10,6 +10,7 @@
 		3BB92FA66C139A2DCA15D5B3 /* BatteryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9924D1FD1DD0AB4ED13067CF /* BatteryStore.swift */; };
 		4640FC9F6CBAB58B4A94AD31 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = D09E661939605782AF1C6357 /* Localizable.xcstrings */; };
 		57DE592E39410F4832F62151 /* MenuScreenshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2590FD2BF1E82E534235994 /* MenuScreenshotTests.swift */; };
+		5C2715C28DFDFD928EAADDF1 /* BatLogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00F638D39BCAD7E49A79C327 /* BatLogoView.swift */; };
 		7A94FB6C6E3839313BBE3425 /* BatteryDashboardSkeleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1869B497D62956967569E2B8 /* BatteryDashboardSkeleton.swift */; };
 		7BDB4C53CFB782CE243A01E0 /* BatteryMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2028A6F706029BE652D4904D /* BatteryMonitor.swift */; };
 		81C502959A9380069180F75B /* DemoBatteryState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70EF237E0E9FF892C4BCD5C5 /* DemoBatteryState.swift */; };
@@ -49,6 +50,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		00F638D39BCAD7E49A79C327 /* BatLogoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatLogoView.swift; sourceTree = "<group>"; };
 		04D28B02650FDDD967990B04 /* BMSLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMSLoader.swift; sourceTree = "<group>"; };
 		08C5D5BD5284F780DC3AA803 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		149006C904FC6285C1E08B8D /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
@@ -186,6 +188,7 @@
 		E255E687B1B39ABB8FCC31B1 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				00F638D39BCAD7E49A79C327 /* BatLogoView.swift */,
 				1869B497D62956967569E2B8 /* BatteryDashboardSkeleton.swift */,
 				04D28B02650FDDD967990B04 /* BMSLoader.swift */,
 				E29E9A990CCFDEE7FBC682B3 /* Panels.swift */,
@@ -348,6 +351,7 @@
 				CAE0838E18D411F700046F93 /* BLECentral.swift in Sources */,
 				DAD06F4AEA6F2160E507E542 /* BMSLoader.swift in Sources */,
 				9EE49B0EE4E5A79B1A3F96DA /* BMSProtocol.swift in Sources */,
+				5C2715C28DFDFD928EAADDF1 /* BatLogoView.swift in Sources */,
 				B610A9E8E17E9DBDED12F89D /* BatMonitorApp.swift in Sources */,
 				7A94FB6C6E3839313BBE3425 /* BatteryDashboardSkeleton.swift in Sources */,
 				D3D22ED5EC70A113502269D7 /* BatteryDetailView.swift in Sources */,

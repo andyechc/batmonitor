@@ -182,6 +182,21 @@ private struct WaveShape: Shape {
     }
 }
 
+/// Secondary action: white text on a filled neutral surface. Used for
+/// non-primary buttons so the brand green stays reserved for primary
+/// actions and live values.
+struct SecondaryButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(.body.weight(.semibold))
+            .foregroundStyle(.white)
+            .padding(.horizontal, 22)
+            .padding(.vertical, 13)
+            .background(Theme.surfaceHigh, in: Capsule())
+            .opacity(configuration.isPressed ? 0.65 : 1)
+    }
+}
+
 struct CellBarsView: View {
     let cells: [Double]
 

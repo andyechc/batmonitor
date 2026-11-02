@@ -14,10 +14,7 @@ struct HomeView: View {
                     Label {
                         Text("home.empty.title")
                     } icon: {
-                        Image("BatLogo")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 120, height: 120)
+                        BatLogoView(size: 120)
                     }
                 } description: {
                     Text("home.empty.text")
@@ -25,12 +22,13 @@ struct HomeView: View {
                     VStack(spacing: 12) {
                         Button("home.add") { showingAdd = true }
                             .buttonStyle(.borderedProminent)
+                            .accessibilityIdentifier("addBattery")
                         Button {
                             path.append(SavedBattery.demo)
                         } label: {
                             Label("demo.open", systemImage: "play.rectangle")
                         }
-                        .buttonStyle(.bordered)
+                        .buttonStyle(SecondaryButtonStyle())
                         .accessibilityIdentifier("openDemo")
                     }
                 }
