@@ -201,29 +201,29 @@ struct BatteryDetailView: View {
                 }
             )
         }
-        .sheet(item: $pendingConfirm) { item in
+        .alert(item: $pendingConfirm) { item in
             switch item {
             case .turnOff(let target):
-                ConfirmSheet(
-                    icon: "power",
-                    title: target == .discharge ? "device.dischargeSwitch" : "device.chargeSwitch",
-                    message: target == .discharge
+                Alert(
+                    title: Text(target == .discharge ? "device.dischargeSwitch" : "device.chargeSwitch"),
+                    message: Text(target == .discharge
                         ? String(localized: "device.confirmDischargeOff")
-                        : String(localized: "device.confirmChargeOff"),
-                    confirmTitle: "device.confirm"
-                ) {
-                    Task { await applySwitch(target) }
-                }
+                        : String(localized: "device.confirmChargeOff")),
+                    primaryButton: .destructive(Text("device.confirm")) {
+                        Task { await applySwitch(target) }
+                    },
+                    secondaryButton: .cancel(Text("device.cancel"))
+                )
             case .remove:
-                ConfirmSheet(
-                    icon: "trash",
-                    title: "device.removeTitle",
-                    message: String(format: String(localized: "device.removeConfirm"), currentName),
-                    confirmTitle: "device.delete"
-                ) {
-                    store.remove(id: battery.id)
-                    dismiss()
-                }
+                Alert(
+                    title: Text("device.removeTitle"),
+                    message: Text(String(format: String(localized: "device.removeConfirm"), currentName)),
+                    primaryButton: .destructive(Text("device.delete")) {
+                        store.remove(id: battery.id)
+                        dismiss()
+                    },
+                    secondaryButton: .cancel(Text("device.cancel"))
+                )
             }
         }
         .sensoryFeedback(.success, trigger: successTrigger)

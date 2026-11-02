@@ -46,12 +46,22 @@ struct RenameSheet: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("device.cancel") { dismiss() }
-                        .disabled(saving)
+                    Button { dismiss() } label: {
+                        Image(systemName: "xmark")
+                            .font(.body.weight(.semibold))
+                            .foregroundStyle(.white)
+                    }
+                    .disabled(saving)
+                    .accessibilityLabel(Text("device.cancel"))
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("device.save", action: save)
-                        .disabled(saving || trimmed.isEmpty || trimmed == currentName)
+                    Button(action: save) {
+                        Image(systemName: "checkmark")
+                            .font(.body.weight(.bold))
+                            .foregroundStyle(Theme.charge)
+                    }
+                    .disabled(saving || trimmed.isEmpty || trimmed == currentName)
+                    .accessibilityLabel(Text("device.save"))
                 }
             }
             .onAppear { focused = true }

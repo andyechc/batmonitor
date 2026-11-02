@@ -1505,22 +1505,6 @@
         }
       }
     },
-    "device.gotIt": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Entendido"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Got it"
-          }
-        }
-      }
-    },
     "help.soc.title": {
       "localizations": {
         "es": {

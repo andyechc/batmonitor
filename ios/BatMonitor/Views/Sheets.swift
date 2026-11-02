@@ -65,6 +65,15 @@ struct InfoSheet: View {
 
     var body: some View {
         VStack(spacing: 16) {
+            HStack {
+                Spacer()
+                Button { dismiss() } label: {
+                    Image(systemName: "xmark")
+                        .font(.body.weight(.semibold))
+                        .foregroundStyle(.white)
+                }
+                .accessibilityLabel(Text("device.cancel"))
+            }
             Image(systemName: "info.circle.fill")
                 .font(.system(size: 44))
                 .foregroundStyle(Theme.charge)
@@ -74,12 +83,7 @@ struct InfoSheet: View {
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
-            Button("device.gotIt") { dismiss() }
-                .buttonStyle(.borderedProminent)
-                .controlSize(.large)
-                .frame(maxWidth: .infinity)
         }
-        .tint(Theme.charge)
         .padding(24)
         .presentationDetents([.medium])
         .presentationDragIndicator(.visible)
@@ -102,6 +106,16 @@ struct DetailActionsSheet: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
+            HStack {
+                Spacer()
+                Button { dismiss() } label: {
+                    Image(systemName: "xmark")
+                        .font(.body.weight(.semibold))
+                        .foregroundStyle(.white)
+                }
+                .accessibilityLabel(Text("device.cancel"))
+            }
+            .padding(.bottom, 4)
             if isDemo {
                 Text("demo.selector")
                     .font(.footnote.weight(.semibold))
@@ -152,13 +166,6 @@ struct DetailActionsSheet: View {
                 }
                 .buttonStyle(.plain)
             }
-
-            Button("device.cancel") { dismiss() }
-                .buttonStyle(.bordered)
-                .controlSize(.large)
-                .frame(maxWidth: .infinity)
-                .tint(Theme.charge)
-                .padding(.top, 12)
         }
         .padding(.horizontal, 24)
         .padding(.top, 12)
@@ -181,46 +188,5 @@ struct DetailActionsSheet: View {
             .contentShape(.rect)
         }
         .buttonStyle(.plain)
-    }
-}
-/// The single confirmation style used everywhere: a bottom sheet with an
-/// explicit confirm button, never a small pop-up.
-struct ConfirmSheet: View {
-    let icon: String
-    let title: LocalizedStringKey
-    let message: String
-    let confirmTitle: LocalizedStringKey
-    let onConfirm: () -> Void
-    @Environment(\.dismiss) private var dismiss
-
-    var body: some View {
-        VStack(spacing: 16) {
-            Image(systemName: icon)
-                .font(.system(size: 44))
-                .foregroundStyle(Theme.danger)
-            Text(title)
-                .font(.headline)
-            Text(message)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-            Button(role: .destructive) {
-                onConfirm()
-                dismiss()
-            } label: {
-                Text(confirmTitle)
-                    .frame(maxWidth: .infinity)
-            }
-            .buttonStyle(.borderedProminent)
-            .controlSize(.large)
-            Button("device.cancel") { dismiss() }
-                .buttonStyle(.bordered)
-                .controlSize(.large)
-                .frame(maxWidth: .infinity)
-        }
-        .tint(Theme.charge)
-        .padding(24)
-        .presentationDetents([.medium])
-        .presentationDragIndicator(.visible)
     }
 }

@@ -97,15 +97,15 @@ struct HomeView: View {
         .sheet(isPresented: $showingAdd) {
             AddBatteryView()
         }
-        .sheet(item: $pendingDelete) { battery in
-            ConfirmSheet(
-                icon: "trash",
-                title: "device.removeTitle",
-                message: String(format: String(localized: "device.removeConfirm"), battery.name),
-                confirmTitle: "device.delete"
-            ) {
-                store.remove(id: battery.id)
-            }
+        .alert(item: $pendingDelete) { battery in
+            Alert(
+                title: Text("device.removeTitle"),
+                message: Text(String(format: String(localized: "device.removeConfirm"), battery.name)),
+                primaryButton: .destructive(Text("device.delete")) {
+                    store.remove(id: battery.id)
+                },
+                secondaryButton: .cancel(Text("device.cancel"))
+            )
         }
     }
 }
