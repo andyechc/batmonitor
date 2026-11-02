@@ -469,10 +469,6 @@ struct BatteryDetailView: View {
                 LabeledValueRow(label: String(localized: "device.firmware"), value: basic.firmwareVersion)
                 LabeledValueRow(label: String(localized: "device.manufactured"), value: basic.productionDate)
                 LabeledValueRow(label: String(localized: "device.stat.cycles"), value: "\(basic.cycles)")
-                LabeledValueRow(
-                    label: String(localized: "device.totalVoltage"),
-                    value: String(format: "%.2f V", basic.totalVoltage)
-                )
                 LabeledValueRow(label: String(localized: "device.nominalCapacity"), value: String(format: "%.0f Ah", basic.nominalCapacity))
                 LabeledValueRow(label: String(localized: "device.balancingCells"), value: "\(basic.balancing.filter { $0 }.count)")
             }

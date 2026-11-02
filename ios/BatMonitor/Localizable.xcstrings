@@ -1441,22 +1441,6 @@
         }
       }
     },
-    "device.totalVoltage": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Voltaje total"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Total voltage"
-          }
-        }
-      }
-    },
     "device.maintenance": {
       "localizations": {
         "es": {
