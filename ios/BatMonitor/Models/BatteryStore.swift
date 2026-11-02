@@ -45,6 +45,15 @@ final class BatteryStore {
         } else {
             snapshots = [:]
         }
+        // UI-test hook (in-memory only, never saved): seeds a fake real
+        // battery so the non-demo menu can be screenshotted in the
+        // simulator without BLE hardware.
+        if CommandLine.arguments.contains("UITEST_FAKE_BATTERY") {
+            let id = UUID(uuidString: "A73B1487-8B90-4A74-9512-273B9F100002")!
+            if battery(id: id) == nil {
+                batteries.append(SavedBattery(id: id, name: "UITEST Battery", addedAt: Date()))
+            }
+        }
     }
 
     func battery(id: UUID) -> SavedBattery? {

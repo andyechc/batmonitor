@@ -31,6 +31,7 @@ struct HomeView: View {
                             Label("demo.open", systemImage: "play.rectangle")
                         }
                         .buttonStyle(.bordered)
+                        .accessibilityIdentifier("openDemo")
                     }
                 }
             } else {
@@ -48,6 +49,7 @@ struct HomeView: View {
                             .buttonStyle(.plain)
                             .listRowBackground(Color.clear)
                             .listRowSeparator(.hidden)
+                            .accessibilityIdentifier("batteryCard")
                             .contextMenu {
                                 Button(role: .destructive) {
                                     pendingDelete = battery

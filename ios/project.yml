@@ -44,6 +44,16 @@ targets:
     settings:
       base:
         GENERATE_INFOPLIST_FILE: YES
+  BatMonitorUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: BatMonitorUITests
+    dependencies:
+      - target: BatMonitor
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
 schemes:
   BatMonitor:
     build:
@@ -53,3 +63,4 @@ schemes:
     test:
       targets:
         - BatMonitorTests
+        - BatMonitorUITests

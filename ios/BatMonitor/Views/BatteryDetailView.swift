@@ -614,14 +614,21 @@ struct BatteryDetailView: View {
                     Button(role: .destructive) {
                         pendingConfirm = .remove
                     } label: {
-                        Label("device.remove", systemImage: "trash")
+                        Label {
+                            Text("device.remove")
+                        } icon: {
+                            Image(systemName: "trash")
+                                .foregroundStyle(Theme.danger)
+                        }
                     }
+                    .tint(Theme.danger)
                 }
             } label: {
                 Image(systemName: "slider.horizontal.3")
                     .foregroundStyle(.white)
                     .accessibilityLabel(Text("device.more"))
             }
+            .accessibilityIdentifier("moreMenu")
         }
     }
 
