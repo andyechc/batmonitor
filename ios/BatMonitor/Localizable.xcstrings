@@ -1441,6 +1441,22 @@
         }
       }
     },
+    "device.topVoltage": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voltaje top"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Top voltage"
+          }
+        }
+      }
+    },
     "device.maintenance": {
       "localizations": {
         "es": {

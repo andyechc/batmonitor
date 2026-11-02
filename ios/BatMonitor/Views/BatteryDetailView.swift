@@ -444,7 +444,8 @@ struct BatteryDetailView: View {
 
     @ViewBuilder
     private var status: some View {
-        if let basic = displayReading?.basic {
+        if let reading = displayReading {
+            let basic = reading.basic
             Card(
                 title: String(localized: "device.protections"),
                 icon: "shield.lefthalf.filled",
@@ -469,6 +470,10 @@ struct BatteryDetailView: View {
                 LabeledValueRow(label: String(localized: "device.firmware"), value: basic.firmwareVersion)
                 LabeledValueRow(label: String(localized: "device.manufactured"), value: basic.productionDate)
                 LabeledValueRow(label: String(localized: "device.stat.cycles"), value: "\(basic.cycles)")
+                LabeledValueRow(
+                    label: String(localized: "device.topVoltage"),
+                    value: reading.cells.max().map { String(format: "%.3f V", $0) } ?? "—"
+                )
                 LabeledValueRow(label: String(localized: "device.nominalCapacity"), value: String(format: "%.0f Ah", basic.nominalCapacity))
                 LabeledValueRow(label: String(localized: "device.balancingCells"), value: "\(basic.balancing.filter { $0 }.count)")
             }
