@@ -152,37 +152,33 @@ private struct BatterySummaryCard: View {
 
             if let snapshot {
                 Divider().overlay(Theme.border)
-                HStack(alignment: .bottom, spacing: 12) {
-                    VStack(alignment: .leading, spacing: 2) {
-                        HStack(alignment: .firstTextBaseline, spacing: 3) {
-                            Text("\(snapshot.soc)")
-                                .font(Theme.numeric(size: 20))
-                                .contentTransition(.numericText(value: Double(snapshot.soc)))
-                            Text("%")
-                                .font(Theme.numeric(size: 20))
-                                .foregroundStyle(Theme.muted)
-                        }
+                HStack(alignment: .firstTextBaseline, spacing: 16) {
+                    HStack(spacing: 5) {
+                        Image(systemName: "bolt")
+                            .foregroundStyle(Theme.charge)
+                        Text(String(format: "%.2f", snapshot.voltage))
+                            .foregroundStyle(.primary)
+                        Text("V")
+                            .foregroundStyle(Theme.muted)
                     }
+                    .font(Theme.numeric(size: 20))
+                    HStack(spacing: 5) {
+                        Image(systemName: "arrow.left.arrow.right")
+                            .foregroundStyle(Theme.muted)
+                        Text(String(format: "%+.2f", snapshot.current))
+                            .foregroundStyle(currentColor(snapshot.current))
+                        Text("A")
+                            .foregroundStyle(Theme.muted)
+                    }
+                    .font(Theme.numeric(size: 20))
                     Spacer(minLength: 8)
-                    VStack(alignment: .trailing, spacing: 4) {
-                        HStack(spacing: 5) {
-                            Image(systemName: "bolt")
-                                .foregroundStyle(Theme.charge)
-                            Text(String(format: "%.2f", snapshot.voltage))
-                                .foregroundStyle(.primary)
-                            Text("V")
-                                .foregroundStyle(Theme.muted)
-                        }
-                        .font(Theme.numeric(size: 20))
-                        HStack(spacing: 5) {
-                            Image(systemName: "arrow.left.arrow.right")
-                                .foregroundStyle(Theme.muted)
-                            Text(String(format: "%+.2f", snapshot.current))
-                                .foregroundStyle(currentColor(snapshot.current))
-                            Text("A")
-                                .foregroundStyle(Theme.muted)
-                        }
-                        .font(Theme.numeric(size: 20))
+                    HStack(alignment: .firstTextBaseline, spacing: 3) {
+                        Text("\(snapshot.soc)")
+                            .font(Theme.numeric(size: 20))
+                            .contentTransition(.numericText(value: Double(snapshot.soc)))
+                        Text("%")
+                            .font(Theme.numeric(size: 20))
+                            .foregroundStyle(Theme.muted)
                     }
                 }
 
