@@ -137,27 +137,29 @@ private struct BatterySummaryCard: View {
                     .frame(width: 44, height: 44)
                     .background(Theme.surfaceHigh, in: Circle())
                 VStack(alignment: .leading, spacing: 3) {
-                    HStack(spacing: 6) {
-                        Text(battery.name)
-                            .font(.headline)
-                            .foregroundStyle(.primary)
-                        Image(systemName: "chevron.right")
-                            .font(.footnote.weight(.semibold))
-                            .foregroundStyle(Theme.muted)
-                    }
+                    Text(battery.name)
+                        .font(.headline)
+                        .foregroundStyle(.primary)
                     Text("device.directBluetooth")
                         .font(.footnote)
                         .foregroundStyle(Theme.muted)
                 }
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .font(.footnote.weight(.semibold))
+                    .foregroundStyle(Theme.muted)
             }
 
             if let snapshot {
                 Divider().overlay(Theme.border)
-                HStack(alignment: .center, spacing: 14) {
-                    VStack(alignment: .leading, spacing: 3) {
-                        HStack(alignment: .firstTextBaseline, spacing: 2) {
+                HStack(alignment: .top, spacing: 12) {
+                    VStack(alignment: .leading, spacing: 2) {
+                        HStack(alignment: .firstTextBaseline, spacing: 3) {
                             Text("\(snapshot.soc)")
-                                .font(Theme.numeric(size: 20))
+                                .font(Theme.numeric(size: 40))
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.7)
+                                .fixedSize(horizontal: true, vertical: false)
                                 .contentTransition(.numericText(value: Double(snapshot.soc)))
                             Text("%")
                                 .font(Theme.numeric(size: 20))
@@ -166,13 +168,9 @@ private struct BatterySummaryCard: View {
                         Text("device.stat.charge")
                             .font(.caption)
                             .foregroundStyle(Theme.muted)
-                        ProgressView(value: Double(snapshot.soc), total: 100)
-                            .tint(Theme.charge)
-                            .frame(width: 104)
                     }
-                    .layoutPriority(1)
-
-                    VStack(alignment: .leading, spacing: 4) {
+                    Spacer(minLength: 8)
+                    VStack(alignment: .trailing, spacing: 4) {
                         HStack(spacing: 5) {
                             Image(systemName: "bolt")
                                 .foregroundStyle(Theme.charge)
@@ -190,10 +188,12 @@ private struct BatterySummaryCard: View {
                             Text("A")
                                 .foregroundStyle(Theme.muted)
                         }
-                        .font(Theme.numeric(size: 18))
+                        .font(Theme.numeric(size: 20))
                     }
-                    Spacer(minLength: 0)
                 }
+
+                ProgressView(value: Double(snapshot.soc), total: 100)
+                    .tint(Theme.charge)
 
                 Text(String(format: String(localized: "device.lastReading"), snapshot.receivedAt.formatted(.relative(presentation: .named))))
                     .font(.caption2)
