@@ -11,12 +11,12 @@ extension Color {
 }
 
 enum Theme {
-    static let background = Color(hex: 0x06080C)
-    static let surface = Color(hex: 0x0F141C)
-    static let surfaceHigh = Color(hex: 0x161D27)
-    static let border = Color(hex: 0x1F2935)
-    static let muted = Color(hex: 0x7D8BA0)
-    static let neutral = Color(hex: 0xD8DEE8)
+    static let background = Color(hex: 0x080808)
+    static let surface = Color(hex: 0x151515)
+    static let surfaceHigh = Color(hex: 0x202020)
+    static let border = Color(hex: 0x2C2C2E)
+    static let muted = Color(hex: 0x8E8E93)
+    static let neutral = Color(hex: 0xD8D8DC)
     static let charge = Color(hex: 0x2EE6A6)
     static let discharge = Color(hex: 0xFFB547)
     static let danger = Color(hex: 0xFF453A)

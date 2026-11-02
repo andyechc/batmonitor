@@ -614,7 +614,7 @@ struct BatteryDetailView: View {
                     }
                 }
             } label: {
-                Image(systemName: "ellipsis.circle")
+                Image(systemName: "line.3.horizontal")
                     .accessibilityLabel(Text("device.more"))
             }
         }
