@@ -32,6 +32,13 @@ yarn-error.*
 
 # local env files
 .env*.local
+local.properties
+
+# Android
+android/.gradle/
+android/**/build/
+android/captures/
+*.hprof
 
 # typescript
 *.tsbuildinfo

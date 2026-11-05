@@ -1,6 +1,6 @@
 # AGENTS.md
 
-BatMonitor: a native app that reads XiaoXiang-compatible BMS batteries over BLE. Current scope is iOS only (SwiftUI). Android comes later, in `android/`, and is not started. The user writes in Spanish; reply in Spanish.
+BatMonitor: a native app that reads XiaoXiang-compatible BMS batteries over BLE. iOS (SwiftUI) is complete; Android (Kotlin + Jetpack Compose, Material3) lives in `android/` as a strict port of the iOS design — same theme hexes, M PLUS 1p figures, Spanish default + English, bottom floating tabs, sheets, dialogs. The user writes in Spanish; reply in Spanish.
 
 ## Layout
 - `ios/`: native iOS app. `project.yml` (XcodeGen) generates `BatMonitor.xcodeproj`. After changing `project.yml`, run `xcodegen generate` in `ios/`. The `.xcodeproj` is committed.
