@@ -64,24 +64,30 @@ struct InfoSheet: View {
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 20) {
             HStack {
                 Spacer()
                 Button { dismiss() } label: {
                     Image(systemName: "xmark")
                         .font(.body.weight(.semibold))
                         .foregroundStyle(.white)
+                        .frame(width: 40, height: 40)
+                        .background(.white.opacity(0.16), in: Circle())
+                        .contentShape(Circle())
                 }
+                .buttonStyle(.plain)
                 .accessibilityLabel(Text("device.cancel"))
             }
             Image(systemName: "info.circle.fill")
-                .font(.system(size: 44))
-                .foregroundStyle(Theme.charge)
+                .font(.system(size: 48))
+                .foregroundStyle(.white)
             Text(topic.title)
-                .font(.headline)
+                .font(.title3.weight(.semibold))
+                .foregroundStyle(.primary)
+                .multilineTextAlignment(.center)
             Text(topic.body)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
+                .font(.body)
+                .foregroundStyle(Theme.neutral)
                 .multilineTextAlignment(.center)
         }
         .padding(24)

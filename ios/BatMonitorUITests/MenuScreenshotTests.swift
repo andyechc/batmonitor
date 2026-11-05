@@ -53,6 +53,17 @@ final class MenuScreenshotTests: XCTestCase {
         }
     }
 
+    func testInfoSheetScreenshot() throws {
+        let app = XCUIApplication()
+        app.launch()
+        XCTAssertTrue(app.buttons["openDemo"].waitForExistence(timeout: 15))
+        app.buttons["openDemo"].tap()
+        let info = app.buttons.matching(identifier: "infoButton").firstMatch
+        XCTAssertTrue(info.waitForExistence(timeout: 15))
+        info.tap()
+        sleep(2)
+        try app.screenshot().pngRepresentation.write(to: URL(fileURLWithPath: "/tmp/shot-info.png"))
+    }
     func testBatFlapScreenshots() throws {
         for (arg, file) in [([], "/tmp/shot-bat-rest.png"), (["UITEST_BAT_UP"], "/tmp/shot-bat-up.png")] {
             let app = XCUIApplication()

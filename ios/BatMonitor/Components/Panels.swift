@@ -48,6 +48,7 @@ struct InfoButton: View {
                 .accessibilityLabel(Text("device.info"))
         }
         .buttonStyle(.plain)
+        .accessibilityIdentifier("infoButton")
     }
 }
 
