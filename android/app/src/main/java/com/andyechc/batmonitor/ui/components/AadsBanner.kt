@@ -26,39 +26,59 @@ private const val AD_HTML = """
         html, body {
           margin: 0;
           padding: 0;
-          background: #171717;
+          background: #080808;
           overflow: hidden;
         }
         body {
           display: flex;
           align-items: flex-start;
           justify-content: center;
-          height: 60px;
+          height: 90px;
         }
         a {
           display: block;
           line-height: 0;
         }
-        img {
+        iframe {
           display: block;
-          width: min(468px, 100vw);
-          height: 60px;
-          max-width: 100vw;
-          object-fit: contain;
+          width: 70%;
+          height: 90px;
+          border: 0;
+          margin: 0 auto;
+          overflow: hidden;
+        }
+        .label {
+          position: absolute;
+          left: 15%;
+          top: -24px;
+          z-index: 2;
+          font-size: 13px;
+          color: #263238;
+          background: #F8F8F9;
+          padding: 4px 10px;
+          border-radius: 4px 4px 0 0;
+          text-decoration: none;
+        }
+        .wrap {
+          position: relative;
+          width: 100%;
+          height: 90px;
         }
       </style>
-    </head>
-    <body>
-      <a href="https://bitmedia.io?r=mw4q968c">
-        <img src="https://bitmedia.io/app/react/pb.w468h60.gif" alt="">
-      </a>
+    </head><body>
+      <div class="wrap">
+        <a class="label" href="https://aads.com/campaigns/new?source_id=2461253&source_type=ad_unit&partner=2461253" target="_blank">
+          Advertise here
+        </a>
+        <iframe data-aa="2461253" src="//acceptable.a-ads.com/2461253/?size=Adaptive&background_color=080808&title_color=2EE6A6&title_hover_color=24b280&text_color=FFFFFF&link_color=2EE6A6&link_hover_color=24b280"></iframe>
+      </div>
     </body>
     </html>
 """
 
-/** Fixed BitMedia banner. The WebView is a static 468 x 60 display area with no scrolling or zoom. */
+/** Fixed AADS banner. The WebView is rendered once with scrolling and zoom disabled. */
 @Composable
-fun BitMediaBanner(modifier: Modifier = Modifier) {
+fun AadsBanner(modifier: Modifier = Modifier) {
     AndroidView(
         factory = { factoryContext ->
             WebView(factoryContext).apply {
@@ -104,13 +124,19 @@ fun BitMediaBanner(modifier: Modifier = Modifier) {
                     event.actionMasked == MotionEvent.ACTION_MOVE
                 }
                 post {
-                    loadDataWithBaseURL("https://bitmedia.io/", AD_HTML, "text/html", "UTF-8", null)
+                    loadDataWithBaseURL(
+                        "https://acceptable.a-ads.com/",
+                        AD_HTML,
+                        "text/html",
+                        "UTF-8",
+                        null,
+                    )
                 }
             }
         },
         modifier = modifier
             .fillMaxWidth()
-            .height(60.dp)
+            .height(90.dp)
             .clip(RoundedCornerShape(8.dp)),
         onRelease = WebView::destroy,
     )

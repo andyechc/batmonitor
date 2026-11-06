@@ -643,22 +643,6 @@ code {
   font-size: 0.79rem;
 }
 
-/* ---------- Banner publicitario (pie) ---------- */
-
-.ad-banner {
-  display: flex;
-  justify-content: center;
-  padding-top: 40px;
-  padding-bottom: 56px;
-  overflow-x: auto;
-}
-
-.ad-banner img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-}
-
 .site-footer__brandlink {
   display: inline-flex;
   align-items: center;
