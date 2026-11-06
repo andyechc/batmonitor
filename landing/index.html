@@ -70,11 +70,6 @@
     <div class="hero__grid" aria-hidden="true"></div>
 
     <div class="shell hero__inner">
-      <p class="eyebrow">
-        <span class="dot" aria-hidden="true"></span>
-        Android · aplicación nativa
-      </p>
-
       <svg class="hero__mark" viewBox="0 0 1024 1024" role="img" aria-label="Logotipo de BatMonitor: un murciélago cuyas alas forman una batería">
         <use href="#bat-mark"></use>
       </svg>
@@ -94,12 +89,6 @@
       </div>
 
       <p class="hero__meta">Android 8.0 o superior · APK directo, sin tienda de por medio</p>
-
-      <ul class="hero__facts">
-        <li><strong>24</strong><span>celdas con voltaje</span></li>
-        <li><strong>BLE</strong><span>sin nube</span></li>
-        <li><strong>0</strong><span>cuentas que crear</span></li>
-      </ul>
     </div>
   </section>
 
@@ -111,7 +100,6 @@
         <h2>Así se ve la app</h2>
         <p class="section__lead">
           Pantallas reales de BatMonitor en Android, en tema oscuro y claro.
-          Las cifras son de la batería de demostración.
         </p>
       </header>
 
@@ -119,7 +107,7 @@
         <figure class="shot" data-reveal>
           <div class="phone">
             <img src="assets/home-dark-es.png" width="1344" height="2992" loading="lazy" decoding="async"
-                 alt="Pantalla de inicio en tema oscuro, sin baterías guardadas, con el logo del murciélago y los botones Añadir batería y Abrir demostración.">
+                 alt="Pantalla de inicio en tema oscuro, sin baterías guardadas, con el logo del murciélago y el botón Añadir batería.">
           </div>
           <figcaption>Inicio<small>Sin baterías guardadas</small></figcaption>
         </figure>
@@ -184,7 +172,7 @@
             <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M4.8 20c.6-3.5 3.6-5.6 7.2-5.6s6.6 2.1 7.2 5.6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="m16.4 15.6 4.2 4.2M20.6 15.6l-4.2 4.2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
           </span>
           <h3>Sin cuenta</h3>
-          <p>Ni registro, ni correo, ni anuncios. Abres la app, buscas la batería y lees. Tus datos se quedan en el móvil.</p>
+          <p>Ni registro ni correo. Abres la app, buscas la batería y lees. Tus datos se quedan en el móvil.</p>
         </li>
 
         <li class="feature" data-reveal>
@@ -228,10 +216,6 @@
       <header class="section__head">
         <p class="kicker">Actualizaciones</p>
         <h2>Qué hay en la última versión</h2>
-        <p class="section__lead">
-          Esta sección se rellena con el fichero de versiones de la app
-          (<code>api/version.json</code>).
-        </p>
       </header>
 
       <div class="updates">
@@ -240,7 +224,6 @@
             <span class="version-badge" data-version-badge>v1.0</span>
             <p class="updates__version">
               Versión <strong data-version-name>1.0</strong>
-              <span class="updates__code">código <span data-version-code>1</span></span>
             </p>
           </div>
 
@@ -248,15 +231,11 @@
           <div class="changelog" data-changelog>
             <p>Versión inicial: lectura BLE, 24 celdas, temas claro y oscuro.</p>
           </div>
-
-          <p class="updates__note" data-api-note>
-            Datos de la versión incluidos en esta página.
-          </p>
         </article>
 
         <aside class="updates__side" data-reveal>
           <h3>Descargar</h3>
-          <p>El APK se publica en GitHub Releases con el nombre de fichero <code>batmonitor.apk</code>.</p>
+          <p>APK firmado, listo para instalar. El navegador te pedirá permiso para instalar apps.</p>
           <a class="btn btn--primary btn--block" href="https://github.com/andyechc/batmonitor/releases/latest/download/batmonitor.apk" data-apk-link>
             <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0 4.5-4.5M12 15l-4.5-4.5M5 19h14" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
             Descargar APK

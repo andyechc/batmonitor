@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -7,6 +10,25 @@ plugins {
 android {
     namespace = "com.andyechc.batmonitor"
     compileSdk = 35
+
+    // Release signing from local.properties (gitignored, never committed).
+    val keystoreProps = Properties().apply {
+        val f = rootProject.file("local.properties")
+        if (f.exists()) {
+            FileInputStream(f).use { load(it) }
+        }
+    }
+    signingConfigs {
+        create("release") {
+            val storeFilePath = keystoreProps.getProperty("release.storeFile")
+            if (storeFilePath != null) {
+                storeFile = file(storeFilePath)
+                storePassword = keystoreProps.getProperty("release.storePassword")
+                keyAlias = keystoreProps.getProperty("release.keyAlias")
+                keyPassword = keystoreProps.getProperty("release.keyPassword")
+            }
+        }
+    }
 
     defaultConfig {
         applicationId = "com.andyechc.batmonitor"
@@ -18,6 +40,7 @@ android {
 
     buildTypes {
         release {
+            signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
