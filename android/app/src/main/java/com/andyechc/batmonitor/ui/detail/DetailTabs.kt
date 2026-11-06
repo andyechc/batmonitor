@@ -60,6 +60,7 @@ import com.andyechc.batmonitor.R
 import com.andyechc.batmonitor.ble.BatteryReading
 import com.andyechc.batmonitor.ble.MonitorStatus
 import com.andyechc.batmonitor.ui.components.BatteryDashboardSkeleton
+import com.andyechc.batmonitor.ui.components.BitMediaBanner
 import com.andyechc.batmonitor.ui.components.Card
 import com.andyechc.batmonitor.ui.components.CellBarsView
 import com.andyechc.batmonitor.ui.components.FluidBattery
@@ -244,6 +245,8 @@ fun OverviewTab(
         Spacer(modifier = Modifier.weight(1f))
         Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null, tint = Theme.colors.muted)
     }
+    Spacer(modifier = Modifier.height(12.dp))
+    BitMediaBanner(modifier = Modifier.fillMaxWidth())
 }
 
 @Composable

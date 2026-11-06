@@ -64,6 +64,7 @@ import com.andyechc.batmonitor.data.BatteryStore
 import com.andyechc.batmonitor.data.SavedBattery
 import com.andyechc.batmonitor.ui.add.AddScreen
 import com.andyechc.batmonitor.ui.components.BatLogo
+import com.andyechc.batmonitor.ui.components.BitMediaBanner
 import com.andyechc.batmonitor.ui.components.UpdateDialog
 import com.andyechc.batmonitor.ui.theme.PrimaryButton
 import com.andyechc.batmonitor.ui.theme.Theme
@@ -201,33 +202,42 @@ fun HomeScreen(store: BatteryStore, onOpenBattery: (SavedBattery) -> Unit) {
 
 @Composable
 private fun EmptyHome(onAdd: () -> Unit) {
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .windowInsetsPadding(WindowInsets.navigationBars)
             .padding(horizontal = 32.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
     ) {
-        BatLogo(size = 120.dp)
-        Spacer(modifier = Modifier.height(24.dp))
-        Text(
-            text = stringResource(R.string.home_empty_title),
-            fontSize = 22.sp,
-            fontWeight = FontWeight.Bold,
-            color = Theme.colors.text,
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = stringResource(R.string.home_empty_text),
-            fontSize = 15.sp,
-            color = Theme.colors.muted,
-            textAlign = androidx.compose.ui.text.style.TextAlign.Center,
-        )
-        Spacer(modifier = Modifier.height(24.dp))
-        PrimaryButton(onClick = onAdd) {
-            Text(stringResource(R.string.home_add), fontWeight = FontWeight.SemiBold)
+        Column(
+            modifier = Modifier.align(Alignment.Center),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+        ) {
+            BatLogo(size = 120.dp)
+            Spacer(modifier = Modifier.height(24.dp))
+            Text(
+                text = stringResource(R.string.home_empty_title),
+                fontSize = 22.sp,
+                fontWeight = FontWeight.Bold,
+                color = Theme.colors.text,
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = stringResource(R.string.home_empty_text),
+                fontSize = 15.sp,
+                color = Theme.colors.muted,
+                textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+            )
+            Spacer(modifier = Modifier.height(24.dp))
+            PrimaryButton(onClick = onAdd) {
+                Text(stringResource(R.string.home_add), fontWeight = FontWeight.SemiBold)
+            }
         }
+        BitMediaBanner(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth(),
+        )
     }
 }
 
