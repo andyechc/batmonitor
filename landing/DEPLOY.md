@@ -2,6 +2,8 @@
 
 La carpeta `landing/` es un sitio estático completo: **no hay build step**, no hay dependencias y no hay `package.json`. Se sube tal cual a cualquier hosting estático.
 
+> **Estado actual: en vivo en https://andyechc.is-a.dev/batmonitor/** mediante el workflow `.github/workflows/pages.yml` (despliega `landing/` en cada push a `main`). La app Android consulta `https://andyechc.is-a.dev/batmonitor/api/version.json` (ver `UpdateCheck.kt`).
+
 ```
 landing/
 ├── index.html            # página única
@@ -121,7 +123,7 @@ Todas las rutas de la landing son **relativas** (`./`, `assets/…`, `./api/vers
 
 1. Mueve o copia la carpeta: `git mv landing docs` (o mantén `landing/` y usa la opción B).
 2. GitHub → **Settings → Pages** → *Build and deployment* → **Deploy from a branch** → rama `main`, carpeta `/docs` → **Save**.
-3. En 1–2 minutos queda en `https://andyechc.github.io/batmonitor/`.
+3. En 1–2 minutos queda en `https://andyechc.is-a.dev/batmonitor/` (el dominio personalizado ya está configurado en el repositorio).
 
 ### Opción B — publicar `landing/` con GitHub Actions (recomendada si quieres mantener la carpeta)
 

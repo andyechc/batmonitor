@@ -39,7 +39,7 @@ object UpdateCheck {
      * 5. `./gradlew :app:assembleDebug`, install, open the app once: the AlertDialog appears.
      * 6. REVERT both the constant and the manifest attribute; neither belongs in a release build.
      */
-    const val UPDATE_URL = "https://andyechc.github.io/batmonitor/api/version.json"
+    const val UPDATE_URL = "https://andyechc.is-a.dev/batmonitor/api/version.json"
 
     /** Fallback when the manifest omits `uptodownUrl`. */
     const val DEFAULT_DOWNLOAD_URL = "https://batmonitor.uptodown.com/android"
