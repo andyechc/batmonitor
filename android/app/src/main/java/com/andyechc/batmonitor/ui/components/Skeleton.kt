@@ -93,9 +93,10 @@ fun BatteryDashboardSkeleton(modifier: Modifier = Modifier) {
     }
 }
 
+@Composable
 private fun shimmerBrush(sweep: Float): Brush {
-    val base = Theme.SurfaceHigh
-    val shine = Color.White.copy(alpha = 0.13f)
+    val base = Theme.colors.surfaceHigh
+    val shine = Theme.colors.shimmer
     val center = 0.5f + sweep * 0.45f
     return Brush.linearGradient(
         0f to base,

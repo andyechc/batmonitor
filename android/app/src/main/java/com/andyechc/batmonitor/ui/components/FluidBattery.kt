@@ -64,6 +64,8 @@ fun FluidBattery(
         phase = (t * direction).toDouble()
     }
     val textMeasurer = rememberTextMeasurer()
+    val textColor = Theme.colors.text
+    val onAccent = Theme.colors.onCharge
     Box(
         modifier = modifier
             .width(199.dp)
@@ -89,7 +91,7 @@ fun FluidBattery(
                         size = Size(bodyW - 2 * pad, h - 2 * pad),
                         cornerRadius = CornerRadius(15.dp.toPx()),
                     )
-                    drawText(layout, color = Color(0xFF020304), topLeft = Offset(tx, ty))
+                    drawText(layout, color = onAccent, topLeft = Offset(tx, ty))
                 } else {
                     val wave = Path()
                     val baseY = (h * (1 - level)).toFloat()
@@ -105,10 +107,10 @@ fun FluidBattery(
                     wave.lineTo(bodyW - pad, h - pad)
                     wave.close()
                     drawPath(wave, color.copy(alpha = 0.85f))
-                    drawText(layout, color = Color.White, topLeft = Offset(tx, ty))
-                    // Dark figure over the liquid, like the iOS knockout text.
+                    drawText(layout, color = textColor, topLeft = Offset(tx, ty))
+                    // Knockout figure over the liquid, like the iOS knockout text.
                     clipPath(wave) {
-                        drawText(layout, color = Color(0xFF020304), topLeft = Offset(tx, ty))
+                        drawText(layout, color = onAccent, topLeft = Offset(tx, ty))
                     }
                 }
             }

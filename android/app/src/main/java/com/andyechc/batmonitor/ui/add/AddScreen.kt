@@ -118,15 +118,15 @@ fun AddScreen(store: BatteryStore, onDone: () -> Unit) {
                 text = stringResource(R.string.add_title),
                 fontSize = 17.sp,
                 fontWeight = FontWeight.SemiBold,
-                color = Color.White,
+                color = Theme.colors.text,
             )
             Spacer(modifier = Modifier.weight(1f))
             IconButton(onClick = onDone) {
                 Box(
-                    modifier = Modifier.size(44.dp).clip(CircleShape).background(Theme.SurfaceHigh),
+                    modifier = Modifier.size(44.dp).clip(CircleShape).background(Theme.colors.surfaceHigh),
                     contentAlignment = Alignment.Center,
                 ) {
-                    Icon(Icons.Filled.Close, contentDescription = stringResource(R.string.device_cancel), tint = Color.White)
+                    Icon(Icons.Filled.Close, contentDescription = stringResource(R.string.device_cancel), tint = Theme.colors.text)
                 }
             }
         }
@@ -136,14 +136,14 @@ fun AddScreen(store: BatteryStore, onDone: () -> Unit) {
             onValueChange = { searchQuery = it },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
-            placeholder = { Text(stringResource(R.string.add_searchprompt), color = Theme.Muted) },
-            leadingIcon = { Icon(Icons.Filled.Search, contentDescription = null, tint = Theme.Muted) },
+            placeholder = { Text(stringResource(R.string.add_searchprompt), color = Theme.colors.muted) },
+            leadingIcon = { Icon(Icons.Filled.Search, contentDescription = null, tint = Theme.colors.muted) },
             colors = OutlinedTextFieldDefaults.colors(
-                focusedTextColor = Color.White,
-                unfocusedTextColor = Color.White,
-                focusedBorderColor = Theme.Charge,
-                unfocusedBorderColor = Theme.Border,
-                cursorColor = Theme.Charge,
+                focusedTextColor = Theme.colors.text,
+                unfocusedTextColor = Theme.colors.text,
+                focusedBorderColor = Theme.colors.charge,
+                unfocusedBorderColor = Theme.colors.border,
+                cursorColor = Theme.colors.charge,
             ),
         )
         Spacer(modifier = Modifier.height(12.dp))
@@ -170,7 +170,7 @@ fun AddScreen(store: BatteryStore, onDone: () -> Unit) {
             Text(
                 text = stringResource(R.string.add_nearby),
                 fontSize = 12.sp,
-                color = Theme.Muted,
+                color = Theme.colors.muted,
                 modifier = Modifier.padding(vertical = 8.dp),
             )
         }
@@ -189,7 +189,7 @@ fun AddScreen(store: BatteryStore, onDone: () -> Unit) {
                     Text(
                         text = stringResource(R.string.add_empty),
                         fontSize = 15.sp,
-                        color = Theme.Muted,
+                        color = Theme.colors.muted,
                         modifier = Modifier.padding(vertical = 12.dp),
                     )
                 }
@@ -199,7 +199,7 @@ fun AddScreen(store: BatteryStore, onDone: () -> Unit) {
                     Text(
                         text = stringResource(R.string.add_nosearchresults),
                         fontSize = 15.sp,
-                        color = Theme.Muted,
+                        color = Theme.colors.muted,
                         modifier = Modifier.padding(vertical = 12.dp),
                     )
                 }
@@ -235,24 +235,24 @@ private fun StatusRow(
     when {
         !permissionsGranted -> {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Filled.Warning, contentDescription = null, tint = Theme.Danger)
+                Icon(Icons.Filled.Warning, contentDescription = null, tint = Theme.colors.danger)
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = stringResource(R.string.add_needpermissions),
                     fontSize = 15.sp,
-                    color = Theme.Danger,
+                    color = Theme.colors.danger,
                     modifier = Modifier.clickable(onClick = onGrant).weight(1f),
                 )
             }
         }
         !bluetoothOn -> {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Filled.Warning, contentDescription = null, tint = Theme.Danger)
+                Icon(Icons.Filled.Warning, contentDescription = null, tint = Theme.colors.danger)
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = stringResource(R.string.add_needbluetooth),
                     fontSize = 15.sp,
-                    color = Theme.Danger,
+                    color = Theme.colors.danger,
                 )
             }
         }
@@ -260,7 +260,7 @@ private fun StatusRow(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 CircularProgressIndicator(
                     modifier = Modifier.size(20.dp),
-                    color = Theme.Charge,
+                    color = Theme.colors.charge,
                     strokeWidth = 2.dp,
                 )
                 Spacer(modifier = Modifier.width(8.dp))
@@ -269,25 +269,25 @@ private fun StatusRow(
                         text = stringResource(R.string.add_scanning),
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Medium,
-                        color = Color.White,
+                        color = Theme.colors.text,
                     )
                     Text(
                         text = stringResource(R.string.add_scanhint),
                         fontSize = 13.sp,
-                        color = Theme.Muted,
+                        color = Theme.colors.muted,
                     )
                 }
             }
         }
         else -> {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Filled.CheckCircle, contentDescription = null, tint = Theme.Charge)
+                Icon(Icons.Filled.CheckCircle, contentDescription = null, tint = Theme.colors.charge)
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = stringResource(R.string.add_done),
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Medium,
-                    color = Theme.Muted,
+                    color = Theme.colors.muted,
                 )
             }
         }
@@ -297,9 +297,9 @@ private fun StatusRow(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(top = 8.dp),
         ) {
-            Icon(Icons.Filled.Warning, contentDescription = null, tint = Theme.Danger)
+            Icon(Icons.Filled.Warning, contentDescription = null, tint = Theme.colors.danger)
             Spacer(modifier = Modifier.width(8.dp))
-            Text(text = error, fontSize = 15.sp, color = Theme.Danger)
+            Text(text = error, fontSize = 15.sp, color = Theme.colors.danger)
         }
     }
 }
@@ -314,25 +314,25 @@ private fun DeviceRow(device: ScannedDevice, onSelect: () -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(
-            modifier = Modifier.size(44.dp).clip(CircleShape).background(Theme.SurfaceHigh),
+            modifier = Modifier.size(44.dp).clip(CircleShape).background(Theme.colors.surfaceHigh),
             contentAlignment = Alignment.Center,
         ) {
-            Icon(Icons.Filled.BatteryStd, contentDescription = null, tint = Theme.Charge)
+            Icon(Icons.Filled.BatteryStd, contentDescription = null, tint = Theme.colors.charge)
         }
         Spacer(modifier = Modifier.width(14.dp))
         Column {
-            Text(text = device.name, fontSize = 17.sp, fontWeight = FontWeight.SemiBold, color = Color.White)
+            Text(text = device.name, fontSize = 17.sp, fontWeight = FontWeight.SemiBold, color = Theme.colors.text)
             Text(
                 text = "${device.rssi} dBm",
                 fontSize = 12.sp,
-                color = Theme.Muted,
+                color = Theme.colors.muted,
             )
         }
         Spacer(modifier = Modifier.weight(1f))
         Icon(
             Icons.AutoMirrored.Filled.KeyboardArrowRight,
             contentDescription = null,
-            tint = Theme.Muted,
+            tint = Theme.colors.muted,
         )
     }
 }

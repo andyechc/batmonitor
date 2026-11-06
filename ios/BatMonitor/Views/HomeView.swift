@@ -87,6 +87,8 @@ struct HomeView: View {
                             .foregroundStyle(Theme.muted)
                     } footer: {
                         Text("demo.safetyHint")
+                            .listRowBackground(Color.clear)
+                            .listRowSeparator(.hidden)
                     }
                 }
                 .listStyle(.plain)

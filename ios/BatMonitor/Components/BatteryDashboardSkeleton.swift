@@ -91,7 +91,7 @@ struct BatteryDashboardSkeleton: View {
                     GeometryReader { geometry in
                         let sweepWidth = max(36, geometry.size.width * 0.42)
                         LinearGradient(
-                            colors: [.clear, Color.white.opacity(0.13), .clear],
+                            colors: [.clear, Theme.shimmer, .clear],
                             startPoint: .leading,
                             endPoint: .trailing
                         )

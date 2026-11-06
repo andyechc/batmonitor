@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Matches AppColors.background (dark palette) to avoid a flash before Compose draws. -->
+    <color name="window_background">#080808</color>
+</resources>

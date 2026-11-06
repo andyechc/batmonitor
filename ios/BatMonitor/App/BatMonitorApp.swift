@@ -8,7 +8,6 @@ struct BatMonitorApp: App {
         WindowGroup {
             HomeView()
             .environment(store)
-            .preferredColorScheme(.dark)
             .tint(Theme.charge)
             .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
             .toolbarBackground(.visible, for: .navigationBar)

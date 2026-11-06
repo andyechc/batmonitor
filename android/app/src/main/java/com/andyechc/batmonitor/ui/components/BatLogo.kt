@@ -51,6 +51,7 @@ fun BatLogo(size: Dp = 120.dp, flapUp: Boolean = false) {
     val flap = flapAnim.value
     val density = LocalDensity.current
     val boxPx = remember(size, density) { with(density) { size.toPx() } }
+    val colors = Theme.colors
     Canvas(
         modifier = Modifier.size(size),
     ) {
@@ -62,31 +63,31 @@ fun BatLogo(size: Dp = 120.dp, flapUp: Boolean = false) {
         }) {
             withTransform({ rotate(-24f * flap, Offset(470f, 503f)) }) {
                 val wing = wingPath(mirrored = false)
-                drawPath(wing, Theme.SurfaceHigh)
-                drawPath(wing, Theme.Charge, style = Stroke(width = 10f))
+                drawPath(wing, colors.surfaceHigh)
+                drawPath(wing, colors.charge, style = Stroke(width = 10f))
             }
             withTransform({ rotate(24f * flap, Offset(554f, 503f)) }) {
                 val wing = wingPath(mirrored = true)
-                drawPath(wing, Theme.SurfaceHigh)
-                drawPath(wing, Theme.Charge, style = Stroke(width = 10f))
+                drawPath(wing, colors.surfaceHigh)
+                drawPath(wing, colors.charge, style = Stroke(width = 10f))
             }
             withTransform({ translate(left = 0f, top = -50f * flap) }) {
                 val earL = earPath(floatArrayOf(440f, 440f), floatArrayOf(416f, 372f), floatArrayOf(484f, 418f))
-                drawPath(earL, Theme.SurfaceHigh)
-                drawPath(earL, Theme.Charge, style = Stroke(width = 10f))
+                drawPath(earL, colors.surfaceHigh)
+                drawPath(earL, colors.charge, style = Stroke(width = 10f))
                 val earR = earPath(floatArrayOf(584f, 440f), floatArrayOf(608f, 372f), floatArrayOf(540f, 418f))
-                drawPath(earR, Theme.SurfaceHigh)
-                drawPath(earR, Theme.Charge, style = Stroke(width = 10f))
+                drawPath(earR, colors.surfaceHigh)
+                drawPath(earR, colors.charge, style = Stroke(width = 10f))
                 drawRoundRect(
-                    Theme.Charge,
+                    colors.charge,
                     Offset(482f, 398f), Size(60f, 40f), CornerRadius(10f, 10f),
                 )
                 drawRoundRect(
-                    Theme.SurfaceHigh,
+                    colors.surfaceHigh,
                     Offset(426f, 430f), Size(172f, 264f), CornerRadius(40f, 40f),
                 )
                 drawRoundRect(
-                    Theme.Charge,
+                    colors.charge,
                     Offset(426f, 430f), Size(172f, 264f), CornerRadius(40f, 40f),
                     style = Stroke(width = 12f),
                 )
@@ -95,10 +96,10 @@ fun BatLogo(size: Dp = 120.dp, flapUp: Boolean = false) {
                         addRoundRect(RoundRect(438f, 442f, 438f + 148f, 442f + 240f, CornerRadius(30f, 30f)))
                     },
                 ) {
-                    drawRect(Theme.Charge, Offset(438f, 562f), Size(148f, 130f))
+                    drawRect(colors.charge, Offset(438f, 562f), Size(148f, 130f))
                 }
-                drawCircle(Theme.Background, radius = 11f, center = Offset(478f, 506f))
-                drawCircle(Theme.Background, radius = 11f, center = Offset(546f, 506f))
+                drawCircle(colors.background, radius = 11f, center = Offset(478f, 506f))
+                drawCircle(colors.background, radius = 11f, center = Offset(546f, 506f))
             }
         }
     }

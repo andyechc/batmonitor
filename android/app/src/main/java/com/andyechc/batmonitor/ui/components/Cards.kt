@@ -40,7 +40,7 @@ fun Card(
                     Icon(
                         imageVector = icon,
                         contentDescription = null,
-                        tint = Theme.Muted,
+                        tint = Theme.colors.muted,
                         modifier = Modifier.padding(end = 8.dp),
                     )
                 }
@@ -48,7 +48,7 @@ fun Card(
                     text = title.uppercase(),
                     fontSize = 12.sp,
                     fontWeight = FontWeight.SemiBold,
-                    color = Theme.Muted,
+                    color = Theme.colors.muted,
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 if (onInfo != null) {
@@ -69,8 +69,8 @@ fun LabeledValueRow(label: String, value: String, modifier: Modifier = Modifier)
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Text(text = label, fontSize = 16.sp, color = Theme.Muted)
+        Text(text = label, fontSize = 16.sp, color = Theme.colors.muted)
         Spacer(modifier = Modifier.weight(1f))
-        Text(text = value, style = Theme.numeric(17), color = androidx.compose.ui.graphics.Color.White)
+        Text(text = value, style = Theme.numeric(17), color = Theme.colors.text)
     }
 }

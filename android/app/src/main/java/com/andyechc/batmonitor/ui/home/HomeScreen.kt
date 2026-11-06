@@ -6,6 +6,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -71,9 +77,13 @@ fun HomeScreen(store: BatteryStore, onOpenBattery: (SavedBattery) -> Unit) {
     var pendingDelete by remember { mutableStateOf<SavedBattery?>(null) }
     val batteries = store.batteries
 
-    Column(modifier = Modifier.fillMaxSize().background(Theme.Background)) {
+    Column(modifier = Modifier.fillMaxSize().background(Theme.colors.background)) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(start = 20.dp, end = 12.dp, top = 56.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                // Keep the header below the status bar; the app draws its own background behind it.
+                .windowInsetsPadding(WindowInsets.statusBars)
+                .padding(start = 20.dp, end = 12.dp, top = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Spacer(modifier = Modifier.weight(1f))
@@ -82,10 +92,10 @@ fun HomeScreen(store: BatteryStore, onOpenBattery: (SavedBattery) -> Unit) {
                     modifier = Modifier
                         .size(44.dp)
                         .clip(CircleShape)
-                        .background(Theme.SurfaceHigh),
+                        .background(Theme.colors.surfaceHigh),
                     contentAlignment = Alignment.Center,
                 ) {
-                    Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.home_add), tint = Theme.Charge)
+                    Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.home_add), tint = Theme.colors.charge)
                 }
             }
         }
@@ -93,7 +103,7 @@ fun HomeScreen(store: BatteryStore, onOpenBattery: (SavedBattery) -> Unit) {
             text = stringResource(R.string.app_home),
             fontSize = 34.sp,
             fontWeight = FontWeight.Bold,
-            color = Color.White,
+            color = Theme.colors.text,
             modifier = Modifier.padding(horizontal = 20.dp),
         )
         if (batteries.isEmpty()) {
@@ -104,13 +114,16 @@ fun HomeScreen(store: BatteryStore, onOpenBattery: (SavedBattery) -> Unit) {
         } else {
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(
+                    bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding() + 24.dp,
+                ),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
                 item {
                     Text(
                         text = stringResource(R.string.home_devices),
                         fontSize = 12.sp,
-                        color = Theme.Muted,
+                        color = Theme.colors.muted,
                         modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 8.dp),
                     )
                 }
@@ -140,7 +153,7 @@ fun HomeScreen(store: BatteryStore, onOpenBattery: (SavedBattery) -> Unit) {
                     Text(
                         text = stringResource(R.string.demo_section),
                         fontSize = 12.sp,
-                        color = Theme.Muted,
+                        color = Theme.colors.muted,
                         modifier = Modifier.padding(start = 20.dp, top = 12.dp),
                     )
                 }
@@ -154,7 +167,7 @@ fun HomeScreen(store: BatteryStore, onOpenBattery: (SavedBattery) -> Unit) {
                     Text(
                         text = stringResource(R.string.demo_safetyhint),
                         fontSize = 13.sp,
-                        color = Theme.Muted,
+                        color = Theme.colors.muted,
                         modifier = Modifier.padding(horizontal = 20.dp, vertical = 4.dp),
                     )
                 }
@@ -166,8 +179,8 @@ fun HomeScreen(store: BatteryStore, onOpenBattery: (SavedBattery) -> Unit) {
         ModalBottomSheet(
             onDismissRequest = { showingAdd = false },
             sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-            containerColor = Theme.Background,
-            contentColor = Color.White,
+            containerColor = Theme.colors.background,
+            contentColor = Theme.colors.text,
         ) {
             AddScreen(store = store, onDone = { showingAdd = false })
         }
@@ -176,7 +189,7 @@ fun HomeScreen(store: BatteryStore, onOpenBattery: (SavedBattery) -> Unit) {
     pendingDelete?.let { battery ->
         AlertDialog(
             onDismissRequest = { pendingDelete = null },
-            containerColor = Theme.Surface,
+            containerColor = Theme.colors.surface,
             title = { Text(stringResource(R.string.device_removetitle)) },
             text = { Text(stringResource(R.string.device_removeconfirm, battery.name)) },
             confirmButton = {
@@ -184,12 +197,12 @@ fun HomeScreen(store: BatteryStore, onOpenBattery: (SavedBattery) -> Unit) {
                     store.remove(battery.id)
                     pendingDelete = null
                 }) {
-                    Text(stringResource(R.string.device_delete), color = Theme.Danger)
+                    Text(stringResource(R.string.device_delete), color = Theme.colors.danger)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { pendingDelete = null }) {
-                    Text(stringResource(R.string.device_cancel), color = Color.White)
+                    Text(stringResource(R.string.device_cancel), color = Theme.colors.text)
                 }
             },
         )
@@ -199,7 +212,10 @@ fun HomeScreen(store: BatteryStore, onOpenBattery: (SavedBattery) -> Unit) {
 @Composable
 private fun EmptyHome(onAdd: () -> Unit, onDemo: () -> Unit) {
     Column(
-        modifier = Modifier.fillMaxSize().padding(horizontal = 32.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .windowInsetsPadding(WindowInsets.navigationBars)
+            .padding(horizontal = 32.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
@@ -209,13 +225,13 @@ private fun EmptyHome(onAdd: () -> Unit, onDemo: () -> Unit) {
             text = stringResource(R.string.home_empty_title),
             fontSize = 22.sp,
             fontWeight = FontWeight.Bold,
-            color = Color.White,
+            color = Theme.colors.text,
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = stringResource(R.string.home_empty_text),
             fontSize = 15.sp,
-            color = Theme.Muted,
+            color = Theme.colors.muted,
             textAlign = androidx.compose.ui.text.style.TextAlign.Center,
         )
         Spacer(modifier = Modifier.height(24.dp))
@@ -245,44 +261,44 @@ private fun BatterySummaryCard(battery: SavedBattery, snapshot: BatterySnapshot?
                 modifier = Modifier
                     .size(44.dp)
                     .clip(CircleShape)
-                    .background(Theme.SurfaceHigh),
+                    .background(Theme.colors.surfaceHigh),
                 contentAlignment = Alignment.Center,
             ) {
-                Icon(Icons.Filled.BatteryStd, contentDescription = null, tint = Theme.Charge)
+                Icon(Icons.Filled.BatteryStd, contentDescription = null, tint = Theme.colors.charge)
             }
             Spacer(modifier = Modifier.width(12.dp))
             Column {
-                Text(text = battery.name, fontSize = 17.sp, fontWeight = FontWeight.SemiBold, color = Color.White)
-                Text(text = stringResource(R.string.device_directbluetooth), fontSize = 13.sp, color = Theme.Muted)
+                Text(text = battery.name, fontSize = 17.sp, fontWeight = FontWeight.SemiBold, color = Theme.colors.text)
+                Text(text = stringResource(R.string.device_directbluetooth), fontSize = 13.sp, color = Theme.colors.muted)
             }
             Spacer(modifier = Modifier.weight(1f))
             Icon(
                 Icons.AutoMirrored.Filled.KeyboardArrowRight,
                 contentDescription = null,
-                tint = Theme.Muted,
+                tint = Theme.colors.muted,
             )
         }
         if (snapshot != null) {
             Spacer(modifier = Modifier.height(16.dp))
-            Box(modifier = Modifier.fillMaxWidth().height(1.dp).background(Theme.Border))
+            Box(modifier = Modifier.fillMaxWidth().height(1.dp).background(Theme.colors.border))
             Spacer(modifier = Modifier.height(16.dp))
             Row(verticalAlignment = Alignment.Bottom) {
-                Icon(Icons.Filled.Bolt, contentDescription = null, tint = Theme.Charge, modifier = Modifier.size(20.dp))
+                Icon(Icons.Filled.Bolt, contentDescription = null, tint = Theme.colors.charge, modifier = Modifier.size(20.dp))
                 Spacer(modifier = Modifier.width(5.dp))
                 Text(
                     text = String.format(Locale.US, "%.2f", snapshot.voltage),
                     style = Theme.numeric(17),
-                    color = Color.White,
+                    color = Theme.colors.text,
                 )
                 Spacer(modifier = Modifier.width(4.dp))
-                Text(text = "V", fontSize = 15.sp, color = Theme.Muted)
+                Text(text = "V", fontSize = 15.sp, color = Theme.colors.muted)
                 Spacer(modifier = Modifier.width(16.dp))
-                Icon(Icons.Filled.SwapHoriz, contentDescription = null, tint = Theme.Muted, modifier = Modifier.size(20.dp))
+                Icon(Icons.Filled.SwapHoriz, contentDescription = null, tint = Theme.colors.muted, modifier = Modifier.size(20.dp))
                 Spacer(modifier = Modifier.width(5.dp))
                 val currentColor = when {
-                    snapshot.current > 0.05 -> Theme.Charge
-                    snapshot.current < -0.05 -> Theme.Discharge
-                    else -> Theme.Muted
+                    snapshot.current > 0.05 -> Theme.colors.charge
+                    snapshot.current < -0.05 -> Theme.colors.discharge
+                    else -> Theme.colors.muted
                 }
                 Text(
                     text = String.format(Locale.US, "%+.2f", snapshot.current),
@@ -290,19 +306,19 @@ private fun BatterySummaryCard(battery: SavedBattery, snapshot: BatterySnapshot?
                     color = currentColor,
                 )
                 Spacer(modifier = Modifier.width(4.dp))
-                Text(text = "A", fontSize = 15.sp, color = Theme.Muted)
+                Text(text = "A", fontSize = 15.sp, color = Theme.colors.muted)
                 Spacer(modifier = Modifier.weight(1f))
-                Text(text = "${snapshot.soc}", style = Theme.numeric(17), color = Color.White)
-                Text(text = "%", style = Theme.numeric(17), color = Theme.Muted)
+                Text(text = "${snapshot.soc}", style = Theme.numeric(17), color = Theme.colors.text)
+                Text(text = "%", style = Theme.numeric(17), color = Theme.colors.muted)
             }
             Spacer(modifier = Modifier.height(8.dp))
-            Box(modifier = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(3.dp)).background(Theme.SurfaceHigh)) {
+            Box(modifier = Modifier.fillMaxWidth().height(6.dp).clip(RoundedCornerShape(3.dp)).background(Theme.colors.surfaceHigh)) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth(snapshot.soc / 100f)
                         .height(6.dp)
                         .clip(RoundedCornerShape(3.dp))
-                        .background(Theme.Charge),
+                        .background(Theme.colors.charge),
                 )
             }
             Spacer(modifier = Modifier.height(8.dp))
@@ -312,14 +328,14 @@ private fun BatterySummaryCard(battery: SavedBattery, snapshot: BatterySnapshot?
                     DateUtils.getRelativeTimeSpanString(snapshot.receivedAt).toString(),
                 ),
                 fontSize = 12.sp,
-                color = Theme.Muted,
+                color = Theme.colors.muted,
             )
         } else {
             Spacer(modifier = Modifier.height(12.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Filled.BluetoothSearching, contentDescription = null, tint = Theme.Charge)
+                Icon(Icons.Filled.BluetoothSearching, contentDescription = null, tint = Theme.colors.charge)
                 Spacer(modifier = Modifier.width(8.dp))
-                Text(text = stringResource(R.string.device_norecentreading), fontSize = 15.sp, color = Theme.Muted)
+                Text(text = stringResource(R.string.device_norecentreading), fontSize = 15.sp, color = Theme.colors.muted)
             }
         }
     }
@@ -339,15 +355,15 @@ private fun DemoBatteryRow(onClick: () -> Unit, modifier: Modifier = Modifier) {
             modifier = Modifier
                 .size(44.dp)
                 .clip(CircleShape)
-                .background(Theme.SurfaceHigh),
+                .background(Theme.colors.surfaceHigh),
             contentAlignment = Alignment.Center,
         ) {
-            Icon(Icons.Filled.PlayArrow, contentDescription = null, tint = Theme.Muted)
+            Icon(Icons.Filled.PlayArrow, contentDescription = null, tint = Theme.colors.muted)
         }
         Spacer(modifier = Modifier.width(12.dp))
         Column {
-            Text(text = stringResource(R.string.demo_batteryname), fontSize = 17.sp, fontWeight = FontWeight.SemiBold, color = Color.White)
-            Text(text = stringResource(R.string.demo_rowhint), fontSize = 13.sp, color = Theme.Muted)
+            Text(text = stringResource(R.string.demo_batteryname), fontSize = 17.sp, fontWeight = FontWeight.SemiBold, color = Theme.colors.text)
+            Text(text = stringResource(R.string.demo_rowhint), fontSize = 13.sp, color = Theme.colors.muted)
         }
     }
 }

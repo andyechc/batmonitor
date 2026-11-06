@@ -33,16 +33,16 @@ fun CellBarsView(cells: List<Double>, modifier: Modifier = Modifier) {
             val ratio = if (balanced) 1f else (0.2 + 0.8 * ((voltage - low) / span)).toFloat()
             val animated by animateFloatAsState(targetValue = ratio, label = "cell$index")
             val color = when {
-                balanced -> Theme.Neutral
-                voltage == high -> Theme.Charge
-                voltage == low -> Theme.Discharge
-                else -> Theme.Neutral
+                balanced -> Theme.colors.neutral
+                voltage == high -> Theme.colors.charge
+                voltage == low -> Theme.colors.discharge
+                else -> Theme.colors.neutral
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = "C${index + 1}",
                     fontSize = 12.sp,
-                    color = Theme.Muted,
+                    color = Theme.colors.muted,
                     modifier = Modifier.width(28.dp),
                 )
                 androidx.compose.foundation.layout.Box(
@@ -50,7 +50,7 @@ fun CellBarsView(cells: List<Double>, modifier: Modifier = Modifier) {
                         .weight(1f)
                         .height(10.dp)
                         .clip(CircleShape)
-                        .background(Theme.SurfaceHigh),
+                        .background(Theme.colors.surfaceHigh),
                 ) {
                     androidx.compose.foundation.layout.Box(
                         modifier = Modifier

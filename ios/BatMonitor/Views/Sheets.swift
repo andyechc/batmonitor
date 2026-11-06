@@ -66,7 +66,7 @@ struct InfoSheet: View {
         VStack(spacing: 20) {
             Image(systemName: "info.circle.fill")
                 .font(.system(size: 48))
-                .foregroundStyle(.white)
+                .foregroundStyle(.primary)
             Text(topic.title)
                 .font(.title3.weight(.semibold))
                 .foregroundStyle(.primary)

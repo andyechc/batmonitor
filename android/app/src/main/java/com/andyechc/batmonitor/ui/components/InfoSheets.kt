@@ -58,8 +58,8 @@ fun InfoSheet(topic: HelpTopic, onDismiss: () -> Unit) {
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-        containerColor = Theme.Surface,
-        contentColor = Color.White,
+        containerColor = Theme.colors.surface,
+        contentColor = Theme.colors.text,
     ) {
         Column(
             modifier = Modifier
@@ -70,7 +70,7 @@ fun InfoSheet(topic: HelpTopic, onDismiss: () -> Unit) {
             Icon(
                 imageVector = Icons.Outlined.Info,
                 contentDescription = null,
-                tint = Color.White,
+                tint = Theme.colors.text,
                 modifier = Modifier.size(48.dp),
             )
             Spacer(modifier = Modifier.size(20.dp))
@@ -84,7 +84,7 @@ fun InfoSheet(topic: HelpTopic, onDismiss: () -> Unit) {
             Text(
                 text = stringResource(topic.bodyRes),
                 fontSize = 16.sp,
-                color = Theme.Neutral,
+                color = Theme.colors.neutral,
                 textAlign = TextAlign.Center,
             )
             Spacer(modifier = Modifier.size(24.dp))
@@ -108,8 +108,8 @@ fun RenameSheet(
     ModalBottomSheet(
         onDismissRequest = { if (!saving) onDismiss() },
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-        containerColor = Theme.Surface,
-        contentColor = Color.White,
+        containerColor = Theme.colors.surface,
+        contentColor = Theme.colors.text,
     ) {
         Column(modifier = Modifier.fillMaxWidth().padding(24.dp)) {
             Text(
@@ -126,24 +126,24 @@ fun RenameSheet(
                 enabled = !saving,
                 placeholder = { Text(stringResource(R.string.device_renametitle)) },
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedTextColor = Color.White,
-                    unfocusedTextColor = Color.White,
-                    focusedBorderColor = Theme.Charge,
-                    unfocusedBorderColor = Theme.Border,
-                    cursorColor = Theme.Charge,
+                    focusedTextColor = Theme.colors.text,
+                    unfocusedTextColor = Theme.colors.text,
+                    focusedBorderColor = Theme.colors.charge,
+                    unfocusedBorderColor = Theme.colors.border,
+                    cursorColor = Theme.colors.charge,
                 ),
             )
             Text(
                 text = stringResource(R.string.device_renamehint),
                 fontSize = 13.sp,
-                color = Theme.Muted,
+                color = Theme.colors.muted,
                 modifier = Modifier.padding(top = 8.dp),
             )
             if (error != null) {
                 Text(
                     text = error!!,
                     fontSize = 14.sp,
-                    color = Theme.Danger,
+                    color = Theme.colors.danger,
                     modifier = Modifier.padding(top = 8.dp),
                 )
             }

@@ -49,7 +49,7 @@ struct RenameSheet: View {
                     Button { dismiss() } label: {
                         Image(systemName: "xmark")
                             .font(.body.weight(.semibold))
-                            .foregroundStyle(.white)
+                            .foregroundStyle(.primary)
                     }
                     .disabled(saving)
                     .accessibilityLabel(Text("device.cancel"))

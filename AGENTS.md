@@ -40,7 +40,7 @@ Verified against the reference app's decompiled code and a real battery ("Andy 7
 - Wait for a settled Bluetooth state (not `unknown` or `resetting`) before scanning or connecting.
 
 ## Design
-- Dark theme, colors in `Components/Theme.swift`. Icons are SF Symbols. Navigation and sheets use system styling, which gets Liquid Glass on iOS 26.
+- Dark/light theme that follows the system appearance (nothing forces a scheme). Every token in `Components/Theme.swift` is a dynamic color with a light and a dark hex; dark keeps the original design, light uses F2F2F5 canvas, FFFFFF cards, E7E7EC chips and text-safe accents (charge 066B49, discharge 8A5300, danger C21A12). Use `Color(.label)` (not `.primary`) for toolbar and menu item colors, since a `Menu` re-tints `.primary`. Icons are SF Symbols. Navigation and sheets use system styling, which gets Liquid Glass on iOS 26.
 - Navigation bars use native ultra-thin material; cards use distinct filled surfaces without outlines. BatMonitor green is the single brand accent, amber marks discharge/warnings, red marks errors/destructive actions, and neutral tones cover idle/secondary data.
 - Home uses cached real readings with an explicit last-reading time. The demo battery is labeled as simulated and never starts BLE or writes to a real BMS.
 - Detail screen has bottom tabs (summary, cells, status, control), a code-drawn animated battery, and a test-state selector for demo only.

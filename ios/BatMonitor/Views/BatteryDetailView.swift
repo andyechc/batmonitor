@@ -95,6 +95,7 @@ struct BatteryDetailView: View {
                 .padding(.bottom, 120)
             }
             .scrollIndicators(.hidden)
+            .background(Theme.background)
             .tabItem { Label(DetailTab.overview.title, systemImage: "speedometer") }
             .tag(DetailTab.overview)
 
@@ -106,6 +107,7 @@ struct BatteryDetailView: View {
                 .padding(.bottom, 120)
             }
             .scrollIndicators(.hidden)
+            .background(Theme.background)
             .tabItem { Label(DetailTab.cells.title, systemImage: "battery.100") }
             .tag(DetailTab.cells)
 
@@ -117,6 +119,7 @@ struct BatteryDetailView: View {
                 .padding(.bottom, 120)
             }
             .scrollIndicators(.hidden)
+            .background(Theme.background)
             .tabItem { Label(DetailTab.status.title, systemImage: "shield.lefthalf.filled") }
             .tag(DetailTab.status)
 
@@ -128,6 +131,7 @@ struct BatteryDetailView: View {
                 .padding(.bottom, 120)
             }
             .scrollIndicators(.hidden)
+            .background(Theme.background)
             .tabItem { Label(DetailTab.control.title, systemImage: "slider.horizontal.3") }
             .tag(DetailTab.control)
         }
@@ -572,7 +576,7 @@ struct BatteryDetailView: View {
                         }
                     }
                     .pickerStyle(.inline)
-                    .tint(.white)
+                    .tint(Color(.label))
                 } else {
                     Group {
                         Button {
@@ -593,7 +597,7 @@ struct BatteryDetailView: View {
                         }
                         .disabled(!isLive)
                     }
-                    .tint(.white)
+                    .tint(Color(.label))
                     Divider()
                     Button(role: .destructive) {
                         pendingConfirm = .remove
@@ -610,7 +614,7 @@ struct BatteryDetailView: View {
                 }
             } label: {
                 Image(systemName: "slider.horizontal.3")
-                    .foregroundStyle(.white)
+                    .foregroundStyle(Color(.label))
                     .accessibilityLabel(Text("device.more"))
             }
             .accessibilityIdentifier("moreMenu")

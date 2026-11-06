@@ -7,6 +7,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -180,82 +183,84 @@ fun DetailScreen(batteryId: UUID, store: BatteryStore, onBack: () -> Unit) {
     }
 
     Scaffold(
-        containerColor = Theme.Background,
+        containerColor = Theme.colors.background,
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text(currentName, fontWeight = FontWeight.SemiBold, color = Color.White) },
+                title = { Text(currentName, fontWeight = FontWeight.SemiBold, color = Theme.colors.text) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null, tint = Color.White)
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null, tint = Theme.colors.text)
                     }
                 },
                 actions = {
                     Box {
                         IconButton(onClick = { menuOpen = true }) {
-                            Icon(Icons.Filled.Tune, contentDescription = stringResource(R.string.device_more), tint = Color.White)
+                            Icon(Icons.Filled.Tune, contentDescription = stringResource(R.string.device_more), tint = Theme.colors.text)
                         }
                         DropdownMenu(
                             expanded = menuOpen,
                             onDismissRequest = { menuOpen = false },
-                            modifier = Modifier.background(Theme.SurfaceHigh),
+                            modifier = Modifier.background(Theme.colors.surfaceHigh),
                         ) {
                             if (isDemo) {
                                 DemoState.entries.forEach { state ->
                                     DropdownMenuItem(
-                                        text = { Text(demoTitle(state), color = Color.White) },
+                                        text = { Text(demoTitle(state), color = Theme.colors.text) },
                                         leadingIcon = {
                                             if (state == demoState) {
-                                                Icon(Icons.Filled.Check, contentDescription = null, tint = Theme.Charge)
+                                                Icon(Icons.Filled.Check, contentDescription = null, tint = Theme.colors.charge)
                                             } else {
                                                 Spacer(modifier = Modifier.size(24.dp))
                                             }
                                         },
                                         onClick = { demoState = state; menuOpen = false },
-                                        colors = MenuDefaults.itemColors(textColor = Color.White),
+                                        colors = MenuDefaults.itemColors(textColor = Theme.colors.text),
                                     )
                                 }
                             } else {
                                 DropdownMenuItem(
-                                    text = { Text(stringResource(R.string.device_rename), color = Color.White) },
-                                    leadingIcon = { Icon(Icons.Filled.Edit, contentDescription = null, tint = Color.White) },
+                                    text = { Text(stringResource(R.string.device_rename), color = Theme.colors.text) },
+                                    leadingIcon = { Icon(Icons.Filled.Edit, contentDescription = null, tint = Theme.colors.text) },
                                     onClick = { menuOpen = false; renaming = true },
-                                    colors = MenuDefaults.itemColors(textColor = Color.White),
+                                    colors = MenuDefaults.itemColors(textColor = Theme.colors.text),
                                 )
                                 DropdownMenuItem(
-                                    text = { Text(stringResource(R.string.device_balance), color = Color.White) },
-                                    leadingIcon = { Icon(Icons.Filled.Tune, contentDescription = null, tint = Color.White) },
+                                    text = { Text(stringResource(R.string.device_balance), color = Theme.colors.text) },
+                                    leadingIcon = { Icon(Icons.Filled.Tune, contentDescription = null, tint = Theme.colors.text) },
                                     enabled = isLive,
                                     onClick = { menuOpen = false; perform { monitor.balance() } },
-                                    colors = MenuDefaults.itemColors(textColor = Color.White, disabledTextColor = Theme.Muted),
+                                    colors = MenuDefaults.itemColors(textColor = Theme.colors.text, disabledTextColor = Theme.colors.muted),
                                 )
                                 DropdownMenuItem(
-                                    text = { Text(stringResource(R.string.device_clearprotection), color = Color.White) },
-                                    leadingIcon = { Icon(Icons.Filled.Shield, contentDescription = null, tint = Color.White) },
+                                    text = { Text(stringResource(R.string.device_clearprotection), color = Theme.colors.text) },
+                                    leadingIcon = { Icon(Icons.Filled.Shield, contentDescription = null, tint = Theme.colors.text) },
                                     enabled = isLive,
                                     onClick = { menuOpen = false; perform { monitor.clearProtection() } },
-                                    colors = MenuDefaults.itemColors(textColor = Color.White, disabledTextColor = Theme.Muted),
+                                    colors = MenuDefaults.itemColors(textColor = Theme.colors.text, disabledTextColor = Theme.colors.muted),
                                 )
-                                Divider(color = Theme.Border)
+                                Divider(color = Theme.colors.border)
                                 DropdownMenuItem(
-                                    text = { Text(stringResource(R.string.device_remove), color = Theme.Danger) },
-                                    leadingIcon = { Icon(Icons.Filled.Delete, contentDescription = null, tint = Theme.Danger) },
+                                    text = { Text(stringResource(R.string.device_remove), color = Theme.colors.danger) },
+                                    leadingIcon = { Icon(Icons.Filled.Delete, contentDescription = null, tint = Theme.colors.danger) },
                                     onClick = { menuOpen = false; pendingRemove = true },
-                                    colors = MenuDefaults.itemColors(textColor = Theme.Danger),
+                                    colors = MenuDefaults.itemColors(textColor = Theme.colors.danger),
                                 )
                             }
                         }
                     }
                 },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Theme.Background),
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Theme.colors.background),
             )
         },
         bottomBar = {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    // Floating tabs stay above the gesture / navigation bar.
+                    .windowInsetsPadding(WindowInsets.navigationBars)
                     .padding(horizontal = 16.dp, vertical = 12.dp)
                     .clip(RoundedCornerShape(28.dp))
-                    .background(Theme.SurfaceHigh)
+                    .background(Theme.colors.surfaceHigh)
                     .padding(horizontal = 8.dp, vertical = 6.dp),
             ) {
                 DetailTab.entries.forEach { t ->
@@ -264,7 +269,7 @@ fun DetailScreen(batteryId: UUID, store: BatteryStore, onBack: () -> Unit) {
                         modifier = Modifier
                             .weight(1f)
                             .clip(RoundedCornerShape(22.dp))
-                            .background(if (selected) Theme.Surface else Color.Transparent)
+                            .background(if (selected) Theme.colors.surface else Color.Transparent)
                             .clickable { tab = t }
                             .padding(vertical = 8.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -272,13 +277,13 @@ fun DetailScreen(batteryId: UUID, store: BatteryStore, onBack: () -> Unit) {
                         Icon(
                             t.icon,
                             contentDescription = null,
-                            tint = if (selected) Theme.Charge else Color.White,
+                            tint = if (selected) Theme.colors.charge else Theme.colors.text,
                             modifier = Modifier.size(24.dp),
                         )
                         Text(
                             stringResource(t.titleRes),
                             fontSize = 12.sp,
-                            color = if (selected) Theme.Charge else Theme.Muted,
+                            color = if (selected) Theme.colors.charge else Theme.colors.muted,
                         )
                     }
                 }
@@ -337,7 +342,7 @@ fun DetailScreen(batteryId: UUID, store: BatteryStore, onBack: () -> Unit) {
     pendingOff?.let { target ->
         AlertDialog(
             onDismissRequest = { pendingOff = null },
-            containerColor = Theme.Surface,
+            containerColor = Theme.colors.surface,
             title = {
                 Text(
                     if (target == SwitchTarget.DISCHARGE) stringResource(R.string.device_dischargeswitch)
@@ -352,12 +357,12 @@ fun DetailScreen(batteryId: UUID, store: BatteryStore, onBack: () -> Unit) {
             },
             confirmButton = {
                 TextButton(onClick = { applySwitch(target); pendingOff = null }) {
-                    Text(stringResource(R.string.device_confirm), color = Theme.Danger)
+                    Text(stringResource(R.string.device_confirm), color = Theme.colors.danger)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { pendingOff = null }) {
-                    Text(stringResource(R.string.device_cancel), color = Color.White)
+                    Text(stringResource(R.string.device_cancel), color = Theme.colors.text)
                 }
             },
         )
@@ -366,7 +371,7 @@ fun DetailScreen(batteryId: UUID, store: BatteryStore, onBack: () -> Unit) {
     if (pendingRemove) {
         AlertDialog(
             onDismissRequest = { pendingRemove = false },
-            containerColor = Theme.Surface,
+            containerColor = Theme.colors.surface,
             title = { Text(stringResource(R.string.device_removetitle)) },
             text = { Text(stringResource(R.string.device_removeconfirm, currentName)) },
             confirmButton = {
@@ -375,12 +380,12 @@ fun DetailScreen(batteryId: UUID, store: BatteryStore, onBack: () -> Unit) {
                     pendingRemove = false
                     onBack()
                 }) {
-                    Text(stringResource(R.string.device_delete), color = Theme.Danger)
+                    Text(stringResource(R.string.device_delete), color = Theme.colors.danger)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { pendingRemove = false }) {
-                    Text(stringResource(R.string.device_cancel), color = Color.White)
+                    Text(stringResource(R.string.device_cancel), color = Theme.colors.text)
                 }
             },
         )

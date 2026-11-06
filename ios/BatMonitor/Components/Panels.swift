@@ -120,8 +120,8 @@ struct FluidBatteryView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 15, style: .continuous))
                 RoundedRectangle(cornerRadius: 20, style: .continuous)
                     .strokeBorder(color, lineWidth: 3)
-                percentText(color: .white)
-                percentText(color: Color(red: 0.02, green: 0.03, blue: 0.05))
+                percentText(color: .primary)
+                percentText(color: Theme.onAccent)
                     .mask(
                         filledShape(level: level, phase: phase)
                             .frame(width: 190, height: 100)
@@ -183,13 +183,14 @@ private struct WaveShape: Shape {
     }
 }
 
-/// Primary action: near-black text on the brand green fill. The dark text
-/// (not white) is what gives the required contrast on the bright green.
+/// Primary action: near-black text on the brand green fill in dark mode,
+/// white text on the darker brand green in light mode. Both keep the contrast
+/// the bright green needs.
 struct PrimaryButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(.body.weight(.semibold))
-            .foregroundStyle(Theme.background)
+            .foregroundStyle(Theme.onAccent)
             .padding(.horizontal, 22)
             .padding(.vertical, 13)
             .background(Theme.charge, in: Capsule())
@@ -197,14 +198,14 @@ struct PrimaryButtonStyle: ButtonStyle {
     }
 }
 
-/// Secondary action: white text on a filled neutral surface. Used for
+/// Secondary action: label text on a filled neutral surface. Used for
 /// non-primary buttons so the brand green stays reserved for primary
 /// actions and live values.
 struct SecondaryButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(.body.weight(.semibold))
-            .foregroundStyle(.white)
+            .foregroundStyle(.primary)
             .padding(.horizontal, 22)
             .padding(.vertical, 13)
             .background(Theme.surfaceHigh, in: Capsule())

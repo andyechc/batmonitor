@@ -26,7 +26,7 @@ fun StatTile(
     value: String,
     unit: String? = null,
     icon: ImageVector,
-    accent: Color = Color.White,
+    accent: Color = Theme.colors.text,
     onInfo: (() -> Unit)? = null,
     modifier: Modifier = Modifier,
 ) {
@@ -39,7 +39,7 @@ fun StatTile(
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(imageVector = icon, contentDescription = null, tint = accent)
             Spacer(modifier = Modifier.width(6.dp))
-            Text(text = label, fontSize = 13.sp, color = Theme.Muted)
+            Text(text = label, fontSize = 13.sp, color = Theme.colors.muted)
             Spacer(modifier = Modifier.weight(1f))
             if (onInfo != null) {
                 androidx.compose.foundation.layout.Box(
@@ -52,7 +52,7 @@ fun StatTile(
             Text(text = value, style = Theme.numeric(29), color = accent)
             if (unit != null) {
                 Spacer(modifier = Modifier.width(4.dp))
-                Text(text = unit, fontSize = 15.sp, color = Theme.Muted)
+                Text(text = unit, fontSize = 15.sp, color = Theme.colors.muted)
             }
         }
     }

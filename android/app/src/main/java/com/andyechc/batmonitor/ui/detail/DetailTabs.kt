@@ -46,6 +46,7 @@ import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -74,10 +75,12 @@ import java.util.UUID
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
+@Composable
+@ReadOnlyComposable
 private fun accentFor(current: Double): Color = when {
-    current > 0.05 -> Theme.Charge
-    current < -0.05 -> Theme.Discharge
-    else -> Theme.Neutral
+    current > 0.05 -> Theme.colors.charge
+    current < -0.05 -> Theme.colors.discharge
+    else -> Theme.colors.neutral
 }
 
 // MARK: - Overview
@@ -103,9 +106,9 @@ fun OverviewTab(
         // State row.
         Row(verticalAlignment = Alignment.CenterVertically) {
             val (icon, labelRes, color) = when {
-                basic.current > 0.05 -> Triple(Icons.Filled.FlashOn, R.string.device_state_charging, Theme.Charge)
-                basic.current < -0.05 -> Triple(Icons.Filled.ArrowDownward, R.string.device_state_discharging, Theme.Discharge)
-                else -> Triple(Icons.Filled.Pause, R.string.device_state_idle, Theme.Neutral)
+                basic.current > 0.05 -> Triple(Icons.Filled.FlashOn, R.string.device_state_charging, Theme.colors.charge)
+                basic.current < -0.05 -> Triple(Icons.Filled.ArrowDownward, R.string.device_state_discharging, Theme.colors.discharge)
+                else -> Triple(Icons.Filled.Pause, R.string.device_state_idle, Theme.colors.neutral)
             }
             Icon(icon, contentDescription = null, tint = color)
             Spacer(modifier = Modifier.width(8.dp))
@@ -117,14 +120,14 @@ fun OverviewTab(
         Text(
             text = String.format(Locale.US, "%.2f de %.0f Ah", basic.remainingCapacity, basic.nominalCapacity),
             fontSize = 15.sp,
-            color = Theme.Muted,
+            color = Theme.colors.muted,
         )
         Spacer(modifier = Modifier.height(6.dp))
         if (basic.soc >= 100) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Filled.CheckCircle, contentDescription = null, tint = Theme.Charge)
+                Icon(Icons.Filled.CheckCircle, contentDescription = null, tint = Theme.colors.charge)
                 Spacer(modifier = Modifier.width(8.dp))
-                Text(text = stringResource(R.string.device_fullycharged), fontSize = 17.sp, fontWeight = FontWeight.SemiBold, color = Theme.Charge)
+                Text(text = stringResource(R.string.device_fullycharged), fontSize = 17.sp, fontWeight = FontWeight.SemiBold, color = Theme.colors.charge)
             }
         } else {
             val missing = basic.nominalCapacity - basic.remainingCapacity
@@ -132,13 +135,13 @@ fun OverviewTab(
                 val mins = (missing / basic.current * 60).roundToInt()
                 val eta = if (mins >= 60) "${mins / 60} h ${mins % 60} min" else "$mins min"
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Filled.Timer, contentDescription = null, tint = Theme.Charge)
+                    Icon(Icons.Filled.Timer, contentDescription = null, tint = Theme.colors.charge)
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = stringResource(R.string.device_timetofull, eta),
                         fontSize = 17.sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = Theme.Charge,
+                        color = Theme.colors.charge,
                     )
                 }
             }
@@ -155,7 +158,7 @@ fun OverviewTab(
                 value = String.format(Locale.US, "%.2f", basic.totalVoltage),
                 unit = "V",
                 icon = Icons.Filled.Bolt,
-                accent = Theme.Neutral,
+                accent = Theme.colors.neutral,
                 onInfo = { onInfo(HelpTopic.VOLTAGE) },
                 modifier = Modifier.weight(1f),
             )
@@ -183,7 +186,7 @@ fun OverviewTab(
                 label = stringResource(R.string.device_stat_cycles),
                 value = "${basic.cycles}",
                 icon = Icons.Filled.Refresh,
-                accent = Theme.Neutral,
+                accent = Theme.colors.neutral,
                 onInfo = { onInfo(HelpTopic.CYCLES) },
                 modifier = Modifier.weight(1f),
             )
@@ -194,7 +197,7 @@ fun OverviewTab(
                 value = if (maxTemp != null) String.format(Locale.US, "%.1f", maxTemp) else "—",
                 unit = if (maxTemp != null) "°C" else null,
                 icon = Icons.Filled.Thermostat,
-                accent = Theme.Neutral,
+                accent = Theme.colors.neutral,
                 onInfo = { onInfo(HelpTopic.MAX_TEMP) },
                 modifier = Modifier.weight(1f),
             )
@@ -203,7 +206,7 @@ fun OverviewTab(
                 value = if (imbalance != null) String.format(Locale.US, "%.0f", imbalance * 1000) else "—",
                 unit = if (imbalance != null) "mV" else null,
                 icon = Icons.Filled.Scale,
-                accent = Theme.Neutral,
+                accent = Theme.colors.neutral,
                 onInfo = { onInfo(HelpTopic.IMBALANCE) },
                 modifier = Modifier.weight(1f),
             )
@@ -220,26 +223,26 @@ fun OverviewTab(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (active.isEmpty()) {
-            Icon(Icons.Filled.CheckCircle, contentDescription = null, tint = Theme.Charge)
+            Icon(Icons.Filled.CheckCircle, contentDescription = null, tint = Theme.colors.charge)
             Spacer(modifier = Modifier.width(12.dp))
             Text(
                 text = stringResource(R.string.device_noprotections),
                 fontSize = 17.sp,
                 fontWeight = FontWeight.Medium,
-                color = Color.White,
+                color = Theme.colors.text,
             )
         } else {
-            Icon(Icons.Filled.Warning, contentDescription = null, tint = Theme.Danger)
+            Icon(Icons.Filled.Warning, contentDescription = null, tint = Theme.colors.danger)
             Spacer(modifier = Modifier.width(12.dp))
             Text(
                 text = stringResource(R.string.device_protectionsactive, active.size),
                 fontSize = 17.sp,
                 fontWeight = FontWeight.Medium,
-                color = Color.White,
+                color = Theme.colors.text,
             )
         }
         Spacer(modifier = Modifier.weight(1f))
-        Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null, tint = Theme.Muted)
+        Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null, tint = Theme.colors.muted)
     }
 }
 
@@ -248,21 +251,21 @@ fun StatusBadge(status: MonitorStatus, message: String?) {
     when (status) {
         MonitorStatus.LIVE -> StatusPill(
             text = stringResource(R.string.device_live),
-            container = Theme.Charge,
-            content = Theme.Charge,
-            leading = { Icon(Icons.Filled.CheckCircle, contentDescription = null, tint = Theme.Charge, modifier = Modifier.size(14.dp)) },
+            container = Theme.colors.charge,
+            content = Theme.colors.charge,
+            leading = { Icon(Icons.Filled.CheckCircle, contentDescription = null, tint = Theme.colors.charge, modifier = Modifier.size(14.dp)) },
         )
         MonitorStatus.CONNECTING -> StatusPill(
             text = stringResource(R.string.device_connectingpill),
-            container = Theme.Muted,
-            content = Theme.Muted,
-            leading = { Icon(Icons.Filled.Refresh, contentDescription = null, tint = Theme.Muted, modifier = Modifier.size(14.dp)) },
+            container = Theme.colors.muted,
+            content = Theme.colors.muted,
+            leading = { Icon(Icons.Filled.Refresh, contentDescription = null, tint = Theme.colors.muted, modifier = Modifier.size(14.dp)) },
         )
         MonitorStatus.ERROR -> StatusPill(
             text = message ?: stringResource(R.string.device_noconnection),
-            container = Theme.Danger,
-            content = Theme.Danger,
-            leading = { Icon(Icons.Filled.Warning, contentDescription = null, tint = Theme.Danger, modifier = Modifier.size(14.dp)) },
+            container = Theme.colors.danger,
+            content = Theme.colors.danger,
+            leading = { Icon(Icons.Filled.Warning, contentDescription = null, tint = Theme.colors.danger, modifier = Modifier.size(14.dp)) },
         )
     }
 }
@@ -285,7 +288,7 @@ fun ConnectingView(status: MonitorStatus, message: String?, modifier: Modifier =
                 Text(
                     text = stringResource(R.string.device_retryhint),
                     fontSize = 15.sp,
-                    color = Theme.Muted,
+                    color = Theme.colors.muted,
                 )
             }
         }
@@ -356,13 +359,13 @@ fun StatusTab(reading: BatteryReading, onInfo: (HelpTopic) -> Unit) {
         val active = reading.basic.protections.filter { it.active }
         if (active.isEmpty()) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Filled.CheckCircle, contentDescription = null, tint = Theme.Charge)
+                Icon(Icons.Filled.CheckCircle, contentDescription = null, tint = Theme.colors.charge)
                 Spacer(modifier = Modifier.width(12.dp))
                 Text(
                     text = stringResource(R.string.device_noprotections),
                     fontSize = 17.sp,
                     fontWeight = FontWeight.Medium,
-                    color = Color.White,
+                    color = Theme.colors.text,
                 )
             }
         } else {
@@ -370,13 +373,13 @@ fun StatusTab(reading: BatteryReading, onInfo: (HelpTopic) -> Unit) {
                 active.forEach { protection ->
                     val index = reading.basic.protections.indexOf(protection)
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(Icons.Filled.Warning, contentDescription = null, tint = Theme.Danger)
+                        Icon(Icons.Filled.Warning, contentDescription = null, tint = Theme.colors.danger)
                         Spacer(modifier = Modifier.width(12.dp))
                         Text(
                             text = protectionLabel(context, index),
                             fontSize = 17.sp,
                             fontWeight = FontWeight.Medium,
-                            color = Color.White,
+                            color = Theme.colors.text,
                         )
                     }
                 }
@@ -459,11 +462,11 @@ fun ControlTab(
         )
         if (busy) {
             Spacer(modifier = Modifier.height(12.dp))
-            CircularProgressIndicator(modifier = Modifier.size(24.dp), color = Theme.Charge, strokeWidth = 3.dp)
+            CircularProgressIndicator(modifier = Modifier.size(24.dp), color = Theme.colors.charge, strokeWidth = 3.dp)
         }
         if (message != null) {
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = message, fontSize = 13.sp, color = Theme.Muted)
+            Text(text = message, fontSize = 13.sp, color = Theme.colors.muted)
         }
     }
     if (!isDemo) {
@@ -478,20 +481,20 @@ fun ControlTab(
                     text = currentName,
                     fontSize = 17.sp,
                     fontWeight = FontWeight.Medium,
-                    color = Color.White,
+                    color = Theme.colors.text,
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                Icon(Icons.Filled.Edit, contentDescription = null, tint = Theme.Muted)
+                Icon(Icons.Filled.Edit, contentDescription = null, tint = Theme.colors.muted)
             }
         }
         OutlinedButton(
             onClick = onRemove,
             modifier = Modifier.fillMaxWidth(),
-            border = androidx.compose.foundation.BorderStroke(1.dp, Theme.Danger),
+            border = androidx.compose.foundation.BorderStroke(1.dp, Theme.colors.danger),
         ) {
-            Icon(Icons.Filled.Delete, contentDescription = null, tint = Theme.Danger)
+            Icon(Icons.Filled.Delete, contentDescription = null, tint = Theme.colors.danger)
             Spacer(modifier = Modifier.width(8.dp))
-            Text(text = stringResource(R.string.device_remove), color = Theme.Danger, fontSize = 17.sp)
+            Text(text = stringResource(R.string.device_remove), color = Theme.colors.danger, fontSize = 17.sp)
         }
     }
 }
@@ -506,12 +509,12 @@ private fun SwitchRow(
     onChange: (Boolean) -> Unit,
 ) {
     Row(verticalAlignment = Alignment.CenterVertically) {
-        Icon(icon, contentDescription = null, tint = if (enabled) Color.White else Theme.Muted)
+        Icon(icon, contentDescription = null, tint = if (enabled) Theme.colors.text else Theme.colors.muted)
         Spacer(modifier = Modifier.width(12.dp))
         Text(
             text = label,
             fontSize = 17.sp,
-            color = if (enabled) Color.White else Theme.Muted,
+            color = if (enabled) Theme.colors.text else Theme.colors.muted,
         )
         Spacer(modifier = Modifier.width(4.dp))
         Box(modifier = Modifier.clickable(onClick = onInfo)) { InfoGlyph() }
@@ -521,10 +524,10 @@ private fun SwitchRow(
             onCheckedChange = onChange,
             enabled = enabled,
             colors = SwitchDefaults.colors(
-                checkedTrackColor = Theme.Charge,
-                checkedThumbColor = Color.White,
-                uncheckedTrackColor = Theme.SurfaceHigh,
-                uncheckedThumbColor = Theme.Muted,
+                checkedTrackColor = Theme.colors.charge,
+                checkedThumbColor = Theme.colors.switchThumb,
+                uncheckedTrackColor = Theme.colors.surfaceHigh,
+                uncheckedThumbColor = Theme.colors.muted,
             ),
         )
     }
@@ -547,18 +550,18 @@ private fun ActionRow(
                 .clickable(enabled = enabled, onClick = onClick),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Icon(icon, contentDescription = null, tint = if (enabled) Color.White else Theme.Muted)
+            Icon(icon, contentDescription = null, tint = if (enabled) Theme.colors.text else Theme.colors.muted)
             Spacer(modifier = Modifier.width(12.dp))
             Text(
                 text = label,
                 fontSize = 17.sp,
-                color = if (enabled) Color.White else Theme.Muted,
+                color = if (enabled) Theme.colors.text else Theme.colors.muted,
             )
             Spacer(modifier = Modifier.weight(1f))
             Icon(
                 Icons.AutoMirrored.Filled.KeyboardArrowRight,
                 contentDescription = null,
-                tint = Theme.Muted,
+                tint = Theme.colors.muted,
             )
         }
         Spacer(modifier = Modifier.width(4.dp))
