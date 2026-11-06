@@ -643,6 +643,26 @@ code {
   font-size: 0.79rem;
 }
 
+.site-footer__brandlink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.site-footer__brandlink:hover {
+  text-decoration: underline;
+}
+
+.site-footer__brandlink img {
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+  vertical-align: -3px;
+}
+
 /* ---------- Aparición al hacer scroll ---------- */
 
 /* Solo se ocultan si hay JS (documentElement lleva la clase `js`), de modo que
