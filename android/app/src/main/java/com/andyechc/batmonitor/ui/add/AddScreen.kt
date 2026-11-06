@@ -114,6 +114,13 @@ fun AddScreen(store: BatteryStore, onDone: () -> Unit) {
 
     Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                text = stringResource(R.string.add_title),
+                fontSize = 17.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = Color.White,
+            )
+            Spacer(modifier = Modifier.weight(1f))
             IconButton(onClick = onDone) {
                 Box(
                     modifier = Modifier.size(44.dp).clip(CircleShape).background(Theme.SurfaceHigh),
@@ -122,13 +129,6 @@ fun AddScreen(store: BatteryStore, onDone: () -> Unit) {
                     Icon(Icons.Filled.Close, contentDescription = stringResource(R.string.device_cancel), tint = Color.White)
                 }
             }
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                text = stringResource(R.string.add_title),
-                fontSize = 17.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = Color.White,
-            )
         }
         Spacer(modifier = Modifier.height(12.dp))
         OutlinedTextField(

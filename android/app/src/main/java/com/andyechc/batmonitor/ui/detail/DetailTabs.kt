@@ -92,48 +92,55 @@ fun OverviewTab(
 ) {
     val basic = reading.basic
     val accent = accentFor(basic.current)
-    StatusBadge(status = status, message = statusMessage)
-    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        StatusBadge(status = status, message = statusMessage)
+        Spacer(modifier = Modifier.height(18.dp))
         FluidBattery(soc = basic.soc, current = basic.current, color = accent)
-    }
-    // State row.
-    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
-        val (icon, labelRes, color) = when {
-            basic.current > 0.05 -> Triple(Icons.Filled.FlashOn, R.string.device_state_charging, Theme.Charge)
-            basic.current < -0.05 -> Triple(Icons.Filled.ArrowDownward, R.string.device_state_discharging, Theme.Discharge)
-            else -> Triple(Icons.Filled.Pause, R.string.device_state_idle, Theme.Neutral)
-        }
-        Icon(icon, contentDescription = null, tint = color)
-        Spacer(modifier = Modifier.width(8.dp))
-        Text(text = stringResource(labelRes), fontSize = 20.sp, fontWeight = FontWeight.SemiBold, color = color)
-        Spacer(modifier = Modifier.width(8.dp))
-        Box(modifier = Modifier.clickable { onInfo(HelpTopic.SOC) }) { InfoGlyph() }
-    }
-    Text(
-        text = String.format(Locale.US, "%.2f de %.0f Ah", basic.remainingCapacity, basic.nominalCapacity),
-        fontSize = 15.sp,
-        color = Theme.Muted,
-    )
-    if (basic.soc >= 100) {
+        Spacer(modifier = Modifier.height(18.dp))
+        // State row.
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(Icons.Filled.CheckCircle, contentDescription = null, tint = Theme.Charge)
+            val (icon, labelRes, color) = when {
+                basic.current > 0.05 -> Triple(Icons.Filled.FlashOn, R.string.device_state_charging, Theme.Charge)
+                basic.current < -0.05 -> Triple(Icons.Filled.ArrowDownward, R.string.device_state_discharging, Theme.Discharge)
+                else -> Triple(Icons.Filled.Pause, R.string.device_state_idle, Theme.Neutral)
+            }
+            Icon(icon, contentDescription = null, tint = color)
             Spacer(modifier = Modifier.width(8.dp))
-            Text(text = stringResource(R.string.device_fullycharged), fontSize = 17.sp, fontWeight = FontWeight.SemiBold, color = Theme.Charge)
+            Text(text = stringResource(labelRes), fontSize = 20.sp, fontWeight = FontWeight.SemiBold, color = color)
+            Spacer(modifier = Modifier.width(8.dp))
+            Box(modifier = Modifier.clickable { onInfo(HelpTopic.SOC) }) { InfoGlyph() }
         }
-    } else {
-        val missing = basic.nominalCapacity - basic.remainingCapacity
-        if (basic.current > 0.05 && missing > 0) {
-            val mins = (missing / basic.current * 60).roundToInt()
-            val eta = if (mins >= 60) "${mins / 60} h ${mins % 60} min" else "$mins min"
+        Spacer(modifier = Modifier.height(6.dp))
+        Text(
+            text = String.format(Locale.US, "%.2f de %.0f Ah", basic.remainingCapacity, basic.nominalCapacity),
+            fontSize = 15.sp,
+            color = Theme.Muted,
+        )
+        Spacer(modifier = Modifier.height(6.dp))
+        if (basic.soc >= 100) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Filled.Timer, contentDescription = null, tint = Theme.Charge)
+                Icon(Icons.Filled.CheckCircle, contentDescription = null, tint = Theme.Charge)
                 Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = stringResource(R.string.device_timetofull, eta),
-                    fontSize = 17.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = Theme.Charge,
-                )
+                Text(text = stringResource(R.string.device_fullycharged), fontSize = 17.sp, fontWeight = FontWeight.SemiBold, color = Theme.Charge)
+            }
+        } else {
+            val missing = basic.nominalCapacity - basic.remainingCapacity
+            if (basic.current > 0.05 && missing > 0) {
+                val mins = (missing / basic.current * 60).roundToInt()
+                val eta = if (mins >= 60) "${mins / 60} h ${mins % 60} min" else "$mins min"
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(Icons.Filled.Timer, contentDescription = null, tint = Theme.Charge)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = stringResource(R.string.device_timetofull, eta),
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Theme.Charge,
+                    )
+                }
             }
         }
     }

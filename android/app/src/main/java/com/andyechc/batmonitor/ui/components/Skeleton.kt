@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
@@ -54,10 +55,14 @@ fun BatteryDashboardSkeleton(modifier: Modifier = Modifier) {
     val shimmer = shimmerBrush(sweep)
     Column(
         modifier = modifier.padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(18.dp),
     ) {
-        // Hero.
-        Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        // Hero (mirrors the centered detail hero).
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
             ShimmerBlock(shimmer, 92.dp, 25.dp, 25.dp)
             ShimmerBlock(shimmer, 190.dp, 100.dp, 20.dp)
             ShimmerBlock(shimmer, 150.dp, 20.dp, 10.dp)

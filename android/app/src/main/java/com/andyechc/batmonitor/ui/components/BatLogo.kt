@@ -56,7 +56,8 @@ fun BatLogo(size: Dp = 120.dp, flapUp: Boolean = false) {
     ) {
         withTransform({
             translate(left = boxPx / 2, top = boxPx / 2)
-            scale(boxPx / 1024f, boxPx / 1024f)
+            // NOTE: pivot must be Zero; the default (canvas center) shifts the drawing.
+            scale(boxPx / 1024f, boxPx / 1024f, pivot = Offset.Zero)
             translate(left = -512f, top = -512f)
         }) {
             withTransform({ rotate(-24f * flap, Offset(470f, 503f)) }) {
