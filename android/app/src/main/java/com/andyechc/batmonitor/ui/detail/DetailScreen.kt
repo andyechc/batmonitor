@@ -27,7 +27,6 @@ import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material.icons.filled.BatteryFull
 import androidx.compose.material.icons.filled.Bolt
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
@@ -88,8 +87,6 @@ import com.andyechc.batmonitor.ble.BatteryReading
 import com.andyechc.batmonitor.ble.BleError
 import com.andyechc.batmonitor.ble.MonitorStatus
 import com.andyechc.batmonitor.data.BatteryStore
-import com.andyechc.batmonitor.data.SavedBattery
-import com.andyechc.batmonitor.demo.DemoState
 import com.andyechc.batmonitor.ui.components.BatteryDashboardSkeleton
 import com.andyechc.batmonitor.ui.components.Card
 import com.andyechc.batmonitor.ui.components.CellBarsView
@@ -119,19 +116,13 @@ fun DetailScreen(batteryId: UUID, store: BatteryStore, onBack: () -> Unit) {
     val context = LocalContext.current
     store.changes.collectAsState()
     val battery = store.battery(batteryId)
-    val isDemo = battery?.isDemo == true || batteryId == SavedBattery.DEMO.id
-    val currentName = if (isDemo) {
-        stringResource(R.string.demo_batteryname)
-    } else {
-        battery?.name ?: ""
-    }
+    val currentName = battery?.name ?: ""
 
     val monitor = remember(batteryId) { BatteryMonitor(context.applicationContext, batteryId) }
     val monitorStatus by monitor.status.collectAsState()
     val monitorReading by monitor.reading.collectAsState()
     val monitorMessage by monitor.message.collectAsState()
 
-    var demoState by rememberSaveable { mutableStateOf(DemoState.CHARGING) }
     var tab by rememberSaveable { mutableStateOf(DetailTab.OVERVIEW) }
     var busy by remember { mutableStateOf(false) }
     var message by remember { mutableStateOf<String?>(null) }
@@ -142,19 +133,10 @@ fun DetailScreen(batteryId: UUID, store: BatteryStore, onBack: () -> Unit) {
     var menuOpen by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
 
-    val displayReading: BatteryReading? = if (isDemo) demoState.reading else monitorReading
-    val status: MonitorStatus = if (isDemo) demoState.status else monitorStatus
-    val statusMessage: String? = if (isDemo) {
-        if (demoState == DemoState.DISCONNECTED) context.getString(R.string.demo_disconnectedmessage) else null
-    } else {
-        monitorMessage
-    }
-    val isLive = if (isDemo) status == MonitorStatus.LIVE else monitor.isLive
+    val isLive = monitor.isLive
 
-    LaunchedEffect(batteryId, isDemo) {
-        if (!isDemo) {
-            monitor.run { reading -> store.record(reading, batteryId) }
-        }
+    LaunchedEffect(batteryId) {
+        monitor.run { reading -> store.record(reading, batteryId) }
     }
 
     fun perform(action: suspend () -> Unit) {
@@ -173,12 +155,11 @@ fun DetailScreen(batteryId: UUID, store: BatteryStore, onBack: () -> Unit) {
     }
 
     fun applySwitch(target: SwitchTarget) {
-        val basic = displayReading?.basic ?: return
+        val basic = monitorReading?.basic ?: return
         val (charge, discharge) = when (target) {
             SwitchTarget.CHARGE -> true to basic.dischargeOn
             SwitchTarget.DISCHARGE -> basic.chargeOn to true
         }
-        if (isDemo) return
         perform { monitor.setSwitches(charge, discharge) }
     }
 
@@ -202,50 +183,33 @@ fun DetailScreen(batteryId: UUID, store: BatteryStore, onBack: () -> Unit) {
                             onDismissRequest = { menuOpen = false },
                             modifier = Modifier.background(Theme.colors.surfaceHigh),
                         ) {
-                            if (isDemo) {
-                                DemoState.entries.forEach { state ->
-                                    DropdownMenuItem(
-                                        text = { Text(demoTitle(state), color = Theme.colors.text) },
-                                        leadingIcon = {
-                                            if (state == demoState) {
-                                                Icon(Icons.Filled.Check, contentDescription = null, tint = Theme.colors.charge)
-                                            } else {
-                                                Spacer(modifier = Modifier.size(24.dp))
-                                            }
-                                        },
-                                        onClick = { demoState = state; menuOpen = false },
-                                        colors = MenuDefaults.itemColors(textColor = Theme.colors.text),
-                                    )
-                                }
-                            } else {
-                                DropdownMenuItem(
-                                    text = { Text(stringResource(R.string.device_rename), color = Theme.colors.text) },
-                                    leadingIcon = { Icon(Icons.Filled.Edit, contentDescription = null, tint = Theme.colors.text) },
-                                    onClick = { menuOpen = false; renaming = true },
-                                    colors = MenuDefaults.itemColors(textColor = Theme.colors.text),
-                                )
-                                DropdownMenuItem(
-                                    text = { Text(stringResource(R.string.device_balance), color = Theme.colors.text) },
-                                    leadingIcon = { Icon(Icons.Filled.Tune, contentDescription = null, tint = Theme.colors.text) },
-                                    enabled = isLive,
-                                    onClick = { menuOpen = false; perform { monitor.balance() } },
-                                    colors = MenuDefaults.itemColors(textColor = Theme.colors.text, disabledTextColor = Theme.colors.muted),
-                                )
-                                DropdownMenuItem(
-                                    text = { Text(stringResource(R.string.device_clearprotection), color = Theme.colors.text) },
-                                    leadingIcon = { Icon(Icons.Filled.Shield, contentDescription = null, tint = Theme.colors.text) },
-                                    enabled = isLive,
-                                    onClick = { menuOpen = false; perform { monitor.clearProtection() } },
-                                    colors = MenuDefaults.itemColors(textColor = Theme.colors.text, disabledTextColor = Theme.colors.muted),
-                                )
-                                Divider(color = Theme.colors.border)
-                                DropdownMenuItem(
-                                    text = { Text(stringResource(R.string.device_remove), color = Theme.colors.danger) },
-                                    leadingIcon = { Icon(Icons.Filled.Delete, contentDescription = null, tint = Theme.colors.danger) },
-                                    onClick = { menuOpen = false; pendingRemove = true },
-                                    colors = MenuDefaults.itemColors(textColor = Theme.colors.danger),
-                                )
-                            }
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.device_rename), color = Theme.colors.text) },
+                                leadingIcon = { Icon(Icons.Filled.Edit, contentDescription = null, tint = Theme.colors.text) },
+                                onClick = { menuOpen = false; renaming = true },
+                                colors = MenuDefaults.itemColors(textColor = Theme.colors.text),
+                            )
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.device_balance), color = Theme.colors.text) },
+                                leadingIcon = { Icon(Icons.Filled.Tune, contentDescription = null, tint = Theme.colors.text) },
+                                enabled = isLive,
+                                onClick = { menuOpen = false; perform { monitor.balance() } },
+                                colors = MenuDefaults.itemColors(textColor = Theme.colors.text, disabledTextColor = Theme.colors.muted),
+                            )
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.device_clearprotection), color = Theme.colors.text) },
+                                leadingIcon = { Icon(Icons.Filled.Shield, contentDescription = null, tint = Theme.colors.text) },
+                                enabled = isLive,
+                                onClick = { menuOpen = false; perform { monitor.clearProtection() } },
+                                colors = MenuDefaults.itemColors(textColor = Theme.colors.text, disabledTextColor = Theme.colors.muted),
+                            )
+                            Divider(color = Theme.colors.border)
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.device_remove), color = Theme.colors.danger) },
+                                leadingIcon = { Icon(Icons.Filled.Delete, contentDescription = null, tint = Theme.colors.danger) },
+                                onClick = { menuOpen = false; pendingRemove = true },
+                                colors = MenuDefaults.itemColors(textColor = Theme.colors.danger),
+                            )
                         }
                     }
                 },
@@ -290,9 +254,9 @@ fun DetailScreen(batteryId: UUID, store: BatteryStore, onBack: () -> Unit) {
             }
         },
     ) { padding ->
-        val reading = displayReading
+        val reading = monitorReading
         if (reading == null) {
-            ConnectingView(status = status, message = statusMessage, modifier = Modifier.padding(padding))
+            ConnectingView(status = monitorStatus, message = monitorMessage, modifier = Modifier.padding(padding))
         } else {
             Column(
                 modifier = Modifier
@@ -306,15 +270,14 @@ fun DetailScreen(batteryId: UUID, store: BatteryStore, onBack: () -> Unit) {
                 when (tab) {
                     DetailTab.OVERVIEW -> OverviewTab(
                         reading = reading,
-                        status = status,
-                        statusMessage = statusMessage,
+                        status = monitorStatus,
+                        statusMessage = monitorMessage,
                         onInfo = { infoTopic = it },
                     )
                     DetailTab.CELLS -> CellsTab(reading = reading, onInfo = { infoTopic = it })
                     DetailTab.STATUS -> StatusTab(reading = reading, onInfo = { infoTopic = it })
                     DetailTab.CONTROL -> ControlTab(
                         batteryId = batteryId,
-                        isDemo = isDemo,
                         reading = reading,
                         isLive = isLive,
                         busy = busy,
@@ -327,8 +290,8 @@ fun DetailScreen(batteryId: UUID, store: BatteryStore, onBack: () -> Unit) {
                                 pendingOff = target
                             }
                         },
-                        onBalance = { perform { if (!isDemo) monitor.balance() } },
-                        onClear = { perform { if (!isDemo) monitor.clearProtection() } },
+                        onBalance = { perform { monitor.balance() } },
+                        onClear = { perform { monitor.clearProtection() } },
                         onRename = { renaming = true },
                         onRemove = { pendingRemove = true },
                         onInfo = { infoTopic = it },
@@ -376,7 +339,7 @@ fun DetailScreen(batteryId: UUID, store: BatteryStore, onBack: () -> Unit) {
             text = { Text(stringResource(R.string.device_removeconfirm, currentName)) },
             confirmButton = {
                 TextButton(onClick = {
-                    if (!isDemo) store.remove(batteryId)
+                    store.remove(batteryId)
                     pendingRemove = false
                     onBack()
                 }) {
@@ -391,7 +354,7 @@ fun DetailScreen(batteryId: UUID, store: BatteryStore, onBack: () -> Unit) {
         )
     }
 
-    if (renaming && !isDemo) {
+    if (renaming) {
         RenameSheet(
             currentName = currentName,
             onDismiss = { renaming = false },
@@ -412,13 +375,4 @@ private fun BleCentralString(error: BleError): String = try {
     com.andyechc.batmonitor.ble.BleCentral.string(error)
 } catch (_: Exception) {
     error.toString()
-}
-
-@Composable
-private fun demoTitle(state: DemoState): String {
-    val context = LocalContext.current
-    return remember(state) {
-        val id = context.resources.getIdentifier(state.titleKey, "string", context.packageName)
-        if (id != 0) context.getString(id) else state.name
-    }
 }

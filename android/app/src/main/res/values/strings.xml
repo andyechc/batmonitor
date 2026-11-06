@@ -20,21 +20,6 @@
     <string name="ble_unauthorized">Permiso de Bluetooth denegado. Actívalo en Ajustes.</string>
     <string name="ble_unnamed">Batería BMS</string>
     <string name="ble_writefailed">No se pudo enviar el comando</string>
-    <string name="demo_batteryname">Batería de prueba</string>
-    <string name="demo_disconnectedmessage">BMS no disponible · modo de prueba</string>
-    <string name="demo_open">Abrir demostración</string>
-    <string name="demo_previewlabel">Vista de prueba · datos simulados</string>
-    <string name="demo_rowhint">Vista de estados de la interfaz</string>
-    <string name="demo_safetyhint">Datos simulados; no se conecta ni modifica una batería real.</string>
-    <string name="demo_section">Vista de prueba</string>
-    <string name="demo_sectionhint">Cambia entre carga, descarga, reposo y fallos desde el menú de la batería.</string>
-    <string name="demo_selector">Simular estado de batería</string>
-    <string name="demo_state_charging">Cargando</string>
-    <string name="demo_state_connecting">Conectando</string>
-    <string name="demo_state_discharging">Descargando</string>
-    <string name="demo_state_disconnected">Desconectada</string>
-    <string name="demo_state_idle">En reposo</string>
-    <string name="demo_state_protection">Protección activa</string>
     <string name="device_balance">Balance automático</string>
     <string name="device_balancingcells">Celdas en balanceo</string>
     <string name="device_cancel">Cancelar</string>
@@ -149,5 +134,8 @@
     <string name="tab_control">Control</string>
     <string name="tab_overview">Resumen</string>
     <string name="tab_status">Estado</string>
+    <string name="update_download">Descargar</string>
+    <string name="update_later">Ahora no</string>
+    <string name="update_title">Nueva versión %1$s</string>
     <string name="app_name">BatMonitor</string>
 </resources>

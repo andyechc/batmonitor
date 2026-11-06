@@ -11,17 +11,7 @@ data class SavedBattery(
     val id: UUID,
     val name: String,
     val addedAt: Long,
-    val isDemo: Boolean? = null,
-) {
-    companion object {
-        val DEMO = SavedBattery(
-            id = UUID.fromString("A73B1487-8B90-4A74-9512-273B9F100001"),
-            name = "BatMonitor · TEST",
-            addedAt = 0L,
-            isDemo = true,
-        )
-    }
-}
+)
 
 data class BatterySnapshot(
     val soc: Int,
@@ -43,6 +33,16 @@ class BatteryStore(context: Context) {
 
     var snapshots: Map<UUID, BatterySnapshot> = loadSnapshots()
         private set
+
+    init {
+        // Migration: the retired demo battery must never survive as a ghost BLE device.
+        if (batteries.any { it.id == LEGACY_DEMO_ID } || snapshots.containsKey(LEGACY_DEMO_ID)) {
+            batteries = batteries.filterNot { it.id == LEGACY_DEMO_ID }
+            snapshots = snapshots - LEGACY_DEMO_ID
+            save()
+            saveSnapshots()
+        }
+    }
 
     fun battery(id: UUID): SavedBattery? = batteries.firstOrNull { it.id == id }
 
@@ -84,7 +84,6 @@ class BatteryStore(context: Context) {
             o.put("id", b.id.toString())
             o.put("name", b.name)
             o.put("addedAt", b.addedAt)
-            if (b.isDemo != null) o.put("isDemo", b.isDemo)
             array.put(o)
         }
         prefs.edit().putString(KEY_BATTERIES, array.toString()).apply()
@@ -111,11 +110,12 @@ class BatteryStore(context: Context) {
             val array = JSONArray(raw)
             (0 until array.length()).map { i ->
                 val o = array.getJSONObject(i)
+                // Older builds also wrote "isDemo"; the key is simply ignored now, and a missing
+                // key never was a requirement, so old saves keep loading as real batteries.
                 SavedBattery(
                     id = UUID.fromString(o.getString("id")),
                     name = o.getString("name"),
                     addedAt = o.optLong("addedAt", 0L),
-                    isDemo = if (o.has("isDemo")) o.getBoolean("isDemo") else null,
                 )
             }
         } catch (_: Exception) {
@@ -146,5 +146,8 @@ class BatteryStore(context: Context) {
     companion object {
         const val KEY_BATTERIES = "batmonitor.batteries.v2"
         const val KEY_SNAPSHOTS = "batmonitor.snapshots.v1"
+
+        /** UUID of the removed demo battery; older installs may still have it saved. */
+        val LEGACY_DEMO_ID: UUID = UUID.fromString("A73B1487-8B90-4A74-9512-273B9F100001")
     }
 }

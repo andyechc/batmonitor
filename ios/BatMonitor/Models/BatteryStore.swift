@@ -5,14 +5,6 @@ struct SavedBattery: Codable, Identifiable, Hashable {
     let id: UUID
     var name: String
     let addedAt: Date
-    var isDemo: Bool? = nil
-
-    static let demo = SavedBattery(
-        id: UUID(uuidString: "A73B1487-8B90-4A74-9512-273B9F100001")!,
-        name: "BatMonitor · TEST",
-        addedAt: .distantPast,
-        isDemo: true
-    )
 }
 
 struct BatterySnapshot: Codable, Equatable {
@@ -30,24 +22,36 @@ final class BatteryStore {
     private let defaults: UserDefaults
     private static let key = "batmonitor.batteries.v2"
     private static let snapshotKey = "batmonitor.snapshots.v1"
+    /// Battery id used by the removed demo mode. Saved data from older
+    /// versions is dropped on load so no ghost battery tries to connect.
+    private static let retiredFixtureID = UUID(uuidString: "A73B1487-8B90-4A74-9512-273B9F100001")!
 
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
+        var loaded: [SavedBattery] = []
         if let data = defaults.data(forKey: Self.key),
            let decoded = try? JSONDecoder().decode([SavedBattery].self, from: data) {
-            batteries = decoded
-        } else {
-            batteries = []
+            loaded = decoded
         }
+        var loadedSnapshots: [UUID: BatterySnapshot] = [:]
         if let data = defaults.data(forKey: Self.snapshotKey),
            let decoded = try? JSONDecoder().decode([UUID: BatterySnapshot].self, from: data) {
-            snapshots = decoded
-        } else {
-            snapshots = [:]
+            loadedSnapshots = decoded
+        }
+        let removedFixture = loaded.contains { $0.id == Self.retiredFixtureID }
+        if removedFixture {
+            loaded.removeAll { $0.id == Self.retiredFixtureID }
+            loadedSnapshots[Self.retiredFixtureID] = nil
+        }
+        batteries = loaded
+        snapshots = loadedSnapshots
+        if removedFixture {
+            save()
+            saveSnapshots()
         }
         // UI-test hook (in-memory only, never saved): seeds a fake real
-        // battery so the non-demo menu can be screenshotted in the
-        // simulator without BLE hardware.
+        // battery so screens can be screenshotted in the simulator without
+        // BLE hardware.
         if CommandLine.arguments.contains("UITEST_FAKE_BATTERY") {
             let id = UUID(uuidString: "A73B1487-8B90-4A74-9512-273B9F100002")!
             if battery(id: id) == nil {

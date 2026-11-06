@@ -30,7 +30,6 @@ struct BatteryDetailView: View {
     @State private var renaming = false
     @State private var pendingConfirm: PendingConfirm?
     @State private var selectedInfo: InfoTopic?
-    @State private var demoState: DemoBatteryState = .charging
     @State private var successTrigger = 0
 
     enum SwitchTarget: Identifiable {
@@ -59,26 +58,11 @@ struct BatteryDetailView: View {
     }
 
     private var currentName: String {
-        if isDemo { return String(localized: "demo.batteryName") }
-        return store.battery(id: battery.id)?.name ?? battery.name
-    }
-
-    private var isDemo: Bool { battery.isDemo == true }
-
-    private var displayReading: BatteryReading? {
-        isDemo ? demoState.reading : monitor.reading
-    }
-
-    private var displayStatus: BatteryMonitor.Status {
-        isDemo ? demoState.status : monitor.status
-    }
-
-    private var displayMessage: String? {
-        isDemo ? demoState.message : monitor.message
+        store.battery(id: battery.id)?.name ?? battery.name
     }
 
     private var isLive: Bool {
-        !isDemo && monitor.status == .live && !busy
+        monitor.status == .live && !busy
     }
 
     private func showInfo(_ topic: InfoTopic) {
@@ -140,13 +124,12 @@ struct BatteryDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { moreMenu }
         .task {
-            if !isDemo { await monitor.run() }
+            await monitor.run()
         }
         .onChange(of: monitor.reading) { _, reading in
-            guard !isDemo, let reading else { return }
+            guard let reading else { return }
             store.record(reading, for: battery.id)
         }
-        .animation(.smooth(duration: 0.35), value: demoState)
         .sheet(isPresented: $renaming) {
             RenameSheet(currentName: currentName) { name in
                 try await monitor.rename(to: name)
@@ -190,7 +173,7 @@ struct BatteryDetailView: View {
 
     @ViewBuilder
     private var overview: some View {
-        if let reading = displayReading {
+        if let reading = monitor.reading {
             hero(reading: reading)
 
             LazyVGrid(columns: twoColumns, spacing: 12) {
@@ -249,7 +232,7 @@ struct BatteryDetailView: View {
 
             protectionSummary(reading.basic)
         } else {
-            ConnectingView(status: displayStatus, message: displayMessage)
+            ConnectingView(status: monitor.status, message: monitor.message)
         }
     }
 
@@ -259,7 +242,7 @@ struct BatteryDetailView: View {
         let charging = basic.current > 0.05
         let accent = accent(for: basic.current)
         return VStack(spacing: 18) {
-            StatusBadge(status: displayStatus, message: displayMessage)
+            StatusBadge(status: monitor.status, message: monitor.message)
             FluidBatteryView(soc: basic.soc, current: basic.current, color: accent)
             VStack(spacing: 6) {
                 HStack(spacing: 6) {
@@ -337,7 +320,7 @@ struct BatteryDetailView: View {
 
     @ViewBuilder
     private var cells: some View {
-        if let reading = displayReading {
+        if let reading = monitor.reading {
             let low = reading.cells.min() ?? 0
             let high = reading.cells.max() ?? 0
 
@@ -376,7 +359,7 @@ struct BatteryDetailView: View {
                 }
             }
         } else {
-            ConnectingView(status: displayStatus, message: displayMessage)
+            ConnectingView(status: monitor.status, message: monitor.message)
         }
     }
 
@@ -401,7 +384,7 @@ struct BatteryDetailView: View {
 
     @ViewBuilder
     private var status: some View {
-        if let basic = displayReading?.basic {
+        if let basic = monitor.reading?.basic {
             Card(
                 title: String(localized: "device.protections"),
                 icon: "shield.lefthalf.filled",
@@ -430,7 +413,7 @@ struct BatteryDetailView: View {
                 LabeledValueRow(label: String(localized: "device.balancingCells"), value: "\(basic.balancing.filter { $0 }.count)")
             }
         } else {
-            ConnectingView(status: displayStatus, message: displayMessage)
+            ConnectingView(status: monitor.status, message: monitor.message)
         }
     }
 
@@ -438,7 +421,7 @@ struct BatteryDetailView: View {
 
     @ViewBuilder
     private var control: some View {
-        if let basic = displayReading?.basic {
+        if let basic = monitor.reading?.basic {
             Card(title: String(localized: "device.switches"), icon: "power") {
                 switchRow(
                     target: .charge,
@@ -487,39 +470,37 @@ struct BatteryDetailView: View {
                 }
             }
 
-            if !isDemo {
-                Card(title: String(localized: "device.name"), icon: "character.cursor.ibeam") {
-                    Button {
-                        renaming = true
-                    } label: {
-                        HStack {
-                            Text(currentName)
-                                .font(.body.weight(.medium))
-                                .foregroundStyle(.primary)
-                            Spacer()
-                            Image(systemName: "pencil")
-                                .foregroundStyle(Theme.muted)
-                        }
-                    }
-                    .buttonStyle(.plain)
-                }
-
-                Button(role: .destructive) {
-                    pendingConfirm = .remove
+            Card(title: String(localized: "device.name"), icon: "character.cursor.ibeam") {
+                Button {
+                    renaming = true
                 } label: {
-                    Label {
-                        Text("device.remove")
-                    } icon: {
-                        Image(systemName: "trash")
-                            .foregroundStyle(Theme.danger)
+                    HStack {
+                        Text(currentName)
+                            .font(.body.weight(.medium))
+                            .foregroundStyle(.primary)
+                        Spacer()
+                        Image(systemName: "pencil")
+                            .foregroundStyle(Theme.muted)
                     }
-                    .frame(maxWidth: .infinity)
                 }
-                .buttonStyle(.bordered)
-                .controlSize(.large)
+                .buttonStyle(.plain)
             }
+
+            Button(role: .destructive) {
+                pendingConfirm = .remove
+            } label: {
+                Label {
+                    Text("device.remove")
+                } icon: {
+                    Image(systemName: "trash")
+                        .foregroundStyle(Theme.danger)
+                }
+                .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.bordered)
+            .controlSize(.large)
         } else {
-            ConnectingView(status: displayStatus, message: displayMessage)
+            ConnectingView(status: monitor.status, message: monitor.message)
         }
     }
 
@@ -569,49 +550,39 @@ struct BatteryDetailView: View {
     private var moreMenu: some ToolbarContent {
         ToolbarItem(placement: .primaryAction) {
             Menu {
-                if isDemo {
-                    Picker("demo.selector", selection: $demoState) {
-                        ForEach(DemoBatteryState.allCases) { state in
-                            Label(state.title, systemImage: state.icon).tag(state)
-                        }
-                    }
-                    .pickerStyle(.inline)
-                    .tint(Color(.label))
-                } else {
-                    Group {
-                        Button {
-                            renaming = true
-                        } label: {
-                            Label("device.rename", systemImage: "pencil")
-                        }
-                        Button {
-                            Task { await perform { try await monitor.balance() } }
-                        } label: {
-                            Label("device.balance", systemImage: "scale.3d")
-                        }
-                        .disabled(!isLive)
-                        Button {
-                            Task { await perform { try await monitor.clearProtection() } }
-                        } label: {
-                            Label("device.clearProtection", systemImage: "shield.slash")
-                        }
-                        .disabled(!isLive)
-                    }
-                    .tint(Color(.label))
-                    Divider()
-                    Button(role: .destructive) {
-                        pendingConfirm = .remove
+                Group {
+                    Button {
+                        renaming = true
                     } label: {
-                        Label {
-                            Text("device.remove")
-                                .foregroundStyle(Theme.danger)
-                        } icon: {
-                            Image(systemName: "trash")
-                                .foregroundStyle(Theme.danger)
-                        }
+                        Label("device.rename", systemImage: "pencil")
                     }
-                    .tint(Theme.danger)
+                    Button {
+                        Task { await perform { try await monitor.balance() } }
+                    } label: {
+                        Label("device.balance", systemImage: "scale.3d")
+                    }
+                    .disabled(!isLive)
+                    Button {
+                        Task { await perform { try await monitor.clearProtection() } }
+                    } label: {
+                        Label("device.clearProtection", systemImage: "shield.slash")
+                    }
+                    .disabled(!isLive)
                 }
+                .tint(Color(.label))
+                Divider()
+                Button(role: .destructive) {
+                    pendingConfirm = .remove
+                } label: {
+                    Label {
+                        Text("device.remove")
+                            .foregroundStyle(Theme.danger)
+                    } icon: {
+                        Image(systemName: "trash")
+                            .foregroundStyle(Theme.danger)
+                    }
+                }
+                .tint(Theme.danger)
             } label: {
                 Image(systemName: "slider.horizontal.3")
                     .foregroundStyle(Color(.label))
@@ -637,7 +608,7 @@ struct BatteryDetailView: View {
     }
 
     private func applySwitch(_ target: SwitchTarget) async {
-        guard let basic = displayReading?.basic, !isDemo else { return }
+        guard let basic = monitor.reading?.basic else { return }
         let charge = target == .charge ? !basic.chargeOn : basic.chargeOn
         let discharge = target == .discharge ? !basic.dischargeOn : basic.dischargeOn
         await perform { try await monitor.setSwitches(charge: charge, discharge: discharge) }

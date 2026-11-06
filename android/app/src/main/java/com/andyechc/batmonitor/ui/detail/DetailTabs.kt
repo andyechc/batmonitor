@@ -411,7 +411,6 @@ fun StatusTab(reading: BatteryReading, onInfo: (HelpTopic) -> Unit) {
 @Composable
 fun ControlTab(
     batteryId: UUID,
-    isDemo: Boolean,
     reading: BatteryReading,
     isLive: Boolean,
     busy: Boolean,
@@ -469,33 +468,31 @@ fun ControlTab(
             Text(text = message, fontSize = 13.sp, color = Theme.colors.muted)
         }
     }
-    if (!isDemo) {
-        Card(title = stringResource(R.string.device_name), icon = Icons.Filled.Edit) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable(onClick = onRename),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    text = currentName,
-                    fontSize = 17.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = Theme.colors.text,
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                Icon(Icons.Filled.Edit, contentDescription = null, tint = Theme.colors.muted)
-            }
-        }
-        OutlinedButton(
-            onClick = onRemove,
-            modifier = Modifier.fillMaxWidth(),
-            border = androidx.compose.foundation.BorderStroke(1.dp, Theme.colors.danger),
+    Card(title = stringResource(R.string.device_name), icon = Icons.Filled.Edit) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable(onClick = onRename),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            Icon(Icons.Filled.Delete, contentDescription = null, tint = Theme.colors.danger)
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(text = stringResource(R.string.device_remove), color = Theme.colors.danger, fontSize = 17.sp)
+            Text(
+                text = currentName,
+                fontSize = 17.sp,
+                fontWeight = FontWeight.Medium,
+                color = Theme.colors.text,
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            Icon(Icons.Filled.Edit, contentDescription = null, tint = Theme.colors.muted)
         }
+    }
+    OutlinedButton(
+        onClick = onRemove,
+        modifier = Modifier.fillMaxWidth(),
+        border = androidx.compose.foundation.BorderStroke(1.dp, Theme.colors.danger),
+    ) {
+        Icon(Icons.Filled.Delete, contentDescription = null, tint = Theme.colors.danger)
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(text = stringResource(R.string.device_remove), color = Theme.colors.danger, fontSize = 17.sp)
     }
 }
 

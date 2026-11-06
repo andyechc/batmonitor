@@ -1,0 +1,10 @@
+{
+  "versionName": "1.0",
+  "versionCode": 1,
+  "notes": {
+    "es": "Versión inicial: lectura BLE, 24 celdas, temas claro y oscuro.",
+    "en": "Initial release: BLE reading, 24 cells, light and dark themes."
+  },
+  "uptodownUrl": "https://batmonitor.uptodown.com/android",
+  "apkUrl": "https://github.com/andyechc/batmonitor/releases/latest/download/batmonitor.apk"
+}

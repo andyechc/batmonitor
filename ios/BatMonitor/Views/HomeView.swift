@@ -19,18 +19,9 @@ struct HomeView: View {
                 } description: {
                     Text("home.empty.text")
                 } actions: {
-                    VStack(spacing: 12) {
-                        Button("home.add") { showingAdd = true }
-                            .buttonStyle(PrimaryButtonStyle())
-                            .accessibilityIdentifier("addBattery")
-                        Button {
-                            path.append(SavedBattery.demo)
-                        } label: {
-                            Label("demo.open", systemImage: "play.rectangle")
-                        }
-                        .buttonStyle(SecondaryButtonStyle())
-                        .accessibilityIdentifier("openDemo")
-                    }
+                    Button("home.add") { showingAdd = true }
+                        .buttonStyle(PrimaryButtonStyle())
+                        .accessibilityIdentifier("addBattery")
                 }
             } else {
                 List {
@@ -70,25 +61,6 @@ struct HomeView: View {
                         Text("home.devices")
                             .font(.footnote)
                             .foregroundStyle(Theme.muted)
-                    }
-
-                    Section {
-                        Button {
-                            path.append(SavedBattery.demo)
-                        } label: {
-                            DemoBatteryRow()
-                        }
-                        .buttonStyle(.plain)
-                        .listRowBackground(Color.clear)
-                        .listRowSeparator(.hidden)
-                    } header: {
-                        Text("demo.section")
-                            .font(.footnote)
-                            .foregroundStyle(Theme.muted)
-                    } footer: {
-                        Text("demo.safetyHint")
-                            .listRowBackground(Color.clear)
-                            .listRowSeparator(.hidden)
                     }
                 }
                 .listStyle(.plain)
@@ -213,26 +185,3 @@ private struct BatterySummaryCard: View {
     }
 }
 
-private struct DemoBatteryRow: View {
-    var body: some View {
-        HStack(spacing: 12) {
-            Image(systemName: "play.rectangle")
-                .font(.title3)
-                .foregroundStyle(Theme.muted)
-                .frame(width: 44, height: 44)
-                .background(Theme.surfaceHigh, in: Circle())
-            VStack(alignment: .leading, spacing: 3) {
-                Text("demo.batteryName")
-                    .font(.headline)
-                    .foregroundStyle(.primary)
-                Text("demo.rowHint")
-                    .font(.footnote)
-                    .foregroundStyle(Theme.muted)
-            }
-            Spacer()
-        }
-        .padding(16)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .panel(cornerRadius: 22)
-    }
-}

@@ -30,7 +30,6 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.BatteryStd
 import androidx.compose.material.icons.filled.BluetoothSearching
 import androidx.compose.material.icons.filled.Bolt
-import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.SwapHoriz
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -44,6 +43,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -53,6 +53,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -63,10 +64,11 @@ import com.andyechc.batmonitor.data.BatteryStore
 import com.andyechc.batmonitor.data.SavedBattery
 import com.andyechc.batmonitor.ui.add.AddScreen
 import com.andyechc.batmonitor.ui.components.BatLogo
+import com.andyechc.batmonitor.ui.components.UpdateDialog
 import com.andyechc.batmonitor.ui.theme.PrimaryButton
-import com.andyechc.batmonitor.ui.theme.SecondaryButton
 import com.andyechc.batmonitor.ui.theme.Theme
 import com.andyechc.batmonitor.ui.theme.panel
+import com.andyechc.batmonitor.update.UpdateCheck
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -75,7 +77,16 @@ fun HomeScreen(store: BatteryStore, onOpenBattery: (SavedBattery) -> Unit) {
     store.changes.collectAsState()
     var showingAdd by remember { mutableStateOf(false) }
     var pendingDelete by remember { mutableStateOf<SavedBattery?>(null) }
+    var update by remember { mutableStateOf<UpdateCheck.AvailableUpdate?>(null) }
     val batteries = store.batteries
+    val context = LocalContext.current
+
+    // One silent check per process: failure or an out-of-date manifest never reaches the UI.
+    LaunchedEffect(Unit) {
+        if (UpdateCheck.Gate.claim()) {
+            update = UpdateCheck.check(context.applicationContext)
+        }
+    }
 
     Column(modifier = Modifier.fillMaxSize().background(Theme.colors.background)) {
         Row(
@@ -107,10 +118,7 @@ fun HomeScreen(store: BatteryStore, onOpenBattery: (SavedBattery) -> Unit) {
             modifier = Modifier.padding(horizontal = 20.dp),
         )
         if (batteries.isEmpty()) {
-            EmptyHome(
-                onAdd = { showingAdd = true },
-                onDemo = { onOpenBattery(SavedBattery.DEMO) },
-            )
+            EmptyHome(onAdd = { showingAdd = true })
         } else {
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
@@ -149,28 +157,6 @@ fun HomeScreen(store: BatteryStore, onOpenBattery: (SavedBattery) -> Unit) {
                         )
                     }
                 }
-                item {
-                    Text(
-                        text = stringResource(R.string.demo_section),
-                        fontSize = 12.sp,
-                        color = Theme.colors.muted,
-                        modifier = Modifier.padding(start = 20.dp, top = 12.dp),
-                    )
-                }
-                item {
-                    DemoBatteryRow(
-                        onClick = { onOpenBattery(SavedBattery.DEMO) },
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                    )
-                }
-                item {
-                    Text(
-                        text = stringResource(R.string.demo_safetyhint),
-                        fontSize = 13.sp,
-                        color = Theme.colors.muted,
-                        modifier = Modifier.padding(horizontal = 20.dp, vertical = 4.dp),
-                    )
-                }
             }
         }
     }
@@ -184,6 +170,10 @@ fun HomeScreen(store: BatteryStore, onOpenBattery: (SavedBattery) -> Unit) {
         ) {
             AddScreen(store = store, onDone = { showingAdd = false })
         }
+    }
+
+    update?.let { available ->
+        UpdateDialog(update = available, onDismiss = { update = null })
     }
 
     pendingDelete?.let { battery ->
@@ -210,7 +200,7 @@ fun HomeScreen(store: BatteryStore, onOpenBattery: (SavedBattery) -> Unit) {
 }
 
 @Composable
-private fun EmptyHome(onAdd: () -> Unit, onDemo: () -> Unit) {
+private fun EmptyHome(onAdd: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -237,12 +227,6 @@ private fun EmptyHome(onAdd: () -> Unit, onDemo: () -> Unit) {
         Spacer(modifier = Modifier.height(24.dp))
         PrimaryButton(onClick = onAdd) {
             Text(stringResource(R.string.home_add), fontWeight = FontWeight.SemiBold)
-        }
-        Spacer(modifier = Modifier.height(12.dp))
-        SecondaryButton(onClick = onDemo) {
-            Icon(Icons.Filled.PlayArrow, contentDescription = null)
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(stringResource(R.string.demo_open), fontWeight = FontWeight.SemiBold)
         }
     }
 }
@@ -337,33 +321,6 @@ private fun BatterySummaryCard(battery: SavedBattery, snapshot: BatterySnapshot?
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(text = stringResource(R.string.device_norecentreading), fontSize = 15.sp, color = Theme.colors.muted)
             }
-        }
-    }
-}
-
-@Composable
-private fun DemoBatteryRow(onClick: () -> Unit, modifier: Modifier = Modifier) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .panel(22.dp)
-            .clickable(onClick = onClick)
-            .padding(16.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Box(
-            modifier = Modifier
-                .size(44.dp)
-                .clip(CircleShape)
-                .background(Theme.colors.surfaceHigh),
-            contentAlignment = Alignment.Center,
-        ) {
-            Icon(Icons.Filled.PlayArrow, contentDescription = null, tint = Theme.colors.muted)
-        }
-        Spacer(modifier = Modifier.width(12.dp))
-        Column {
-            Text(text = stringResource(R.string.demo_batteryname), fontSize = 17.sp, fontWeight = FontWeight.SemiBold, color = Theme.colors.text)
-            Text(text = stringResource(R.string.demo_rowhint), fontSize = 13.sp, color = Theme.colors.muted)
         }
     }
 }
