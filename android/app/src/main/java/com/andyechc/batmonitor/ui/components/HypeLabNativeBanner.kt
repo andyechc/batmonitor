@@ -35,32 +35,79 @@ private const val NATIVE_AD_HTML = """
           display: flex;
           justify-content: center;
           align-items: center;
-          height: 50px;
+          min-height: 110px;
         }
-        #container-c397d1910b23f4baf8e2bcc58b4ab53e {
+        hype-native {
+          display: block;
           width: min(728px, 100vw);
-          min-height: 50px;
         }
+        .native-ad {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 10px 12px;
+          color: #f2f2f2;
+          font-family: -apple-system, Roboto, sans-serif;
+          text-decoration: none;
+        }
+        .native-ad__icon {
+          width: 48px;
+          height: 48px;
+          object-fit: cover;
+          border-radius: 8px;
+          flex: 0 0 auto;
+        }
+        .native-ad__advertiser {
+          font-size: 10px;
+          letter-spacing: .06em;
+          text-transform: uppercase;
+          color: #8e8e93;
+        }
+        .native-ad__headline {
+          font-size: 14px;
+          font-weight: 600;
+          margin-top: 2px;
+        }
+        .native-ad__body {
+          font-size: 12px;
+          color: #c7c7cc;
+          margin-top: 2px;
+        }
+        .native-ad__media, .native-ad__cta { display: none; }
+        a { text-decoration: none; color: inherit; }
       </style>
+      <script defer src="https://api.hypelab.com/v1/scripts/hp-sdk.js?v=0"></script>
+      <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          window.HypeLab && HypeLab.initialize({
+            environment: "production",
+            propertySlug: "9af16221b7",
+          });
+        });
+      </script>
     </head>
     <body>
-      <script>
-        atOptions = {
-          'key' : '41ca3acc231ff3be16fe2aead44e283b',
-          'format' : 'iframe',
-          'height' : 50,
-          'width' : 320,
-          'params' : {}
-        };
-      </script>
-      <script src="https://bicea.org/22/41ca3acc231ff3be16fe2aead44e283b"></script>
+      <hype-native placement="4f3cc7a8a2">
+        <div class="native-ad">
+          <img data-ref="icon" class="native-ad__icon" alt="" />
+          <div>
+            <div data-ref="advertiser" class="native-ad__advertiser"></div>
+            <div data-ref="headline" class="native-ad__headline"></div>
+            <div data-ref="body" class="native-ad__body"></div>
+          </div>
+          <a data-ref="ctaLink" href="/" target="_blank">
+            <div data-ref="mediaContent" class="native-ad__media"></div>
+            <div data-ref="ctaText" class="native-ad__cta"></div>
+          </a>
+        </div>
+      </hype-native>
     </body>
     </html>
 """
 
-/** Fixed Bicea native banner. The WebView is a static display area with no scrolling or zoom. */
+/** Fixed HypeLab native banner (detail Summary). Static WebView, no scrolling or zoom. */
 @Composable
-fun BiceaNativeBanner(modifier: Modifier = Modifier) {
+fun HypeLabNativeBanner(modifier: Modifier = Modifier) {
     AndroidView(
         factory = { factoryContext ->
             WebView(factoryContext).apply {
@@ -109,14 +156,14 @@ fun BiceaNativeBanner(modifier: Modifier = Modifier) {
                     event.actionMasked == MotionEvent.ACTION_MOVE
                 }
                 post {
-                    loadDataWithBaseURL("https://bicea.org/", NATIVE_AD_HTML, "text/html", "UTF-8", null)
+                    loadDataWithBaseURL("https://api.hypelab.com/", NATIVE_AD_HTML, "text/html", "UTF-8", null)
                 }
             }
         },
         modifier = modifier
             .fillMaxWidth()
             .widthIn(max = 728.dp)
-            .height(50.dp)
+            .height(110.dp)
             .clip(RoundedCornerShape(8.dp)),
         onRelease = WebView::destroy,
     )

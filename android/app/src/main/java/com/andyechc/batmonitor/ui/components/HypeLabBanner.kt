@@ -37,30 +37,31 @@ private const val AD_HTML = """
           align-items: center;
           height: 50px;
         }
-        #container-c397d1910b23f4baf8e2bcc58b4ab53e {
+        hype-banner {
+          display: block;
           width: min(728px, 100vw);
           min-height: 50px;
         }
       </style>
+      <script defer src="https://api.hypelab.com/v1/scripts/hp-sdk.js?v=0"></script>
+      <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          window.HypeLab && HypeLab.initialize({
+            environment: "production",
+            propertySlug: "9af16221b7",
+          });
+        });
+      </script>
     </head>
     <body>
-      <script>
-        atOptions = {
-          'key' : '41ca3acc231ff3be16fe2aead44e283b',
-          'format' : 'iframe',
-          'height' : 50,
-          'width' : 320,
-          'params' : {}
-        };
-      </script>
-      <script src="https://bicea.org/22/41ca3acc231ff3be16fe2aead44e283b"></script>
+      <hype-banner placement="bf70112ad7"></hype-banner>
     </body>
     </html>
 """
 
-/** Fixed Bicea banner. The WebView is a static display area with no scrolling or zoom. */
+/** Fixed HypeLab home banner. The WebView is a static display area with no scrolling or zoom. */
 @Composable
-fun BiceaBanner(modifier: Modifier = Modifier) {
+fun HypeLabBanner(modifier: Modifier = Modifier) {
     AndroidView(
         factory = { factoryContext ->
             WebView(factoryContext).apply {
@@ -109,7 +110,7 @@ fun BiceaBanner(modifier: Modifier = Modifier) {
                     event.actionMasked == MotionEvent.ACTION_MOVE
                 }
                 post {
-                    loadDataWithBaseURL("https://bicea.org/", AD_HTML, "text/html", "UTF-8", null)
+                    loadDataWithBaseURL("https://api.hypelab.com/", AD_HTML, "text/html", "UTF-8", null)
                 }
             }
         },
