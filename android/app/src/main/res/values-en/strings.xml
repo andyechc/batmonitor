@@ -49,6 +49,7 @@
     <string name="device_maintenance">Maintenance</string>
     <string name="device_manufactured">Manufactured</string>
     <string name="device_more">More options</string>
+    <string name="device_privacy">Privacy Policy</string>
     <string name="device_name">Name</string>
     <string name="device_noconnection">No connection</string>
     <string name="device_noprotections">No active protections</string>

@@ -2,9 +2,9 @@
   "versionName": "1.1",
   "versionCode": 2,
   "notes": {
-    "es": "Nuevo banner de BitMedia en Resumen y en la pantalla sin baterías.",
-    "en": "New BitMedia banner in Summary and the no-battery screen."
+    "es": "Publicidad de AidZap y política de privacidad añadidas.",
+    "en": "AidZap advertising and privacy policy added."
   },
-  "uptodownUrl": "https://batmonitor.uptodown.com/android",
+  "uptodownUrl": "https://github.com/andyechc/batmonitor/releases/latest/download/batmonitor.apk",
   "apkUrl": "https://github.com/andyechc/batmonitor/releases/latest/download/batmonitor.apk"
 }

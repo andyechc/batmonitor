@@ -23,6 +23,7 @@ struct BatteryDetailView: View {
 
     @Environment(BatteryStore.self) private var store
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.openURL) private var openURL
     @State private var monitor: BatteryMonitor
     @State private var tab: DetailTab = .overview
     @State private var busy = false
@@ -571,6 +572,14 @@ struct BatteryDetailView: View {
                 }
                 .tint(Color(.label))
                 Divider()
+                Button {
+                    if let url = URL(string: "https://andyechc.is-a.dev/batmonitor/privacy.html") {
+                        openURL(url)
+                    }
+                } label: {
+                    Label("device.privacy", systemImage: "hand.raised")
+                }
+                .tint(Color(.label))
                 Button(role: .destructive) {
                     pendingConfirm = .remove
                 } label: {

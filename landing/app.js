@@ -1,29 +1,29 @@
 /**
  * BatMonitor · landing
  *
- * Lee `api/version.json` y rellena la versión, el changelog y los enlaces de
- * descarga. Si el fetch falla (por ejemplo al abrir el HTML con file://, o si
- * la API aún no está publicada) se usan los mismos valores por defecto escritos
- * aquí abajo, así que la página nunca se queda a medias.
+ * Reads `api/version.json` and fills in the version, changelog and download
+ * links. If the fetch fails (for example when opening the HTML via file://, or
+ * if the API is not published yet) the defaults below are used, so the page
+ * never renders half-empty.
  */
 (function () {
   'use strict';
 
-  /* Mismos valores que api/version.json. Mantener ambos sincronizados. */
+  /* Same values as api/version.json. Keep both in sync. */
   var DEFAULTS = {
     versionName: '1.1',
     versionCode: 2,
     notes: {
-      es: 'Nuevo banner de BitMedia en Resumen y en la pantalla sin baterías.',
-      en: 'New BitMedia banner in Summary and the no-battery screen.'
+      es: 'Publicidad de AidZap y política de privacidad añadidas.',
+      en: 'AidZap advertising and privacy policy added.'
     },
-    uptodownUrl: 'https://batmonitor.uptodown.com/android',
+    uptodownUrl: 'https://github.com/andyechc/batmonitor/releases/latest/download/batmonitor.apk',
     apkUrl: 'https://github.com/andyechc/batmonitor/releases/latest/download/batmonitor.apk'
   };
 
   var VERSION_URL = './api/version.json';
 
-  /* ---------- Utilidades ---------- */
+  /* ---------- Utilities ---------- */
 
   function str(value, fallback) {
     return typeof value === 'string' && value.trim() !== '' ? value.trim() : fallback;
@@ -39,7 +39,7 @@
     return Number.isFinite(n) && n >= 0 ? Math.trunc(n) : fallback;
   }
 
-  /** Normaliza lo que devuelve la API, campo a campo, sobre los valores por defecto. */
+  /** Normalizes whatever the API returns, field by field, over the defaults. */
   function normalize(raw) {
     var data = raw && typeof raw === 'object' ? raw : {};
     var notes = data.notes && typeof data.notes === 'object' ? data.notes : {};
@@ -68,7 +68,7 @@
     });
   }
 
-  /** Changelog: una viñeta por línea; si nota es de una sola línea, un párrafo. */
+  /** Changelog: one bullet per line; a single-line note becomes a paragraph. */
   function renderChangelog(container, text) {
     if (!container) return;
 
@@ -98,28 +98,28 @@
     container.appendChild(list);
   }
 
-  /* ---------- Pintar ---------- */
+  /* ---------- Render ---------- */
 
   function apply(version, live) {
     setText('[data-version-badge]', 'v' + version.versionName);
     setText('[data-version-name]', version.versionName);
     setText('[data-version-code]', String(version.versionCode));
 
-    renderChangelog(document.querySelector('[data-changelog]'), version.notes.es);
+    renderChangelog(document.querySelector('[data-changelog]'), version.notes.en);
 
-    // El botón principal y cualquier otro CTA apuntan siempre al APK de la API.
+    // The main button and any other CTA always point at the API's APK.
     setHref('[data-apk-link]', version.apkUrl);
     setHref('[data-uptodown-link]', version.uptodownUrl);
 
     var note = document.querySelector('[data-api-note]');
     if (note) {
       note.textContent = live
-        ? 'Leído ahora desde api/version.json.'
-        : 'No se pudo consultar api/version.json: se muestra la versión incluida en esta página.';
+        ? 'Read just now from api/version.json.'
+        : 'Could not fetch api/version.json: showing the version bundled in this page.';
     }
   }
 
-  /* ---------- Arranque ---------- */
+  /* ---------- Boot ---------- */
 
   apply(normalize(DEFAULTS), false);
 
@@ -132,11 +132,11 @@
       apply(normalize(data), true);
     })
     .catch(function () {
-      // Silencioso a propósito: los valores por defecto ya están pintados.
+      // Silent on purpose: the defaults are already rendered.
       apply(normalize(DEFAULTS), false);
     });
 
-  /* ---------- Animación de aparición ---------- */
+  /* ---------- Reveal animation ---------- */
 
   var revealables = document.querySelectorAll('[data-reveal]');
 
@@ -154,7 +154,7 @@
     revealables.forEach(function (el) { observer.observe(el); });
   }
 
-  /* ---------- Año del pie ---------- */
+  /* ---------- Footer year ---------- */
 
   setText('[data-current-year]', String(new Date().getFullYear()));
 })();

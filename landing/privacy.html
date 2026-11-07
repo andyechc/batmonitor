@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BatMonitor — Application Privacy Policy</title>
+<meta name="description" content="Official BatMonitor privacy policy (Android and iOS): what data is processed, where it is stored, which permissions are used and what AidZap advertising shares.">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#080808">
+<link rel="canonical" href="https://andyechc.is-a.dev/batmonitor/privacy.html">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .legal { padding: clamp(48px, 7vw, 88px) 0 72px; }
+  .legal__inner { max-width: 820px; }
+  .legal__back { display: inline-flex; align-items: center; gap: 8px; color: var(--accent); font-weight: 600; font-size: .92rem; }
+  .legal h1 { font-size: clamp(2rem, 5.4vw, 3.1rem); margin-top: 22px; }
+  .legal__meta { color: var(--muted); margin-top: 12px; font-size: .92rem; }
+  .legal section { margin-top: 40px; }
+  .legal h2 { font-size: 1.32rem; margin-bottom: 10px; }
+  .legal h3 { margin: 20px 0 6px; }
+  .legal p, .legal li { color: var(--neutral); }
+  .legal p + p, .legal ul + p { margin-top: 10px; }
+  .legal ul { list-style: disc; padding-left: 22px; margin-top: 8px; }
+  .legal li + li { margin-top: 5px; }
+  .legal a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+  .legal table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: .93rem; }
+  .legal th, .legal td { text-align: left; vertical-align: top; padding: 10px 12px; border: 1px solid var(--border); }
+  .legal th { background: var(--surface-high); }
+  .legal td, .legal th { color: var(--neutral); }
+  .legal__summary { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 22px; margin-top: 28px; }
+  .legal__summary strong { color: var(--text); }
+  .legal code { overflow-wrap: anywhere; }
+</style>
+</head>
+<body>
+<main class="legal">
+  <div class="shell legal__inner">
+    <a class="legal__back" href="./">← Back to BatMonitor</a>
+    <h1>Application Privacy Policy</h1>
+    <p class="legal__meta">BatMonitor · Last updated: November 7, 2026 · Version 1.0</p>
+
+    <div class="legal__summary">
+      <p><strong>Summary.</strong> BatMonitor has no accounts and no servers of its own for your data. The batteries you save and the last reading of each are stored <strong>only on your phone</strong>. The app never sends your BMS readings, your battery names or your Bluetooth identifiers to its developer. The only network communications made by the app itself are: (1) on Android, a version check with no personal data in the request body, and (2) on Android, <strong>AidZap</strong> advertising, which may process technical advertising data (IP address, cookies, browser identifiers, etc.) under its own policy. The iOS app has no third-party advertising. If you do not want to share anything with the ad network, turn off your connection or uninstall the app: reading over Bluetooth does not need the internet.</p>
+    </div>
+
+    <section>
+      <h2>1. Data controller</h2>
+      <p>The controller of the data described in this policy is <strong>andyechc</strong>, the personal developer of BatMonitor, reachable through his personal site (<a href="https://andyechc.is-a.dev/">andyechc.is-a.dev</a>) and the project's public GitHub repository (<a href="https://github.com/andyechc/batmonitor">github.com/andyechc/batmonitor</a>), where you can open an issue or query. There is no company behind BatMonitor and no appointed data protection officer: it is a personal project with no user registration. BatMonitor is not affiliated with any BMS manufacturer.</p>
+    </section>
+
+    <section>
+      <h2>2. Scope</h2>
+      <p>This policy covers the BatMonitor apps for <strong>Android</strong> and <strong>iOS</strong> and the official download website (<a href="https://andyechc.is-a.dev/batmonitor/">andyechc.is-a.dev/batmonitor</a>). It does not cover battery manufacturers' firmware or services, nor the privacy policies of Uptodown, GitHub, AidZap, Apple or Google, which are governed by their own documents and are linked in section 8.</p>
+    </section>
+
+    <section>
+      <h2>3. What data is processed and how</h2>
+      <h3>3.1 Data you save, stored on your phone</h3>
+      <p>When you add a battery, the app stores locally, in the app's private storage:</p>
+      <ul>
+        <li>The <strong>name you assign</strong> to the battery (by default, the name advertised by the BMS).</li>
+        <li>The <strong>Bluetooth identifier (UUID)</strong> of the BMS device, needed to reconnect to it. On Android the stored identifier is derived from the device's Bluetooth address; on iOS it is provided by CoreBluetooth.</li>
+        <li>The <strong>date you added</strong> the battery.</li>
+        <li>The <strong>last real reading</strong> received from that battery: state of charge (SOC %), voltage, current and reception date/time. This lets the app show the battery in the list even when it is not connected.</li>
+      </ul>
+      <p>This data is kept in the system's private preferences (SharedPreferences on Android, UserDefaults on iOS). <strong>It is never sent to any developer server.</strong></p>
+
+      <h3>3.2 BMS data read live</h3>
+      <p>When you connect a battery, the app reads over Bluetooth LE, in real time and only while connected: total voltage, current, remaining and nominal capacity, cycles, the date recorded by the BMS, each cell's voltage, NTC sensor temperatures, active protections, charge/discharge switch (FET) states, cell balancing state, numbers of cells and sensors, and the BMS firmware version. This data is <strong>only shown on your screen</strong>: apart from the last reading in 3.1, it is not stored permanently and is not transmitted to third parties.</p>
+      <p>Control actions (changing the name stored in the BMS, enabling automatic balancing, clearing protections and opening/closing the charge and discharge switches) are sent <strong>over Bluetooth only to the BMS you selected</strong>. None of these actions leaves the local link with your battery.</p>
+
+      <h3>3.3 Bluetooth scan data</h3>
+      <p>While you search for batteries, the app keeps in memory the devices it finds: advertised name, UUID and signal strength (RSSI). These results are <strong>not saved</strong>: only the data of the battery you choose to add is kept, under the terms of 3.1.</p>
+
+      <h3>3.4 Network data from the update check (Android only)</h3>
+      <p>When you open the app, BatMonitor for Android makes a single <code>GET</code> request to <code>https://andyechc.is-a.dev/batmonitor/api/version.json</code> to see whether a new version is available. The request <strong>carries no personal data in its body</strong>: your name, battery, device identifier and installed version are not sent. As with any HTTPS request, the server/CDN hosting the page (GitHub Pages) may log what is usual in a web log: IP address, date and time, and the system user agent. This is used only to serve the file and check the version.</p>
+      <p>The iOS app does not perform this check or any other network request: its code contains no network calls.</p>
+
+      <h3>3.5 Data BatMonitor does NOT collect</h3>
+      <p>The app itself does not collect or transmit: accounts, names, email addresses, phone numbers, contacts, photos, files, microphone, camera, GPS location, system advertising identifiers (Android Advertising ID / IDFA), health data, financial data, or browsing data across apps. It contains no analytics, audience measurement, or crash reporting of its own.</p>
+    </section>
+
+    <section>
+      <h2>4. Permissions used</h2>
+      <table>
+        <thead><tr><th>Platform</th><th>Permission</th><th>What it is used for</th></tr></thead>
+        <tbody>
+          <tr><td>Android</td><td>Bluetooth (scan and connect)</td><td>Discover and connect to your BMS over Bluetooth LE.</td></tr>
+          <tr><td>Android</td><td>Precise location (Android 10 and earlier only)</td><td>The operating system requires it to scan for Bluetooth on those versions. The app <strong>uses no location API</strong>: it does not read your GPS position or store it.</td></tr>
+          <tr><td>Android</td><td>Internet</td><td>Version check and AidZap advertising (sections 3.4 and 7).</td></tr>
+          <tr><td>iOS</td><td>Bluetooth (always)</td><td>Read your battery's BMS via CoreBluetooth, as the system prompt states.</td></tr>
+        </tbody>
+      </table>
+      <p>All permissions are optional for basic use: without Bluetooth the app cannot read the BMS, but no other access will be requested.</p>
+    </section>
+
+    <section>
+      <h2>5. Retention, backups and deletion</h2>
+      <p>Your local data is kept <strong>until you delete it</strong>: removing a battery from the app deletes its name, identifier and last reading; uninstalling the app deletes all local data. Please note:</p>
+      <ul>
+        <li>On Android the app allows system backup (<code>allowBackup</code>), so your saved batteries may be included in your device backup if you have it enabled. That backup is governed by Google's terms.</li>
+        <li>On iOS, UserDefaults data may be included in your iCloud backup if you have it enabled, under Apple's terms.</li>
+        <li>Backups may retain data deleted on the phone until the system itself overwrites or removes it; BatMonitor has no control over that cycle.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>6. Purposes and legal basis</h2>
+      <ul>
+        <li><strong>Providing the service</strong> (reading and controlling your BMS over Bluetooth): performance of the user's own request when installing and using the app.</li>
+        <li><strong>Maintenance and security</strong> (checking for a new version): legitimate interest in offering updates and fixing bugs.</li>
+        <li><strong>Advertising</strong> (AidZap ads on Android and on the website): shown as the counterpart of a free app. Advertising does not use your battery or BMS reading data. You can stop seeing it by turning off your internet connection or uninstalling the app.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>7. Third-party advertising: AidZap</h2>
+      <p>The Android app shows <strong>AidZap</strong> ads (<a href="https://aidzap.com/">aidzap.com</a>) in a fixed <code>WebView</code> (banner and native ads), and the download website shows its banner and native ads. When they load, the <code>WebView</code> or browser contacts AidZap's servers, so AidZap and its advertising partners may process, for their own purposes and under their own privacy policy, technical data such as your IP address, user agent, cookies or <code>WebView</code> storage, device or browser identifiers, approximate location derived from the IP, and ad interactions. <strong>BatMonitor never sends AidZap</strong> your battery names, Bluetooth identifiers, BMS readings, or any account data (there is no account). The developer does not control which specific data AidZap processes or for how long: see AidZap's privacy policy at <a href="https://aidzap.com/">aidzap.com</a>. The iOS app shows no third-party advertising.</p>
+    </section>
+
+    <section>
+      <h2>8. Other third parties involved</h2>
+      <table>
+        <thead><tr><th>Third party</th><th>Role</th><th>Data it may process</th></tr></thead>
+        <tbody>
+          <tr><td>GitHub Pages (hosts the website and <code>version.json</code>)</td><td>Hosts the download page and the version manifest the Android app queries.</td><td>Usual web log data (IP, date/time, user agent). See the <a href="https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement">GitHub Privacy Statement</a>.</td></tr>
+          <tr><td>GitHub Releases</td><td>Distribution of the APK when you choose the direct download.</td><td>Whatever is generated when downloading from GitHub, under its policy.</td></tr>
+          <tr><td>Uptodown</td><td>Distribution of the Android APK.</td><td>Whatever is generated when visiting/downloading from Uptodown, under its policy.</td></tr>
+          <tr><td>Apple / Google (operating system)</td><td>Bluetooth permissions, device backups, opening the browser when you tap download or policy links, and app updates in their stores.</td><td>Whatever belongs to each platform under its own policies.</td></tr>
+        </tbody>
+      </table>
+      <p>BatMonitor <strong>does not sell or share</strong> your battery data with any third party. The app's only outgoing communications are those described in sections 3.4 and 7.</p>
+    </section>
+
+    <section>
+      <h2>9. Download website</h2>
+      <p>The page <a href="https://andyechc.is-a.dev/batmonitor/">andyechc.is-a.dev/batmonitor</a> is a static page with no accounts and no forms. When you visit it, the hosting provider (GitHub Pages) may log the usual technical data of a web visit, and the page's AidZap ads are governed by section 7. The page itself sets no analytics or tracking cookies of its own.</p>
+    </section>
+
+    <section>
+      <h2>10. Your rights</h2>
+      <p>You can exercise your rights of access, rectification, erasure, restriction, portability and objection by writing through the contact channels in section 1. In practice, most are exercised directly on your phone: removing a battery deletes its saved data, and uninstalling the app deletes all local data. For any data AidZap or GitHub may have logged in their own systems, please contact those third parties under their policies. You may also lodge a complaint with the Spanish Data Protection Agency (AEPD) or the supervisory authority corresponding to your place of residence.</p>
+    </section>
+
+    <section>
+      <h2>11. Security</h2>
+      <p>Local data is stored in the app's private storage, protected by the operating system. The version check and ads run over HTTPS. BatMonitor does not transmit your BMS readings to any server, so there is no central database that could be breached. The Bluetooth link is local between your phone and your BMS. Note that your device backup (section 5) depends on the configuration and security of your Apple or Google account.</p>
+    </section>
+
+    <section>
+      <h2>12. Children</h2>
+      <p>BatMonitor is not directed at children and does not deliberately collect data from any user by age. Its only audience is people who own BMS batteries and a compatible phone.</p>
+    </section>
+
+    <section>
+      <h2>13. Changes to this policy</h2>
+      <p>If this policy changes materially (for example, if new third parties or new data collection are added), the updated version will be published at this same address before the change takes effect, and the date in the header will be updated. Minor changes will also be published here. We recommend reviewing this page periodically.</p>
+    </section>
+
+    <section>
+      <h2>14. Contact</h2>
+      <p>For any question about this policy or the processing of your data, open an issue at <a href="https://github.com/andyechc/batmonitor/issues">github.com/andyechc/batmonitor/issues</a> or visit <a href="https://andyechc.is-a.dev/">andyechc.is-a.dev</a>. Please do not include unnecessary personal data in your message.</p>
+    </section>
+  </div>
+</main>
+</body>
+</html>

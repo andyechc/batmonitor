@@ -1,5 +1,7 @@
 package com.andyechc.batmonitor.ui.detail
 
+import android.content.Intent
+import android.net.Uri
 import android.text.format.DateUtils
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -204,6 +206,23 @@ fun DetailScreen(batteryId: UUID, store: BatteryStore, onBack: () -> Unit) {
                                 colors = MenuDefaults.itemColors(textColor = Theme.colors.text, disabledTextColor = Theme.colors.muted),
                             )
                             Divider(color = Theme.colors.border)
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.device_privacy), color = Theme.colors.text) },
+                                leadingIcon = { Icon(Icons.Filled.Info, contentDescription = null, tint = Theme.colors.text) },
+                                onClick = {
+                                    menuOpen = false
+                                    try {
+                                        context.startActivity(
+                                            Intent(
+                                                Intent.ACTION_VIEW,
+                                                Uri.parse("https://andyechc.is-a.dev/batmonitor/privacy.html"),
+                                            ).apply { addCategory(Intent.CATEGORY_BROWSABLE) },
+                                        )
+                                    } catch (_: Exception) {
+                                    }
+                                },
+                                colors = MenuDefaults.itemColors(textColor = Theme.colors.text),
+                            )
                             DropdownMenuItem(
                                 text = { Text(stringResource(R.string.device_remove), color = Theme.colors.danger) },
                                 leadingIcon = { Icon(Icons.Filled.Delete, contentDescription = null, tint = Theme.colors.danger) },

@@ -1329,6 +1329,22 @@
         }
       }
     },
+    "device.privacy": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Política de privacidad"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Privacy Policy"
+          }
+        }
+      }
+    },
     "device.tapToMonitor": {
       "localizations": {
         "es": {
