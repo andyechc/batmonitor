@@ -337,12 +337,13 @@ code {
   max-width: 728px;
   margin: 22px auto 0;
   line-height: 0;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
 }
 
-.hero-ad #container-c397d1910b23f4baf8e2bcc58b4ab53e {
-  width: 100%;
-  max-width: 728px;
-  min-height: 90px;
+.hero-ad iframe {
+  border: 0;
 }
 
 .hero__facts {
