@@ -35,25 +35,25 @@ private const val AD_HTML = """
           display: flex;
           justify-content: center;
           align-items: center;
-          height: 90px;
+          height: 50px;
         }
         #container-c397d1910b23f4baf8e2bcc58b4ab53e {
           width: min(728px, 100vw);
-          min-height: 90px;
+          min-height: 50px;
         }
       </style>
     </head>
     <body>
       <script>
         atOptions = {
-          'key' : '140d256fe445d23666023a6f1cf20e09',
+          'key' : '41ca3acc231ff3be16fe2aead44e283b',
           'format' : 'iframe',
-          'height' : 90,
-          'width' : 728,
+          'height' : 50,
+          'width' : 320,
           'params' : {}
         };
       </script>
-      <script src="https://bicea.org/22/140d256fe445d23666023a6f1cf20e09"></script>
+      <script src="https://bicea.org/22/41ca3acc231ff3be16fe2aead44e283b"></script>
     </body>
     </html>
 """
@@ -116,7 +116,7 @@ fun BiceaBanner(modifier: Modifier = Modifier) {
         modifier = modifier
             .fillMaxWidth()
             .widthIn(max = 728.dp)
-            .height(90.dp)
+            .height(50.dp)
             .clip(RoundedCornerShape(8.dp)),
         onRelease = WebView::destroy,
     )

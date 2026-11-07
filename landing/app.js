@@ -14,8 +14,8 @@
     versionName: '1.3',
     versionCode: 4,
     notes: {
-      es: 'Nuevo proveedor de publicidad (bicea.org, iframe 728x90) en la app y en la web. Sin cambios funcionales.',
-      en: 'New advertising provider (bicea.org, 728x90 iframe) in the app and on the website. No functional changes.'
+      es: 'Nuevo proveedor de publicidad (bicea.org, iframe 320x50) en la app. Sin cambios funcionales.',
+      en: 'New advertising provider (bicea.org, 320x50 iframe) in the app. No functional changes.'
     },
     uptodownUrl: 'https://github.com/andyechc/batmonitor/releases/latest/download/batmonitor.apk',
     apkUrl: 'https://github.com/andyechc/batmonitor/releases/latest/download/batmonitor.apk'
