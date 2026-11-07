@@ -48,10 +48,10 @@
             android:fillColor="#2EE6A6"
             android:pathData="M438 562 H586 V692 H438 Z" />
         <path
-            android:fillColor="#0B0F14"
+            android:fillColor="#2EE6A6"
             android:pathData="M478 506 m-11 0 a11 11 0 1 0 22 0 a11 11 0 1 0 -22 0 Z" />
         <path
-            android:fillColor="#0B0F14"
+            android:fillColor="#2EE6A6"
             android:pathData="M546 506 m-11 0 a11 11 0 1 0 22 0 a11 11 0 1 0 -22 0 Z" />
     </group>
 </vector>

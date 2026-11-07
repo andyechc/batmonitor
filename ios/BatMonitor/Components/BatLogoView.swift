@@ -63,9 +63,9 @@ struct BatLogoView: View {
                 .clipShape(Path(roundedRect: CGRect(x: 438, y: 442, width: 148, height: 240),
                                     cornerSize: CGSize(width: 30, height: 30)))
             Path(ellipseIn: CGRect(x: 467, y: 495, width: 22, height: 22))
-                .fill(Theme.background)
+                .fill(Theme.charge)
             Path(ellipseIn: CGRect(x: 535, y: 495, width: 22, height: 22))
-                .fill(Theme.background)
+                .fill(Theme.charge)
         }
         .offset(y: -50 * flap)
     }

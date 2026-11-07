@@ -98,8 +98,8 @@ fun BatLogo(size: Dp = 120.dp, flapUp: Boolean = false) {
                 ) {
                     drawRect(colors.charge, Offset(438f, 562f), Size(148f, 130f))
                 }
-                drawCircle(colors.background, radius = 11f, center = Offset(478f, 506f))
-                drawCircle(colors.background, radius = 11f, center = Offset(546f, 506f))
+                drawCircle(colors.charge, radius = 11f, center = Offset(478f, 506f))
+                drawCircle(colors.charge, radius = 11f, center = Offset(546f, 506f))
             }
         }
     }
