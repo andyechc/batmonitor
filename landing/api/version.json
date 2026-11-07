@@ -1,9 +1,9 @@
 {
-  "versionName": "1.1",
-  "versionCode": 2,
+  "versionName": "1.2",
+  "versionCode": 3,
   "notes": {
-    "es": "Publicidad de AidZap y política de privacidad añadidas.",
-    "en": "AidZap advertising and privacy policy added."
+    "es": "Publicidad de AidZap (banner y nativos), política de privacidad oficial, ojos verdes en el logo y corrección del texto de capacidad en inglés.",
+    "en": "AidZap advertising (banner and native ads), official privacy policy, green eyes on the logo and English capacity text fix."
   },
   "uptodownUrl": "https://github.com/andyechc/batmonitor/releases/latest/download/batmonitor.apk",
   "apkUrl": "https://github.com/andyechc/batmonitor/releases/latest/download/batmonitor.apk"
