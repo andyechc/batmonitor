@@ -54,6 +54,7 @@
     <string name="device_noconnection">No connection</string>
     <string name="device_noprotections">No active protections</string>
     <string name="device_norecentreading">Connect to get the first reading</string>
+    <string name="device_capacity_remaining">%1$s of %2$s Ah</string>
     <string name="device_nominalcapacity">Nominal capacity</string>
     <string name="device_off">Off</string>
     <string name="device_on">On</string>

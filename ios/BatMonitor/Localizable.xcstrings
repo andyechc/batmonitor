@@ -1441,6 +1441,22 @@
         }
       }
     },
+    "device.capacityRemaining": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ de %@ Ah"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ of %@ Ah"
+          }
+        }
+      }
+    },
     "device.nominalCapacity": {
       "localizations": {
         "es": {

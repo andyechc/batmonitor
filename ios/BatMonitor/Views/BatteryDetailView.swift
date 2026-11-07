@@ -254,7 +254,7 @@ struct BatteryDetailView: View {
                 .font(.title3.weight(.semibold))
                 .foregroundStyle(accent)
                 .contentTransition(.opacity)
-                Text(String(format: "%.2f de %.0f Ah", basic.remainingCapacity, basic.nominalCapacity))
+                Text(String(format: String(localized: "device.capacityRemaining"), String(format: "%.2f", basic.remainingCapacity), String(format: "%.0f", basic.nominalCapacity)))
                     .font(Theme.numeric(size: 16))
                     .foregroundStyle(Theme.muted)
                     .monospacedDigit()

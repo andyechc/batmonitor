@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicBoolean
  *   "versionName": "1.0",
  *   "versionCode": 1,
  *   "notes": { "es": "…", "en": "…" },
- *   "uptodownUrl": "https://batmonitor.uptodown.com/android",
+ *   "uptodownUrl": "https://github.com/andyechc/batmonitor/releases/latest/download/batmonitor.apk",
  *   "apkUrl": "https://github.com/andyechc/batmonitor/releases/latest/download/batmonitor.apk"
  * }
  * ```
@@ -42,7 +42,7 @@ object UpdateCheck {
     const val UPDATE_URL = "https://andyechc.is-a.dev/batmonitor/api/version.json"
 
     /** Fallback when the manifest omits `uptodownUrl`. */
-    const val DEFAULT_DOWNLOAD_URL = "https://batmonitor.uptodown.com/android"
+    const val DEFAULT_DOWNLOAD_URL = "https://github.com/andyechc/batmonitor/releases/latest/download/batmonitor.apk"
 
     private const val TIMEOUT_MS = 8_000
 

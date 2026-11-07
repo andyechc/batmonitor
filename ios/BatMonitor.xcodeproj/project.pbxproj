@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0D6D9049FAA4E50D99A3A525 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = BE8F8E03F0EC4F01FFA28396 /* PrivacyInfo.xcprivacy */; };
 		3BB92FA66C139A2DCA15D5B3 /* BatteryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9924D1FD1DD0AB4ED13067CF /* BatteryStore.swift */; };
 		4640FC9F6CBAB58B4A94AD31 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = D09E661939605782AF1C6357 /* Localizable.xcstrings */; };
 		57DE592E39410F4832F62151 /* MenuScreenshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2590FD2BF1E82E534235994 /* MenuScreenshotTests.swift */; };
@@ -68,6 +69,7 @@
 		A3F7064A99E077F5243C5A97 /* BatteryScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryScanner.swift; sourceTree = "<group>"; };
 		A63CF706400147AE15C58FE9 /* AddBatteryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddBatteryView.swift; sourceTree = "<group>"; };
 		AD82FA820E362E5B2392A7EE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		BE8F8E03F0EC4F01FFA28396 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		C2D4E812A3E583D337963985 /* BMSProtocolTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMSProtocolTests.swift; sourceTree = "<group>"; };
 		C37708AF0CE81568E68F7437 /* BatMonitor.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = BatMonitor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C866DB75ED4A56E55289CFF1 /* RenameSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenameSheet.swift; sourceTree = "<group>"; };
@@ -163,6 +165,7 @@
 				AD82FA820E362E5B2392A7EE /* Assets.xcassets */,
 				08C5D5BD5284F780DC3AA803 /* Info.plist */,
 				D09E661939605782AF1C6357 /* Localizable.xcstrings */,
+				BE8F8E03F0EC4F01FFA28396 /* PrivacyInfo.xcprivacy */,
 				95971E3F37616BBF84E4A4EC /* App */,
 				77F581E3EA9ADF696701BDF9 /* BLE */,
 				E255E687B1B39ABB8FCC31B1 /* Components */,
@@ -317,6 +320,7 @@
 				B1C6A8D70C943654DE89AFE8 /* Assets.xcassets in Resources */,
 				4640FC9F6CBAB58B4A94AD31 /* Localizable.xcstrings in Resources */,
 				E9039C2EE661970C45E862FC /* MPLUS1p-ExtraBold.ttf in Resources */,
+				0D6D9049FAA4E50D99A3A525 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -499,7 +503,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 3PUM2552T9;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -513,7 +517,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -577,7 +581,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = 3PUM2552T9;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -597,7 +601,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;

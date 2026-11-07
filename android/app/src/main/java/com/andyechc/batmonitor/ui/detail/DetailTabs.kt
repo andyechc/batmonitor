@@ -119,7 +119,11 @@ fun OverviewTab(
         }
         Spacer(modifier = Modifier.height(6.dp))
         Text(
-            text = String.format(Locale.US, "%.2f de %.0f Ah", basic.remainingCapacity, basic.nominalCapacity),
+            text = stringResource(
+                R.string.device_capacity_remaining,
+                String.format(Locale.US, "%.2f", basic.remainingCapacity),
+                String.format(Locale.US, "%.0f", basic.nominalCapacity),
+            ),
             fontSize = 15.sp,
             color = Theme.colors.muted,
         )
