@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.view.MotionEvent
 import android.view.View
+import android.webkit.CookieManager
 import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
 import android.webkit.WebView
@@ -36,32 +37,22 @@ private const val AD_HTML = """
           align-items: center;
           height: 58px;
         }
-        a {
-          display: block;
+        #container-c397d1910b23f4baf8e2bcc58b4ab53e {
           width: min(728px, 100vw);
-          line-height: 0;
-        }
-        img {
-          display: block;
-          width: 100%;
-          height: 58px;
-          max-width: 728px;
-          object-fit: contain;
-          border: 0;
+          min-height: 58px;
         }
       </style>
     </head>
     <body>
-      <a href="https://aidzap.com/r/B3425FB3" target="_blank">
-        <img src="https://aidzap.com/banner-img/publisher/en/aidzap-publisher-en-728x90" width="728" height="90" alt="AidZap">
-      </a>
+      <script async="async" data-cfasync="false" src="https://bicea.org/21/c397d1910b23f4baf8e2bcc58b4ab53e"></script>
+      <div id="container-c397d1910b23f4baf8e2bcc58b4ab53e"></div>
     </body>
     </html>
 """
 
-/** Fixed AidZap banner. The WebView is a static display area with no scrolling or zoom. */
+/** Fixed Bicea banner. The WebView is a static display area with no scrolling or zoom. */
 @Composable
-fun AidZapBanner(modifier: Modifier = Modifier) {
+fun BiceaBanner(modifier: Modifier = Modifier) {
     AndroidView(
         factory = { factoryContext ->
             WebView(factoryContext).apply {
@@ -90,7 +81,7 @@ fun AidZapBanner(modifier: Modifier = Modifier) {
                 settings.apply {
                     javaScriptEnabled = true
                     loadsImagesAutomatically = true
-                    domStorageEnabled = false
+                    domStorageEnabled = true
                     cacheMode = WebSettings.LOAD_NO_CACHE
                     mediaPlaybackRequiresUserGesture = true
                     displayZoomControls = false
@@ -99,6 +90,9 @@ fun AidZapBanner(modifier: Modifier = Modifier) {
                     setSupportMultipleWindows(false)
                     setNeedInitialFocus(false)
                 }
+                val cookieManager = CookieManager.getInstance()
+                cookieManager.setAcceptCookie(true)
+                cookieManager.setAcceptThirdPartyCookies(this, true)
                 isVerticalScrollBarEnabled = false
                 isHorizontalScrollBarEnabled = false
                 overScrollMode = View.OVER_SCROLL_NEVER
@@ -107,7 +101,7 @@ fun AidZapBanner(modifier: Modifier = Modifier) {
                     event.actionMasked == MotionEvent.ACTION_MOVE
                 }
                 post {
-                    loadDataWithBaseURL("https://aidzap.com/", AD_HTML, "text/html", "UTF-8", null)
+                    loadDataWithBaseURL("https://bicea.org/", AD_HTML, "text/html", "UTF-8", null)
                 }
             }
         },

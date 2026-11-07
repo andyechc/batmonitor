@@ -60,7 +60,7 @@ import com.andyechc.batmonitor.R
 import com.andyechc.batmonitor.ble.BatteryReading
 import com.andyechc.batmonitor.ble.MonitorStatus
 import com.andyechc.batmonitor.ui.components.BatteryDashboardSkeleton
-import com.andyechc.batmonitor.ui.components.AidZapNativeBanner
+import com.andyechc.batmonitor.ui.components.BiceaNativeBanner
 import com.andyechc.batmonitor.ui.components.Card
 import com.andyechc.batmonitor.ui.components.CellBarsView
 import com.andyechc.batmonitor.ui.components.FluidBattery
@@ -250,7 +250,7 @@ fun OverviewTab(
         Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, contentDescription = null, tint = Theme.colors.muted)
     }
     Spacer(modifier = Modifier.height(12.dp))
-    AidZapNativeBanner(modifier = Modifier.fillMaxWidth())
+    BiceaNativeBanner(modifier = Modifier.fillMaxWidth())
 }
 
 @Composable
@@ -412,7 +412,7 @@ fun StatusTab(reading: BatteryReading, onInfo: (HelpTopic) -> Unit) {
         )
     }
     Spacer(modifier = Modifier.height(12.dp))
-    AidZapNativeBanner(modifier = Modifier.fillMaxWidth())
+    BiceaNativeBanner(modifier = Modifier.fillMaxWidth())
 }
 
 // MARK: - Control
@@ -504,7 +504,7 @@ fun ControlTab(
         Text(text = stringResource(R.string.device_remove), color = Theme.colors.danger, fontSize = 17.sp)
     }
     Spacer(modifier = Modifier.height(12.dp))
-    AidZapNativeBanner(modifier = Modifier.fillMaxWidth())
+    BiceaNativeBanner(modifier = Modifier.fillMaxWidth())
 }
 
 @Composable

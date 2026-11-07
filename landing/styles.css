@@ -339,24 +339,10 @@ code {
   line-height: 0;
 }
 
-.hero-ad img {
+.hero-ad #container-c397d1910b23f4baf8e2bcc58b4ab53e {
   width: 100%;
-  height: auto;
   max-width: 728px;
-}
-
-/* ---------- Anuncios nativos AidZap ---------- */
-
-.native-ads {
-  max-width: 728px;
-  margin: 24px auto;
   min-height: 90px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--surface-high);
-  border-radius: 8px;
-  overflow: hidden;
 }
 
 .hero__facts {

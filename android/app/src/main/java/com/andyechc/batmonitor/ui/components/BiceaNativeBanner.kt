@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.view.MotionEvent
 import android.view.View
+import android.webkit.CookieManager
 import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
 import android.webkit.WebView
@@ -36,29 +37,22 @@ private const val NATIVE_AD_HTML = """
           align-items: center;
           height: 58px;
         }
-        .native-ads {
+        #container-c397d1910b23f4baf8e2bcc58b4ab53e {
           width: min(728px, 100vw);
           min-height: 58px;
         }
       </style>
     </head>
     <body>
-      <div class="native-ads" data-aidzap-unit="f9bd1068-163e-47a8-8390-54d1dc0c5803" data-aidzap-type="native"></div>
-      <!-- AidZap native loader: la red inyecta el contenido del unit. -->
-      <script>
-        (function () {
-          document.querySelectorAll('.native-ads[data-aidzap-unit]').forEach(function (el) {
-            el.setAttribute('data-aidzap-loaded', 'pending');
-          });
-        })();
-      </script>
+      <script async="async" data-cfasync="false" src="https://bicea.org/21/c397d1910b23f4baf8e2bcc58b4ab53e"></script>
+      <div id="container-c397d1910b23f4baf8e2bcc58b4ab53e"></div>
     </body>
     </html>
 """
 
-/** Fixed AidZap native banner. The WebView is a static display area with no scrolling or zoom. */
+/** Fixed Bicea native banner. The WebView is a static display area with no scrolling or zoom. */
 @Composable
-fun AidZapNativeBanner(modifier: Modifier = Modifier) {
+fun BiceaNativeBanner(modifier: Modifier = Modifier) {
     AndroidView(
         factory = { factoryContext ->
             WebView(factoryContext).apply {
@@ -87,7 +81,7 @@ fun AidZapNativeBanner(modifier: Modifier = Modifier) {
                 settings.apply {
                     javaScriptEnabled = true
                     loadsImagesAutomatically = true
-                    domStorageEnabled = false
+                    domStorageEnabled = true
                     cacheMode = WebSettings.LOAD_NO_CACHE
                     mediaPlaybackRequiresUserGesture = true
                     displayZoomControls = false
@@ -96,6 +90,9 @@ fun AidZapNativeBanner(modifier: Modifier = Modifier) {
                     setSupportMultipleWindows(false)
                     setNeedInitialFocus(false)
                 }
+                val cookieManager = CookieManager.getInstance()
+                cookieManager.setAcceptCookie(true)
+                cookieManager.setAcceptThirdPartyCookies(this, true)
                 isVerticalScrollBarEnabled = false
                 isHorizontalScrollBarEnabled = false
                 overScrollMode = View.OVER_SCROLL_NEVER
@@ -104,7 +101,7 @@ fun AidZapNativeBanner(modifier: Modifier = Modifier) {
                     event.actionMasked == MotionEvent.ACTION_MOVE
                 }
                 post {
-                    loadDataWithBaseURL("https://aidzap.com/", NATIVE_AD_HTML, "text/html", "UTF-8", null)
+                    loadDataWithBaseURL("https://bicea.org/", NATIVE_AD_HTML, "text/html", "UTF-8", null)
                 }
             }
         },

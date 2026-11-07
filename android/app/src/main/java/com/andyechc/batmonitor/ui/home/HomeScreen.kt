@@ -64,8 +64,8 @@ import com.andyechc.batmonitor.data.BatteryStore
 import com.andyechc.batmonitor.data.SavedBattery
 import com.andyechc.batmonitor.ui.add.AddScreen
 import com.andyechc.batmonitor.ui.components.BatLogo
-import com.andyechc.batmonitor.ui.components.AidZapBanner
-import com.andyechc.batmonitor.ui.components.AidZapNativeBanner
+import com.andyechc.batmonitor.ui.components.BiceaBanner
+import com.andyechc.batmonitor.ui.components.BiceaNativeBanner
 import com.andyechc.batmonitor.ui.components.UpdateDialog
 import com.andyechc.batmonitor.ui.theme.PrimaryButton
 import com.andyechc.batmonitor.ui.theme.Theme
@@ -161,7 +161,7 @@ fun HomeScreen(store: BatteryStore, onOpenBattery: (SavedBattery) -> Unit) {
                 }
 
                 item {
-                    AidZapNativeBanner(
+                    BiceaNativeBanner(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp),
@@ -242,7 +242,7 @@ private fun EmptyHome(onAdd: () -> Unit) {
                 Text(stringResource(R.string.home_add), fontWeight = FontWeight.SemiBold)
             }
         }
-        AidZapBanner(
+        BiceaBanner(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth(),
