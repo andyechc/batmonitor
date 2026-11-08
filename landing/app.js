@@ -11,11 +11,11 @@
 
   /* Same values as api/version.json. Keep both in sync. */
   var DEFAULTS = {
-    versionName: '1.4',
-    versionCode: 5,
+    versionName: '1.5',
+    versionCode: 6,
     notes: {
-      es: 'Anuncio en la app actualizado al formato iframe 320x50 de bicea.org y eliminado de la web. Sin cambios funcionales.',
-      en: 'In-app ad updated to the bicea.org 320x50 iframe format and removed from the website. No functional changes.'
+      es: 'Anuncios de Adsterra restaurados y nueva pantalla de Ajustes con comprobación de actualizaciones y sección Acerca de.',
+      en: 'Adsterra ads restored and new Settings screen with update check and an About section.'
     },
     uptodownUrl: 'https://github.com/andyechc/batmonitor/releases/latest/download/batmonitor.apk',
     apkUrl: 'https://github.com/andyechc/batmonitor/releases/latest/download/batmonitor.apk'
