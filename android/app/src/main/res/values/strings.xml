@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="about_body">Desarrollada por andyechc, desarrollador de software independiente.</string>
+    <string name="about_site">andyechc.is-a.dev</string>
+    <string name="about_title">Acerca de</string>
     <string name="add_done">Búsqueda terminada</string>
     <string name="add_empty">No encontramos baterías. Asegúrate de que el BMS esté encendido y cerca.</string>
     <string name="add_nearby">Dispositivos cercanos</string>
@@ -132,6 +135,12 @@
     <string name="protection_7">Baja temperatura en descarga</string>
     <string name="protection_8">Sobrecorriente en carga</string>
     <string name="protection_9">Sobrecorriente en descarga</string>
+    <string name="settings_latest">Ya estás usando la última versión</string>
+    <string name="settings_open">Ajustes</string>
+    <string name="settings_title">Ajustes</string>
+    <string name="settings_updateerror">No se pudo comprobar la actualización</string>
+    <string name="settings_updates">Comprobar actualización</string>
+    <string name="settings_version">Versión %1$s</string>
     <string name="tab_cells">Celdas</string>
     <string name="tab_control">Control</string>
     <string name="tab_overview">Resumen</string>

@@ -30,6 +30,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.BatteryStd
 import androidx.compose.material.icons.filled.BluetoothSearching
 import androidx.compose.material.icons.filled.Bolt
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SwapHoriz
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -64,7 +65,8 @@ import com.andyechc.batmonitor.data.BatteryStore
 import com.andyechc.batmonitor.data.SavedBattery
 import com.andyechc.batmonitor.ui.add.AddScreen
 import com.andyechc.batmonitor.ui.components.BatLogo
-import com.andyechc.batmonitor.ui.components.HypeLabBanner
+import com.andyechc.batmonitor.ui.components.BiceaBanner
+import com.andyechc.batmonitor.ui.components.BiceaNativeBanner
 import com.andyechc.batmonitor.ui.components.UpdateDialog
 import com.andyechc.batmonitor.ui.theme.PrimaryButton
 import com.andyechc.batmonitor.ui.theme.Theme
@@ -74,7 +76,11 @@ import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(store: BatteryStore, onOpenBattery: (SavedBattery) -> Unit) {
+fun HomeScreen(
+    store: BatteryStore,
+    onOpenBattery: (SavedBattery) -> Unit,
+    onOpenSettings: () -> Unit,
+) {
     store.changes.collectAsState()
     var showingAdd by remember { mutableStateOf(false) }
     var pendingDelete by remember { mutableStateOf<SavedBattery?>(null) }
@@ -99,6 +105,18 @@ fun HomeScreen(store: BatteryStore, onOpenBattery: (SavedBattery) -> Unit) {
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Spacer(modifier = Modifier.weight(1f))
+            IconButton(onClick = onOpenSettings) {
+                Box(
+                    modifier = Modifier
+                        .size(44.dp)
+                        .clip(CircleShape)
+                        .background(Theme.colors.surfaceHigh),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Icon(Icons.Filled.Settings, contentDescription = stringResource(R.string.settings_open), tint = Theme.colors.text)
+                }
+            }
+            Spacer(modifier = Modifier.width(8.dp))
             IconButton(onClick = { showingAdd = true }) {
                 Box(
                     modifier = Modifier
@@ -160,7 +178,7 @@ fun HomeScreen(store: BatteryStore, onOpenBattery: (SavedBattery) -> Unit) {
                 }
 
                 item {
-                    HypeLabBanner(
+                    BiceaNativeBanner(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp),
@@ -241,7 +259,7 @@ private fun EmptyHome(onAdd: () -> Unit) {
                 Text(stringResource(R.string.home_add), fontWeight = FontWeight.SemiBold)
             }
         }
-        HypeLabBanner(
+        BiceaBanner(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth(),

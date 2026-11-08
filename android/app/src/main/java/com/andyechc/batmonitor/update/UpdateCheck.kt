@@ -62,15 +62,26 @@ object UpdateCheck {
         fun claim(): Boolean = checked.compareAndSet(false, true)
     }
 
+    /** Outcome of a check the user asked for, so the UI can tell "up to date" from "failed". */
+    sealed interface Result {
+        data class Update(val update: AvailableUpdate) : Result
+        data object UpToDate : Result
+        data object Failed : Result
+    }
+
     /** Returns the pending update, or null when there is nothing to show (or anything failed). */
-    suspend fun check(context: Context): AvailableUpdate? = withContext(Dispatchers.IO) {
+    suspend fun check(context: Context): AvailableUpdate? =
+        (checkNow(context) as? Result.Update)?.update
+
+    /** Manual check (Settings): reports up-to-date and failure instead of staying silent. */
+    suspend fun checkNow(context: Context): Result = withContext(Dispatchers.IO) {
         try {
             val installed = installedVersionCode(context)
-            val json = fetch(UPDATE_URL) ?: return@withContext null
-            val remote = parse(json) ?: return@withContext null
-            if (remote.versionCode > installed) remote else null
+            val json = fetch(UPDATE_URL) ?: return@withContext Result.Failed
+            val remote = parse(json) ?: return@withContext Result.Failed
+            if (remote.versionCode > installed) Result.Update(remote) else Result.UpToDate
         } catch (_: Exception) {
-            null
+            Result.Failed
         }
     }
 

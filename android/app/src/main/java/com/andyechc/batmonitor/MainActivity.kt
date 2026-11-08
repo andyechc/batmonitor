@@ -26,6 +26,8 @@ import com.andyechc.batmonitor.data.BatteryStore
 import com.andyechc.batmonitor.data.SavedBattery
 import com.andyechc.batmonitor.ui.detail.DetailScreen
 import com.andyechc.batmonitor.ui.home.HomeScreen
+import com.andyechc.batmonitor.ui.settings.AboutScreen
+import com.andyechc.batmonitor.ui.settings.SettingsScreen
 import com.andyechc.batmonitor.ui.theme.BatMonitorTheme
 import com.andyechc.batmonitor.ui.theme.Theme
 import java.util.UUID
@@ -86,7 +88,17 @@ fun BatMonitorNav() {
                 onOpenBattery = { battery: SavedBattery ->
                     navController.navigate("detail/${battery.id}")
                 },
+                onOpenSettings = { navController.navigate("settings") },
             )
+        }
+        composable("settings") {
+            SettingsScreen(
+                onBack = { navController.popBackStack() },
+                onOpenAbout = { navController.navigate("about") },
+            )
+        }
+        composable("about") {
+            AboutScreen(onBack = { navController.popBackStack() })
         }
         composable(
             route = "detail/{id}",
