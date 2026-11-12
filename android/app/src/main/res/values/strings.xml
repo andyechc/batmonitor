@@ -5,10 +5,15 @@
     <string name="about_title">Acerca de</string>
     <string name="add_done">Búsqueda terminada</string>
     <string name="add_empty">No encontramos baterías. Asegúrate de que el BMS esté encendido y cerca.</string>
+    <string name="add_enablebluetooth">Activar Bluetooth</string>
+    <string name="add_enablelocation">Activar ubicación</string>
+    <string name="add_grantpermission">Conceder permiso</string>
     <string name="add_nearby">Dispositivos cercanos</string>
     <string name="add_needbluetooth">Activa el Bluetooth para buscar baterías.</string>
-    <string name="add_needpermissions">Concede los permisos de Bluetooth para buscar baterías.</string>
+    <string name="add_needlocation">Activa la ubicación del sistema para poder buscar dispositivos Bluetooth.</string>
     <string name="add_nosearchresults">No hay baterías que coincidan con la búsqueda.</string>
+    <string name="add_opensettings">Abrir ajustes</string>
+    <string name="add_permissionsdenied">Sin permiso de Bluetooth no podemos buscar baterías. Concédelo o actívalo en los ajustes de la app.</string>
     <string name="add_retry">Buscar de nuevo</string>
     <string name="add_scanhint">Buscando BMS cercanos por Bluetooth</string>
     <string name="add_scanning">Buscando baterías cerca…</string>
@@ -20,8 +25,8 @@
     <string name="ble_noconnect">No se pudo conectar con el BMS</string>
     <string name="ble_noresponse">El BMS no respondió</string>
     <string name="ble_notconnected">No conectado</string>
+    <string name="ble_scanfailed">No se pudo iniciar la búsqueda Bluetooth. Inténtalo de nuevo.</string>
     <string name="ble_unauthorized">Permiso de Bluetooth denegado. Actívalo en Ajustes.</string>
-    <string name="ble_unnamed">Batería BMS</string>
     <string name="ble_writefailed">No se pudo enviar el comando</string>
     <string name="device_balance">Balance automático</string>
     <string name="device_balancingcells">Celdas en balanceo</string>

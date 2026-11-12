@@ -36,6 +36,7 @@ local.properties
 
 # Android
 android/.gradle/
+android/.idea/
 android/**/build/
 android/captures/
 *.hprof

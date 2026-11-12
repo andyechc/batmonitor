@@ -5,10 +5,15 @@
     <string name="about_title">About</string>
     <string name="add_done">Search finished</string>
     <string name="add_empty">No batteries found. Make sure the BMS is on and nearby.</string>
+    <string name="add_enablebluetooth">Turn on Bluetooth</string>
+    <string name="add_enablelocation">Turn on location</string>
+    <string name="add_grantpermission">Grant permission</string>
     <string name="add_nearby">Nearby devices</string>
     <string name="add_needbluetooth">Turn on Bluetooth to search for batteries.</string>
-    <string name="add_needpermissions">Grant Bluetooth permissions to search for batteries.</string>
+    <string name="add_needlocation">Turn on system location so Bluetooth devices can be found.</string>
     <string name="add_nosearchresults">No batteries match this search.</string>
+    <string name="add_opensettings">Open settings</string>
+    <string name="add_permissionsdenied">Without Bluetooth permission we cannot search for batteries. Grant it or enable it in the app settings.</string>
     <string name="add_retry">Search again</string>
     <string name="add_scanhint">Looking for nearby BMS devices over Bluetooth</string>
     <string name="add_scanning">Searching for nearby batteries…</string>
@@ -20,8 +25,8 @@
     <string name="ble_noconnect">Could not connect to the BMS</string>
     <string name="ble_noresponse">The BMS did not respond</string>
     <string name="ble_notconnected">Not connected</string>
+    <string name="ble_scanfailed">Could not start the Bluetooth search. Try again.</string>
     <string name="ble_unauthorized">Bluetooth permission denied. Enable it in Settings.</string>
-    <string name="ble_unnamed">BMS battery</string>
     <string name="ble_writefailed">Could not send the command</string>
     <string name="device_balance">Auto balance</string>
     <string name="device_balancingcells">Balancing cells</string>

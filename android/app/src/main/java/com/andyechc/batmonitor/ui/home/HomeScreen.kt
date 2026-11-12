@@ -1,6 +1,11 @@
 package com.andyechc.batmonitor.ui.home
 
+import android.bluetooth.BluetoothAdapter
+import android.content.Intent
+import android.provider.Settings
 import android.text.format.DateUtils
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -49,6 +54,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -64,6 +70,9 @@ import com.andyechc.batmonitor.data.BatterySnapshot
 import com.andyechc.batmonitor.data.BatteryStore
 import com.andyechc.batmonitor.data.SavedBattery
 import com.andyechc.batmonitor.ui.add.AddScreen
+import com.andyechc.batmonitor.ui.add.hasPermissions
+import com.andyechc.batmonitor.ui.add.isBluetoothOn
+import com.andyechc.batmonitor.ui.add.requiredPermissions
 import com.andyechc.batmonitor.ui.components.BatLogo
 import com.andyechc.batmonitor.ui.components.BiceaBanner
 import com.andyechc.batmonitor.ui.components.BiceaNativeBanner
@@ -82,11 +91,39 @@ fun HomeScreen(
     onOpenSettings: () -> Unit,
 ) {
     store.changes.collectAsState()
-    var showingAdd by remember { mutableStateOf(false) }
+    var showingAdd by rememberSaveable { mutableStateOf(false) }
     var pendingDelete by remember { mutableStateOf<SavedBattery?>(null) }
     var update by remember { mutableStateOf<UpdateCheck.AvailableUpdate?>(null) }
     val batteries = store.batteries
     val context = LocalContext.current
+
+    // Permission and Bluetooth prompts run from Home, before the Add sheet exists: a system
+    // dialog opened on top of a ModalBottomSheet can eat the tap that dismisses it and close
+    // the sheet, which used to hide the scan right after granting.
+    val permissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions(),
+    ) { showingAdd = true }
+
+    val bluetoothLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.StartActivityForResult(),
+    ) { showingAdd = true }
+
+    fun requestBluetooth() {
+        try {
+            bluetoothLauncher.launch(Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE))
+        } catch (_: Exception) {
+            showingAdd = true
+            context.startActivity(Intent(Settings.ACTION_BLUETOOTH_SETTINGS))
+        }
+    }
+
+    fun openAdd() {
+        when {
+            !hasPermissions(context) -> permissionLauncher.launch(requiredPermissions())
+            !isBluetoothOn(context) -> requestBluetooth()
+            else -> showingAdd = true
+        }
+    }
 
     // One silent check per process: failure or an out-of-date manifest never reaches the UI.
     LaunchedEffect(Unit) {
@@ -117,7 +154,7 @@ fun HomeScreen(
                 }
             }
             Spacer(modifier = Modifier.width(8.dp))
-            IconButton(onClick = { showingAdd = true }) {
+            IconButton(onClick = { openAdd() }) {
                 Box(
                     modifier = Modifier
                         .size(44.dp)
@@ -137,7 +174,7 @@ fun HomeScreen(
             modifier = Modifier.padding(horizontal = 20.dp),
         )
         if (batteries.isEmpty()) {
-            EmptyHome(onAdd = { showingAdd = true })
+            EmptyHome(onAdd = { openAdd() })
         } else {
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
@@ -195,7 +232,18 @@ fun HomeScreen(
             containerColor = Theme.colors.background,
             contentColor = Theme.colors.text,
         ) {
-            AddScreen(store = store, onDone = { showingAdd = false })
+            AddScreen(
+                store = store,
+                onDone = { showingAdd = false },
+                onRequestPermissions = {
+                    showingAdd = false
+                    permissionLauncher.launch(requiredPermissions())
+                },
+                onEnableBluetooth = {
+                    showingAdd = false
+                    requestBluetooth()
+                },
+            )
         }
     }
 

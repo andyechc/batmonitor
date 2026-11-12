@@ -15,4 +15,5 @@ sealed class BleError : Exception() {
     data object NotConnected : BleError()
     data object WriteFailed : BleError()
     data object InvalidData : BleError()
+    data object ScanFailed : BleError()
 }

@@ -1,5 +1,6 @@
 package com.andyechc.batmonitor.ble
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
@@ -10,12 +11,12 @@ import android.bluetooth.BluetoothGattDescriptor
 import android.bluetooth.BluetoothManager
 import android.bluetooth.BluetoothProfile
 import android.bluetooth.le.ScanCallback
-import android.bluetooth.le.ScanFilter
 import android.bluetooth.le.ScanResult
 import android.bluetooth.le.ScanSettings
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Build
-import android.os.ParcelUuid
+import androidx.core.content.ContextCompat
 import com.andyechc.batmonitor.R
 import com.andyechc.batmonitor.protocol.BmsBasicInfo
 import com.andyechc.batmonitor.protocol.BmsCodec
@@ -30,7 +31,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -52,8 +56,13 @@ object BleCentral {
     private val links = ConcurrentHashMap<UUID, GattLink>()
 
     private var scanCallback: ScanCallback? = null
+    private var scanGeneration = 0
     private val _discoveries = MutableSharedFlow<ScannedDevice>(extraBufferCapacity = 64)
     val discoveries = _discoveries.asSharedFlow()
+
+    /** Last platform scan failure, if any. Cleared on every new scan. */
+    private val _scanError = MutableStateFlow<BleError?>(null)
+    val scanError: StateFlow<BleError?> = _scanError.asStateFlow()
 
     fun init(context: Context) {
         appContext = context.applicationContext
@@ -70,9 +79,8 @@ object BleCentral {
         BleError.NotConnected -> appContext.getString(R.string.ble_notconnected)
         BleError.WriteFailed -> appContext.getString(R.string.ble_writefailed)
         BleError.InvalidData -> appContext.getString(R.string.ble_invaliddata)
+        BleError.ScanFailed -> appContext.getString(R.string.ble_scanfailed)
     }
-
-    fun unnamed(): String = appContext.getString(R.string.ble_unnamed)
 
     /** Wait until the adapter leaves unknown/resetting-like transient states. */
     suspend fun waitUntilSettled() {
@@ -89,35 +97,70 @@ object BleCentral {
         if (state != BluetoothAdapter.STATE_ON) throw BleError.BluetoothOff
     }
 
+    /** True when the runtime permissions needed to see devices (and their names) are granted. */
+    fun canScan(): Boolean {
+        val permissions = if (Build.VERSION.SDK_INT >= 31) {
+            listOf(Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT)
+        } else {
+            listOf(Manifest.permission.ACCESS_FINE_LOCATION)
+        }
+        return permissions.all {
+            ContextCompat.checkSelfPermission(appContext, it) == PackageManager.PERMISSION_GRANTED
+        }
+    }
+
     fun startScan() {
         val btAdapter = adapter().adapter ?: throw BleError.BluetoothOff
         if (btAdapter.state != BluetoothAdapter.STATE_ON) throw BleError.BluetoothOff
+        if (!canScan()) throw BleError.Unauthorized
         val scanner = btAdapter.bluetoothLeScanner ?: throw BleError.BluetoothOff
         stopScan()
+        _scanError.value = null
+        val generation = ++scanGeneration
         val cb = object : ScanCallback() {
             override fun onScanResult(callbackType: Int, result: ScanResult) {
+                if (generation != scanGeneration) return
                 val device = result.device ?: return
-                val address = device.address ?: return
-                val name = if (Build.VERSION.SDK_INT >= 31) {
-                    result.scanRecord?.deviceName
-                } else {
+                val address = try {
+                    device.address
+                } catch (e: SecurityException) {
+                    return
+                }
+                if (address.isEmpty()) return
+                val advertisedName = result.scanRecord?.deviceName?.takeIf { it.isNotBlank() }
+                val name = advertisedName ?: try {
+                    device.name?.takeIf { it.isNotBlank() }
+                } catch (e: SecurityException) {
                     null
-                } ?: result.device?.name ?: unnamed()
+                } ?: address
                 val id = UUID.nameUUIDFromBytes(address.toByteArray(Charsets.UTF_8))
                 knownAddresses[id] = address
                 _discoveries.tryEmit(ScannedDevice(id = id, name = name, rssi = result.rssi))
             }
 
-            override fun onScanFailed(errorCode: Int) = Unit
+            override fun onScanFailed(errorCode: Int) {
+                if (generation != scanGeneration) return
+                _scanError.value = BleError.ScanFailed
+            }
         }
         scanCallback = cb
-        val filter = ScanFilter.Builder()
-            .setServiceUuid(ParcelUuid(serviceUuid))
-            .build()
         val settings = ScanSettings.Builder()
             .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
+            .setReportDelay(0)
             .build()
-        scanner.startScan(listOf(filter), settings, cb)
+        try {
+            // No ScanFilter on purpose: XiaoXiang-compatible BMS units do not advertise the
+            // FF00 service UUID, so a service filter hid every battery. The UI lists all
+            // nearby BLE devices instead.
+            scanner.startScan(emptyList(), settings, cb)
+        } catch (e: SecurityException) {
+            scanCallback = null
+            throw BleError.Unauthorized
+        } catch (e: Exception) {
+            scanCallback = null
+            _scanError.value = BleError.ScanFailed
+            throw BleError.ScanFailed
+        }
     }
 
     fun stopScan() {
