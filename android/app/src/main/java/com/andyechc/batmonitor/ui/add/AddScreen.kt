@@ -38,6 +38,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -261,7 +262,7 @@ fun AddScreen(
                     color = Theme.colors.muted,
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                SecondaryButton(onClick = { showAllDevices = true }) {
+                TextButton(onClick = { showAllDevices = true }) {
                     Text(stringResource(R.string.add_showallaction), fontWeight = FontWeight.SemiBold)
                 }
             }
