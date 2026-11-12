@@ -14,13 +14,13 @@ class BatteryScannerTest {
     private val third = UUID.fromString("A73B1487-8B90-4A74-9512-273B9F100103")
 
     @Test
-    fun newDevicesAreSortedByAscendingRssi() {
+    fun newDevicesAreSortedByDescendingRssi() {
         var devices = emptyList<ScannedDevice>()
         devices = mergeScannedDevices(devices, ScannedDevice(first, "JBD", -70))
         devices = mergeScannedDevices(devices, ScannedDevice(second, "Band", -90))
         devices = mergeScannedDevices(devices, ScannedDevice(third, "TV", -80))
 
-        assertEquals(listOf(second, third, first), devices.map { it.id })
+        assertEquals(listOf(first, third, second), devices.map { it.id })
     }
 
     @Test

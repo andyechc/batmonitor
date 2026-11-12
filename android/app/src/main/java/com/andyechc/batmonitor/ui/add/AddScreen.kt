@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.BatteryStd
@@ -205,13 +206,16 @@ fun AddScreen(
             onValueChange = { searchQuery = it },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
+            shape = RoundedCornerShape(16.dp),
             placeholder = { Text(stringResource(R.string.add_searchprompt), color = Theme.colors.muted) },
             leadingIcon = { Icon(Icons.Filled.Search, contentDescription = null, tint = Theme.colors.muted) },
             colors = OutlinedTextFieldDefaults.colors(
                 focusedTextColor = Theme.colors.text,
                 unfocusedTextColor = Theme.colors.text,
-                focusedBorderColor = Theme.colors.charge,
-                unfocusedBorderColor = Theme.colors.border,
+                focusedBorderColor = androidx.compose.ui.graphics.Color.Transparent,
+                unfocusedBorderColor = androidx.compose.ui.graphics.Color.Transparent,
+                focusedContainerColor = Theme.colors.surfaceHigh,
+                unfocusedContainerColor = Theme.colors.surfaceHigh,
                 cursorColor = Theme.colors.charge,
             ),
         )

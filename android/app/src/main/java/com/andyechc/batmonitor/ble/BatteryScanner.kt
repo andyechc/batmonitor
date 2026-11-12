@@ -30,8 +30,8 @@ internal fun mergeScannedDevices(
             if (it.id == device.id) it.copy(name = name, rssi = device.rssi, address = address) else it
         }
     }
-    // Ascending numeric order, same as iOS: more negative RSSI (farther) first.
-    return merged.sortedBy { it.rssi }
+    // Descending numeric order: strongest signal (closest) first.
+    return merged.sortedByDescending { it.rssi }
 }
 
 /** Heuristic: devices that look like a BMS (iOS only ever sees FF00-advertisers; on Android
