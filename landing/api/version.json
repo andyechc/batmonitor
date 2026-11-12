@@ -1,9 +1,9 @@
 {
-  "versionName": "1.5",
-  "versionCode": 6,
+  "versionName": "1.6",
+  "versionCode": 7,
   "notes": {
-    "es": "Anuncios de Adsterra restaurados y nueva pantalla de Ajustes con comprobación de actualizaciones y sección Acerca de.",
-    "en": "Adsterra ads restored and new Settings screen with update check and an About section."
+    "es": "Lista de dispositivos ordenada por cercanía, buscador sin borde, filtro 'Mostrar todos' como texto, política de privacidad en Ajustes y mejoras de conexión BLE.",
+    "en": "Device list sorted by proximity, borderless search field, 'Show all' as text button, privacy policy in Settings and BLE connection hardening."
   },
   "uptodownUrl": "https://github.com/andyechc/batmonitor/releases/latest/download/batmonitor.apk",
   "apkUrl": "https://github.com/andyechc/batmonitor/releases/latest/download/batmonitor.apk"
