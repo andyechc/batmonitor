@@ -16,6 +16,7 @@ import android.bluetooth.le.ScanSettings
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import android.util.Log
 import androidx.core.content.ContextCompat
 import com.andyechc.batmonitor.R
 import com.andyechc.batmonitor.protocol.BmsBasicInfo
@@ -29,6 +30,7 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -39,10 +41,14 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withTimeout
+import kotlinx.coroutines.withTimeoutOrNull
 
 /** CoreBluetooth-equivalent central: scan, connect, command, notify parsing. */
 @SuppressLint("MissingPermission")
 object BleCentral {
+    /** logcat tag for every BLE decision; `adb logcat -s BatMonitor` shows the whole story. */
+    const val TAG = "BatMonitor"
+
     private val serviceUuid: UUID = UUID.fromString("0000ff00-0000-1000-8000-00805f9b34fb")
     private val notifyUuid: UUID = UUID.fromString("0000ff01-0000-1000-8000-00805f9b34fb")
     private val writeUuid: UUID = UUID.fromString("0000ff02-0000-1000-8000-00805f9b34fb")
@@ -117,6 +123,7 @@ object BleCentral {
         stopScan()
         _scanError.value = null
         val generation = ++scanGeneration
+        val loggedAddresses = HashSet<String>()
         val cb = object : ScanCallback() {
             override fun onScanResult(callbackType: Int, result: ScanResult) {
                 if (generation != scanGeneration) return
@@ -135,7 +142,30 @@ object BleCentral {
                 } ?: address
                 val id = UUID.nameUUIDFromBytes(address.toByteArray(Charsets.UTF_8))
                 knownAddresses[id] = address
-                _discoveries.tryEmit(ScannedDevice(id = id, name = name, rssi = result.rssi))
+                val record = result.scanRecord
+                // One line per address (this phone drops debug-level logs, so it must be I):
+                // it shows what each device advertises, which is how the BMS filter is tuned.
+                if (loggedAddresses.add(address)) {
+                    Log.i(
+                        TAG,
+                        "scan $address name=$name rssi=${result.rssi} " +
+                            "services=${record?.serviceUuids} " +
+                            "serviceData=${record?.serviceData?.keys} " +
+                            "manufacturer=${record?.manufacturerSpecificData?.let { m ->
+                                (0 until m.size()).map { index -> "%04X".format(m.keyAt(index)) }
+                            }} " +
+                            "tx=${record?.txPowerLevel}",
+                    )
+                }
+                _discoveries.tryEmit(
+                    ScannedDevice(
+                        id = id,
+                        name = name,
+                        rssi = result.rssi,
+                        address = address,
+                        serviceUuids = record?.serviceUuids?.map { it.uuid } ?: emptyList(),
+                    ),
+                )
             }
 
             override fun onScanFailed(errorCode: Int) {
@@ -173,22 +203,65 @@ object BleCentral {
         scanCallback = null
     }
 
+    /** Restores a saved MAC so a fresh process can connect without scanning first. */
+    fun rememberAddress(id: UUID, address: String) {
+        if (address.isNotBlank()) knownAddresses[id] = address
+    }
+
+    /**
+     * Android can only open a GATT link by MAC address, so a saved battery whose address is
+     * unknown has to be found again. iOS does the same in `resolvePeripheral` by rescanning.
+     */
+    private suspend fun resolveAddress(id: UUID): String {
+        knownAddresses[id]?.let { return it }
+        Log.i(TAG, "no address for $id yet, scanning to resolve it")
+        startScan()
+        try {
+            withTimeoutOrNull(6_000) {
+                while (knownAddresses[id] == null) delay(200)
+            }
+        } finally {
+            stopScan()
+        }
+        return knownAddresses[id] ?: throw BleError.NoConnect
+    }
+
     suspend fun connect(id: UUID) {
         waitUntilSettled()
         disconnect(id)
-        val address = knownAddresses[id] ?: throw BleError.NoConnect
+        val address = resolveAddress(id)
         val device = adapter().adapter?.getRemoteDevice(address) ?: throw BleError.NoConnect
-        val link = GattLink(device)
-        links[id] = link
-        try {
-            withTimeout(20_000) { link.open() }
-            // First-response workaround: the first notification after subscribing
-            // is lost, so settle before the first command.
-            delay(1_000)
-        } catch (e: Exception) {
+        Log.i(TAG, "connect start $address")
+
+        var lastError: BleError = BleError.NoConnect
+        // Android's known GATT_ERROR (133) is only cured by throwing the client away and
+        // starting over with a brand-new BluetoothGatt object.
+        for (attempt in 1..2) {
+            // The first attempt follows iOS (20 s); the retry gets less so the screen settles.
+            val budget = if (attempt == 1) 20_000L else 12_000L
+            val link = GattLink(id, device)
+            links[id] = link
+            try {
+                withTimeout(budget) { link.open() }
+                Log.i(TAG, "connect ok on attempt $attempt")
+                // First-response workaround: the first notification after subscribing is
+                // lost, so settle before the first command.
+                delay(1_500)
+                return
+            } catch (e: TimeoutCancellationException) {
+                lastError = BleError.NoConnect
+                Log.w(TAG, "connect timeout on attempt $attempt")
+            } catch (e: kotlinx.coroutines.CancellationException) {
+                teardown(id)
+                throw e
+            } catch (e: Exception) {
+                lastError = (e as? BleError) ?: BleError.NoConnect
+                Log.w(TAG, "connect failed on attempt $attempt: $e")
+            }
             teardown(id)
-            throw (e as? BleError) ?: BleError.NoConnect
+            delay(600)
         }
+        throw lastError
     }
 
     fun disconnect(id: UUID) {
@@ -214,60 +287,61 @@ object BleCentral {
         return link.command(payload, cmd, timeoutMs)
     }
 
-    private class GattLink(private val device: BluetoothDevice) {
-        private var gatt: BluetoothGatt? = null
-        private var writeChar: BluetoothGattCharacteristic? = null
+    private class GattLink(private val id: UUID, private val device: BluetoothDevice) {
+        @Volatile private var gatt: BluetoothGatt? = null
+        @Volatile private var writeChar: BluetoothGattCharacteristic? = null
+        @Volatile private var notifyChar: BluetoothGattCharacteristic? = null
         private val parser = BmsFrameParser()
         private val writeMutex = Mutex()
         private val waiters = ConcurrentHashMap<Int, CompletableDeferred<BmsFrame>>()
-        private var nameWaiter: CompletableDeferred<BmsFrame>? = null
-        private var openResult: CompletableDeferred<Boolean>? = null
+        @Volatile private var nameWaiter: CompletableDeferred<BmsFrame>? = null
+
+        // One barrier per handshake step, each resolved by the matching GATT callback.
+        private val stateChanged = CompletableDeferred<Int>()
+        private val servicesReady = CompletableDeferred<Boolean>()
+        private val mtuSettled = CompletableDeferred<Int>()
+        private val notifyReady = CompletableDeferred<Boolean>()
 
         private val callback = object : BluetoothGattCallback() {
             override fun onConnectionStateChange(gatt: BluetoothGatt, status: Int, newState: Int) {
-                if (newState == BluetoothProfile.STATE_CONNECTED) {
-                    try {
-                        requestMtu(gatt)
-                        gatt.discoverServices()
-                    } catch (_: Exception) {
-                        openResult?.complete(false)
+                Log.i(
+                    TAG,
+                    "onConnectionStateChange status=$status (0x%02X) state=$newState".format(status),
+                )
+                when (newState) {
+                    BluetoothProfile.STATE_CONNECTED -> {
+                        // status 0 here; a non-zero status arrives together with a disconnect.
+                        if (!stateChanged.isCompleted) stateChanged.complete(status)
                     }
-                } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
-                    failAll(BleError.NoConnect)
-                    openResult?.let { if (!it.isCompleted) it.complete(false) }
+                    BluetoothProfile.STATE_DISCONNECTED -> {
+                        if (!stateChanged.isCompleted) stateChanged.complete(status)
+                        resolveDeadHandshake()
+                        failAll(BleError.NoConnect)
+                    }
                 }
             }
 
             override fun onServicesDiscovered(gatt: BluetoothGatt, status: Int) {
                 if (status != BluetoothGatt.GATT_SUCCESS) {
-                    openResult?.complete(false)
+                    Log.w(TAG, "onServicesDiscovered failed status=$status")
+                    servicesReady.complete(false)
                     return
                 }
                 val service = gatt.getService(serviceUuid)
-                val notify = service?.getCharacteristic(notifyUuid)
+                notifyChar = service?.getCharacteristic(notifyUuid)
                 writeChar = service?.getCharacteristic(writeUuid)
-                if (notify == null || writeChar == null) {
-                    openResult?.complete(false)
-                    return
-                }
-                try {
-                    gatt.setCharacteristicNotification(notify, true)
-                    val cccd = notify.getDescriptor(cccdUuid)
-                    if (cccd != null) {
-                        if (Build.VERSION.SDK_INT >= 33) {
-                            gatt.writeDescriptor(cccd, BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE)
-                        } else {
-                            @Suppress("DEPRECATION")
-                            cccd.value = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
-                            @Suppress("DEPRECATION")
-                            gatt.writeDescriptor(cccd)
-                        }
-                    } else {
-                        openResult?.complete(true)
-                    }
-                } catch (_: Exception) {
-                    openResult?.complete(false)
-                }
+                val found = notifyChar != null && writeChar != null
+                Log.i(
+                    TAG,
+                    "services discovered: FF01=${notifyChar != null} FF02=${writeChar != null} " +
+                        "all=${gatt.services?.map { it.uuid.toString().substring(4, 8) }}",
+                )
+                servicesReady.complete(found)
+            }
+
+            override fun onMtuChanged(gatt: BluetoothGatt, mtu: Int, status: Int) {
+                Log.i(TAG, "onMtuChanged mtu=$mtu status=$status")
+                mtuSettled.complete(if (status == BluetoothGatt.GATT_SUCCESS) mtu else 0)
             }
 
             override fun onDescriptorWrite(
@@ -275,8 +349,9 @@ object BleCentral {
                 descriptor: BluetoothGattDescriptor,
                 status: Int,
             ) {
-                if (descriptor.uuid == cccdUuid) {
-                    openResult?.complete(status == BluetoothGatt.GATT_SUCCESS)
+                Log.i(TAG, "onDescriptorWrite ${descriptor.uuid} status=$status")
+                if (descriptor.uuid == cccdUuid && !notifyReady.isCompleted) {
+                    notifyReady.complete(status == BluetoothGatt.GATT_SUCCESS)
                 }
             }
 
@@ -294,11 +369,139 @@ object BleCentral {
             }
         }
 
-        private fun requestMtu(gatt: BluetoothGatt) {
-            try {
-                if (Build.VERSION.SDK_INT >= 21) gatt.requestMtu(247)
-            } catch (_: Exception) {
+        /**
+         * Connect and subscribe in the order the stack actually accepts:
+         * connect -> settle -> discoverServices -> MTU -> CCCD. Asking for the MTU before the
+         * discovery used to make discoverServices() return false and the link never opened.
+         */
+        suspend fun open() {
+            val g = try {
+                // TRANSPORT_LE is explicit: on a dual-mode device the default transport can
+                // pick BR/EDR, which this BMS does not speak.
+                device.connectGatt(appContext, false, callback, BluetoothDevice.TRANSPORT_LE)
+            } catch (e: SecurityException) {
+                Log.w(TAG, "connectGatt denied: $e")
+                null
+            } catch (e: Exception) {
+                Log.w(TAG, "connectGatt failed: $e")
+                null
+            } ?: throw BleError.NoConnect
+            gatt = g
+            Log.i(TAG, "connectGatt(TRANSPORT_LE) -> $g")
+
+            val status = try {
+                withTimeout(12_000) { stateChanged.await() }
+            } catch (e: TimeoutCancellationException) {
+                Log.w(TAG, "no onConnectionStateChange within 12 s")
+                throw BleError.NoConnect
             }
+            if (status != BluetoothGatt.GATT_SUCCESS) {
+                Log.w(TAG, "connection refused status=$status")
+                throw BleError.NoConnect
+            }
+            // Ask for a high connection priority: some BMS (JBD/XiaoXiang) drop the link
+            // within a second when the connection stays at the default low interval.
+            try {
+                val ok = g.requestConnectionPriority(BluetoothGatt.CONNECTION_PRIORITY_HIGH)
+                Log.i(TAG, "requestConnectionPriority(HIGH) -> $ok")
+            } catch (e: Exception) {
+                Log.w(TAG, "requestConnectionPriority failed: $e")
+            }
+            if (!discover(g)) throw BleError.NoConnect
+            negotiateMtu(g)
+            if (!enableNotifications(g)) throw BleError.NoConnect
+        }
+
+        private suspend fun discover(g: BluetoothGatt): Boolean {
+            // Give the link a moment: some stacks reject discovery issued straight from the
+            // CONNECTED callback.
+            delay(250)
+            flushServiceCache(g)
+            repeat(3) { attempt ->
+                val started = try {
+                    g.discoverServices()
+                } catch (e: Exception) {
+                    Log.w(TAG, "discoverServices threw: $e")
+                    false
+                }
+                Log.i(TAG, "discoverServices attempt ${attempt + 1} -> $started")
+                if (started) {
+                    when (withTimeoutOrNull(6_000) { servicesReady.await() }) {
+                        true -> return true
+                        // The device answered but has no FF00/FF01/FF02: wrong device.
+                        false -> return false
+                        // No callback at all: worth one more request.
+                        null -> Log.w(TAG, "no onServicesDiscovered callback")
+                    }
+                }
+                delay(500)
+            }
+            return false
+        }
+
+        /** Hidden-API cache flush: the usual cure for a stale GATT database (status 129/133). */
+        private fun flushServiceCache(g: BluetoothGatt) {
+            try {
+                val method = g.javaClass.getMethod("refresh")
+                Log.i(TAG, "refresh() -> ${method.invoke(g)}")
+            } catch (e: Exception) {
+                Log.i(TAG, "refresh() unavailable: ${e.javaClass.simpleName}")
+            }
+        }
+
+        private suspend fun negotiateMtu(g: BluetoothGatt) {
+            // Basic info is a 43-byte frame, so 23-byte MTU means chunked notifications. Best
+            // effort: if the exchange is refused we keep the default and reassemble chunks.
+            val requested = try {
+                g.requestMtu(247)
+            } catch (e: Exception) {
+                false
+            }
+            if (!requested) {
+                Log.i(TAG, "requestMtu(247) refused")
+                return
+            }
+            Log.i(TAG, "mtu settled: ${withTimeoutOrNull(2_000) { mtuSettled.await() }}")
+        }
+
+        private suspend fun enableNotifications(g: BluetoothGatt): Boolean {
+            val notify = notifyChar ?: return false
+            val registered = try {
+                g.setCharacteristicNotification(notify, true)
+            } catch (e: Exception) {
+                false
+            }
+            Log.i(TAG, "setCharacteristicNotification -> $registered")
+            if (!registered) return false
+            val cccd = notify.getDescriptor(cccdUuid)
+            if (cccd == null) {
+                Log.w(TAG, "FF01 has no CCCD; notifications stay unsubscribed")
+                return true
+            }
+            val written = try {
+                if (Build.VERSION.SDK_INT >= 33) {
+                    g.writeDescriptor(cccd, BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE) == 0
+                } else {
+                    @Suppress("DEPRECATION")
+                    cccd.value = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
+                    @Suppress("DEPRECATION")
+                    g.writeDescriptor(cccd)
+                }
+            } catch (e: Exception) {
+                Log.w(TAG, "writeDescriptor threw: $e")
+                false
+            }
+            Log.i(TAG, "writeDescriptor(CCCD) -> $written")
+            if (!written) return false
+            val ready = withTimeoutOrNull(5_000) { notifyReady.await() }
+            Log.i(TAG, "notifications ready: $ready")
+            return ready == true
+        }
+
+        private fun resolveDeadHandshake() {
+            if (!servicesReady.isCompleted) servicesReady.complete(false)
+            if (!mtuSettled.isCompleted) mtuSettled.complete(0)
+            if (!notifyReady.isCompleted) notifyReady.complete(false)
         }
 
         private fun route(raw: List<Byte>?) {
@@ -321,14 +524,6 @@ object BleCentral {
             waiters.clear()
             nameWaiter?.let { if (!it.isCompleted) it.completeExceptionally(error) }
             nameWaiter = null
-        }
-
-        suspend fun open() {
-            val result = CompletableDeferred<Boolean>()
-            openResult = result
-            gatt = device.connectGatt(appContext, false, callback, BluetoothDevice.TRANSPORT_LE)
-                ?: throw BleError.NoConnect
-            if (result.await() != true) throw BleError.NoConnect
         }
 
         suspend fun command(payload: List<Int>, cmd: Int, timeoutMs: Long): BmsFrame {
@@ -368,7 +563,13 @@ object BleCentral {
                     }
                     if (!ok) throw BleError.WriteFailed
                 }
-                withTimeout(timeoutMs) { waiter.await() }
+                try {
+                    withTimeout(timeoutMs) { waiter.await() }
+                } catch (e: TimeoutCancellationException) {
+                    // A plain withTimeout would surface as CancellationException and kill the
+                    // monitor loop; a missing answer is a normal protocol error.
+                    throw BleError.NoResponse
+                }
             } finally {
                 waiters.remove(cmd, waiter)
                 if (nameWaiter === waiter) nameWaiter = null
@@ -376,14 +577,18 @@ object BleCentral {
         }
 
         fun close() {
+            Log.i(TAG, "closing link $id")
+            resolveDeadHandshake()
             failAll(BleError.NoConnect)
-            try {
-                gatt?.disconnect()
-                gatt?.close()
-            } catch (_: Exception) {
-            }
+            val g = gatt
             gatt = null
             writeChar = null
+            notifyChar = null
+            try {
+                g?.disconnect()
+                g?.close()
+            } catch (_: Exception) {
+            }
         }
     }
 }

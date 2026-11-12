@@ -85,6 +85,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.andyechc.batmonitor.R
 import com.andyechc.batmonitor.ble.BatteryMonitor
+import com.andyechc.batmonitor.ble.BleCentral
 import com.andyechc.batmonitor.ble.BatteryReading
 import com.andyechc.batmonitor.ble.BleError
 import com.andyechc.batmonitor.ble.MonitorStatus
@@ -138,6 +139,8 @@ fun DetailScreen(batteryId: UUID, store: BatteryStore, onBack: () -> Unit) {
     val isLive = monitor.isLive
 
     LaunchedEffect(batteryId) {
+        // The saved MAC lets the first attempt connect straight away instead of rescanning.
+        store.battery(batteryId)?.address?.let { BleCentral.rememberAddress(batteryId, it) }
         monitor.run { reading -> store.record(reading, batteryId) }
     }
 

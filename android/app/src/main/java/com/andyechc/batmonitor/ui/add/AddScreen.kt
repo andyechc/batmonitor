@@ -62,6 +62,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.andyechc.batmonitor.R
 import com.andyechc.batmonitor.ble.BatteryScanner
 import com.andyechc.batmonitor.ble.ScannedDevice
+import com.andyechc.batmonitor.ble.isLikelyBattery
 import com.andyechc.batmonitor.data.BatteryStore
 import com.andyechc.batmonitor.ui.theme.SecondaryButton
 import com.andyechc.batmonitor.ui.theme.Theme
@@ -114,6 +115,7 @@ fun AddScreen(
     var hasStarted by remember { mutableStateOf(false) }
     var scanJob by remember { mutableStateOf<Job?>(null) }
     var searchQuery by remember { mutableStateOf("") }
+    var showAllDevices by remember { mutableStateOf(false) }
 
     val found by scanner.found.collectAsState()
     val isScanning by scanner.isScanning.collectAsState()
@@ -231,12 +233,33 @@ fun AddScreen(
         }
 
         val tokens = searchQuery.split(Regex("\\s+")).filter { it.isNotEmpty() }.map(::fold)
+        val baseFound = if (showAllDevices) found else found.filter { isLikelyBattery(it) }
         val filtered = if (tokens.isEmpty()) {
-            found
+            baseFound
         } else {
-            found.filter { device ->
+            baseFound.filter { device ->
                 val haystack = fold("${device.name} ${device.id} ${device.rssi} dBm")
                 tokens.all { haystack.contains(it) }
+            }
+        }
+
+        if (found.isNotEmpty() && !showAllDevices && found.any { !isLikelyBattery(it) }) {
+            // Offer to reveal the rest of the BLE neighbourhood, mirroring iOS search.
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = stringResource(R.string.add_showall, found.count { !isLikelyBattery(it) }),
+                    fontSize = 13.sp,
+                    color = Theme.colors.muted,
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                SecondaryButton(onClick = { showAllDevices = true }) {
+                    Text(stringResource(R.string.add_showallaction), fontWeight = FontWeight.SemiBold)
+                }
             }
         }
 
@@ -253,7 +276,7 @@ fun AddScreen(
                 DeviceRow(device = device, onSelect = {
                     scope.launch {
                         scanner.stop()
-                        store.add(device.id, device.name)
+                        store.add(device.id, device.name, device.address)
                         onDone()
                     }
                 })

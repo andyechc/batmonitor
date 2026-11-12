@@ -25,10 +25,24 @@ internal fun mergeScannedDevices(
             existing.name.isBlank() -> device.name
             else -> device.name
         }
-        current.map { if (it.id == device.id) it.copy(name = name, rssi = device.rssi) else it }
+        val address = device.address.ifBlank { existing.address }
+        current.map {
+            if (it.id == device.id) it.copy(name = name, rssi = device.rssi, address = address) else it
+        }
     }
     // Ascending numeric order, same as iOS: more negative RSSI (farther) first.
     return merged.sortedBy { it.rssi }
+}
+
+/** Heuristic: devices that look like a BMS (iOS only ever sees FF00-advertisers; on Android
+ *  XiaoXiang/JBD units often advertise without that UUID, so we also match by name). */
+fun isLikelyBattery(device: ScannedDevice): Boolean {
+    if (device.serviceUuids.any { it.toString().equals("0000ff00-0000-1000-8000-00805f9b34fb", ignoreCase = true) }) {
+        return true
+    }
+    val name = device.name.lowercase()
+    val keywords = listOf("jbd", "xiaoxiang", "xiao xiang", "jikong", "jk bms", "spp", "bms", "battery", "andy")
+    return keywords.any { name.contains(it) }
 }
 
 class BatteryScanner {

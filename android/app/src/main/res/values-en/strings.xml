@@ -9,6 +9,8 @@
     <string name="add_enablelocation">Turn on location</string>
     <string name="add_grantpermission">Grant permission</string>
     <string name="add_nearby">Nearby devices</string>
+    <string name="add_showall">%d other devices are not batteries</string>
+    <string name="add_showallaction">Show all</string>
     <string name="add_needbluetooth">Turn on Bluetooth to search for batteries.</string>
     <string name="add_needlocation">Turn on system location so Bluetooth devices can be found.</string>
     <string name="add_nosearchresults">No batteries match this search.</string>

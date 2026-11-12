@@ -11,6 +11,11 @@ data class SavedBattery(
     val id: UUID,
     val name: String,
     val addedAt: Long,
+    /**
+     * BLE MAC of the BMS. Android identifies a peripheral by its address, so it has to be stored:
+     * without it a fresh process cannot connect until a scan finds the battery again.
+     */
+    val address: String? = null,
 )
 
 data class BatterySnapshot(
@@ -59,9 +64,14 @@ class BatteryStore(context: Context) {
         saveSnapshots()
     }
 
-    fun add(id: UUID, name: String) {
+    fun add(id: UUID, name: String, address: String? = null) {
         if (battery(id) != null) return
-        batteries = batteries + SavedBattery(id = id, name = name, addedAt = System.currentTimeMillis())
+        batteries = batteries + SavedBattery(
+            id = id,
+            name = name,
+            addedAt = System.currentTimeMillis(),
+            address = address,
+        )
         save()
     }
 
@@ -84,6 +94,7 @@ class BatteryStore(context: Context) {
             o.put("id", b.id.toString())
             o.put("name", b.name)
             o.put("addedAt", b.addedAt)
+            b.address?.let { o.put("address", it) }
             array.put(o)
         }
         prefs.edit().putString(KEY_BATTERIES, array.toString()).apply()
@@ -116,6 +127,7 @@ class BatteryStore(context: Context) {
                     id = UUID.fromString(o.getString("id")),
                     name = o.getString("name"),
                     addedAt = o.optLong("addedAt", 0L),
+                    address = o.optString("address", "").takeIf { it.isNotBlank() },
                 )
             }
         } catch (_: Exception) {

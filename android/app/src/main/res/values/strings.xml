@@ -9,6 +9,8 @@
     <string name="add_enablelocation">Activar ubicación</string>
     <string name="add_grantpermission">Conceder permiso</string>
     <string name="add_nearby">Dispositivos cercanos</string>
+    <string name="add_showall">%d otros dispositivos no son baterías</string>
+    <string name="add_showallaction">Mostrar todos</string>
     <string name="add_needbluetooth">Activa el Bluetooth para buscar baterías.</string>
     <string name="add_needlocation">Activa la ubicación del sistema para poder buscar dispositivos Bluetooth.</string>
     <string name="add_nosearchresults">No hay baterías que coincidan con la búsqueda.</string>
