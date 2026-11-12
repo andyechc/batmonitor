@@ -128,6 +128,28 @@ fun SettingsScreen(onBack: () -> Unit, onOpenAbout: () -> Unit) {
                 Divider(color = Theme.colors.border, modifier = Modifier.padding(start = 72.dp))
                 SettingsRow(
                     icon = Icons.Filled.Info,
+                    title = stringResource(R.string.device_privacy),
+                    onClick = {
+                        try {
+                            context.startActivity(
+                                Intent(Intent.ACTION_VIEW, Uri.parse("https://andyechc.is-a.dev/batmonitor/privacy.html"))
+                                    .apply { addCategory(Intent.CATEGORY_BROWSABLE) },
+                            )
+                        } catch (_: Exception) {
+                        }
+                    },
+                    trailing = {
+                        Icon(
+                            Icons.AutoMirrored.Filled.OpenInNew,
+                            contentDescription = null,
+                            tint = Theme.colors.muted,
+                            modifier = Modifier.size(18.dp),
+                        )
+                    },
+                )
+                Divider(color = Theme.colors.border, modifier = Modifier.padding(start = 72.dp))
+                SettingsRow(
+                    icon = Icons.Filled.Info,
                     title = stringResource(R.string.about_title),
                     onClick = onOpenAbout,
                     trailing = {
