@@ -11,8 +11,8 @@
 
   /* Same values as api/version.json. Keep both in sync. */
   var DEFAULTS = {
-    versionName: '1.6',
-    versionCode: 7,
+    versionName: '1.7',
+    versionCode: 8,
     notes: {
       es: '• Mejoras en la pantalla de añadir batería: dispositivos ordenados por cercanía y búsqueda más cómoda.\n• Mejoras en la conexión con las baterías.\n• Añadidos Ajustes con comprobación de actualizaciones y Acerca de.\n• Correcciones generales de la interfaz.',
       en: '• Improved the add-battery screen: devices sorted by proximity and a smoother search.\n• Improved connection reliability with batteries.\n• Added Settings with update check and About.\n• General UI fixes.'
