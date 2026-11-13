@@ -22,6 +22,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.andyechc.batmonitor.ble.BleCentral
+import com.andyechc.batmonitor.ble.DemoBattery
 import com.andyechc.batmonitor.data.BatteryStore
 import com.andyechc.batmonitor.data.SavedBattery
 import com.andyechc.batmonitor.ui.detail.DetailScreen
@@ -80,6 +81,8 @@ private fun ApplySystemBarAppearance(darkTheme: Boolean) {
 fun BatMonitorNav() {
     val context = LocalContext.current
     val store = remember { BatteryStore(context.applicationContext) }
+    // Debug-only demo batteries (see DemoBattery); release builds never seed them.
+    remember { DemoBattery.seed(store, context.applicationContext); true }
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "home") {
         composable("home") {

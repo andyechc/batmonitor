@@ -1,6 +1,7 @@
 package com.andyechc.batmonitor.data
 
 import android.content.Context
+import com.andyechc.batmonitor.ble.BmsType
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
@@ -45,6 +46,25 @@ class BatteryStoreTest {
         assertEquals(UUID.fromString("A73B1487-8B90-4A74-9512-273B9F100002"), batteries[0].id)
         assertEquals("Legacy flag", batteries[1].name)
         assertEquals(12L, batteries[1].addedAt)
+        // Saves without a type predate ANT support and were all XiaoXiang.
+        assertEquals(BmsType.XIAOXIANG, batteries[0].type)
+        assertEquals(BmsType.XIAOXIANG, batteries[1].type)
+    }
+
+    @Test
+    fun bmsTypeRoundTripsAndIsPersisted() {
+        val store = BatteryStore(context)
+        val ant = UUID.fromString("A73B1487-8B90-4A74-9512-273B9F100020")
+        val jbd = UUID.fromString("A73B1487-8B90-4A74-9512-273B9F100021")
+
+        store.add(ant, "ANT pack", type = BmsType.ANT)
+        store.add(jbd, "Andy 72x45")
+
+        val reloaded = BatteryStore(context)
+        assertEquals(BmsType.ANT, reloaded.battery(ant)?.type)
+        assertEquals(BmsType.XIAOXIANG, reloaded.battery(jbd)?.type)
+        val raw = prefs.getString(BatteryStore.KEY_BATTERIES, "").orEmpty()
+        assertTrue(raw.contains("\"type\":\"ANT\""))
     }
 
     @Test

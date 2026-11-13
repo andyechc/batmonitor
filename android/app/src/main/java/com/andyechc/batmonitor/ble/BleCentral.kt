@@ -24,6 +24,10 @@ import com.andyechc.batmonitor.protocol.BmsCodec
 import com.andyechc.batmonitor.protocol.BmsCommand
 import com.andyechc.batmonitor.protocol.BmsFrame
 import com.andyechc.batmonitor.protocol.BmsFrameParser
+import com.andyechc.batmonitor.protocol.ant.AntCodec
+import com.andyechc.batmonitor.protocol.ant.AntFrame
+import com.andyechc.batmonitor.protocol.ant.AntFrameParser
+import com.andyechc.batmonitor.protocol.ant.AntRealtime
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 import kotlinx.coroutines.CompletableDeferred
@@ -49,9 +53,6 @@ object BleCentral {
     /** logcat tag for every BLE decision; `adb logcat -s BatMonitor` shows the whole story. */
     const val TAG = "BatMonitor"
 
-    private val serviceUuid: UUID = UUID.fromString("0000ff00-0000-1000-8000-00805f9b34fb")
-    private val notifyUuid: UUID = UUID.fromString("0000ff01-0000-1000-8000-00805f9b34fb")
-    private val writeUuid: UUID = UUID.fromString("0000ff02-0000-1000-8000-00805f9b34fb")
     private val cccdUuid: UUID = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb")
 
     private lateinit var appContext: Context
@@ -86,6 +87,8 @@ object BleCentral {
         BleError.WriteFailed -> appContext.getString(R.string.ble_writefailed)
         BleError.InvalidData -> appContext.getString(R.string.ble_invaliddata)
         BleError.ScanFailed -> appContext.getString(R.string.ble_scanfailed)
+        BleError.Unsupported -> appContext.getString(R.string.device_unsupported)
+        BleError.LegacyAnt -> appContext.getString(R.string.device_legacy_ant)
     }
 
     /** Wait until the adapter leaves unknown/resetting-like transient states. */
@@ -157,13 +160,15 @@ object BleCentral {
                             "tx=${record?.txPowerLevel}",
                     )
                 }
+                val serviceUuids = record?.serviceUuids?.map { it.uuid } ?: emptyList()
                 _discoveries.tryEmit(
                     ScannedDevice(
                         id = id,
                         name = name,
                         rssi = result.rssi,
                         address = address,
-                        serviceUuids = record?.serviceUuids?.map { it.uuid } ?: emptyList(),
+                        serviceUuids = serviceUuids,
+                        type = BmsType.detect(name, serviceUuids),
                     ),
                 )
             }
@@ -226,12 +231,15 @@ object BleCentral {
         return knownAddresses[id] ?: throw BleError.NoConnect
     }
 
-    suspend fun connect(id: UUID) {
+    suspend fun connect(id: UUID, type: BmsType = BmsType.XIAOXIANG) {
         waitUntilSettled()
         disconnect(id)
         val address = resolveAddress(id)
         val device = adapter().adapter?.getRemoteDevice(address) ?: throw BleError.NoConnect
-        Log.i(TAG, "connect start $address")
+        // Old-protocol ANT packs answer with `AA 55` frames we cannot decode. The vendor
+        // app asks the user to confirm; we cannot, so the battery is reported instead.
+        if (type == BmsType.ANT && isLegacyAntDevice(device)) throw BleError.LegacyAnt
+        Log.i(TAG, "connect start $address type=$type")
 
         var lastError: BleError = BleError.NoConnect
         // Android's known GATT_ERROR (133) is only cured by throwing the client away and
@@ -239,7 +247,7 @@ object BleCentral {
         for (attempt in 1..2) {
             // The first attempt follows iOS (20 s); the retry gets less so the screen settles.
             val budget = if (attempt == 1) 20_000L else 12_000L
-            val link = GattLink(id, device)
+            val link = GattLink(id, device, type)
             links[id] = link
             try {
                 withTimeout(budget) { link.open() }
@@ -272,14 +280,69 @@ object BleCentral {
         links.remove(id)?.close()
     }
 
-    suspend fun readBattery(id: UUID): BatteryReading {
-        val basicFrame = command(id, BmsCodec.readCommand(BmsCommand.BASIC_INFO), BmsCommand.BASIC_INFO)
-        if (basicFrame.status != 0) throw BleError.InvalidData
-        val basic = BmsCodec.parseBasicInfo(basicFrame.data) ?: throw BleError.InvalidData
-        val cellFrame = command(id, BmsCodec.readCommand(BmsCommand.CELL_VOLTAGES), BmsCommand.CELL_VOLTAGES)
-        if (cellFrame.status != 0) throw BleError.InvalidData
-        val cells = BmsCodec.parseCellVoltages(cellFrame.data)
-        return BatteryReading(basic = basic, cells = cells, receivedAt = System.currentTimeMillis())
+    suspend fun readBattery(id: UUID, type: BmsType = BmsType.XIAOXIANG): BatteryReading {
+        val link = links[id] ?: throw BleError.NotConnected
+        return when (type) {
+            BmsType.XIAOXIANG -> {
+                val basicFrame = command(id, BmsCodec.readCommand(BmsCommand.BASIC_INFO), BmsCommand.BASIC_INFO)
+                if (basicFrame.status != 0) throw BleError.InvalidData
+                val basic = BmsCodec.parseBasicInfo(basicFrame.data) ?: throw BleError.InvalidData
+                val cellFrame = command(id, BmsCodec.readCommand(BmsCommand.CELL_VOLTAGES), BmsCommand.CELL_VOLTAGES)
+                if (cellFrame.status != 0) throw BleError.InvalidData
+                val cells = BmsCodec.parseCellVoltages(cellFrame.data)
+                BatteryReading(basic = basic, cells = cells, receivedAt = System.currentTimeMillis())
+            }
+            BmsType.ANT -> {
+                // The advertised name is only guaranteed once connected, so check again.
+                if (link.isLegacyAnt) throw BleError.LegacyAnt
+                // One request returns the whole snapshot (cells, SOC, current, temperatures).
+                val frame = link.commandAnt(
+                    AntCodec.realtimeRequest(),
+                    AntCodec.REALTIME_RESPONSE,
+                    timeoutMs = 3_000,
+                )
+                val data = AntCodec.decodeRealtime(frame.bytes) ?: throw BleError.InvalidData
+                antReading(data)
+            }
+        }
+    }
+
+    /** Reads the device name safely; a missing permission just means "unknown". */
+    private fun isLegacyAntDevice(device: BluetoothDevice): Boolean = try {
+        BmsType.isLegacyAnt(device.name)
+    } catch (e: SecurityException) {
+        false
+    }
+
+    /**
+     * Maps an ANT snapshot onto the app's shared reading model. Fields the ANT
+     * protocol does not expose here (cycles, protections, FET bits, balancing
+     * cells) are left empty/zero; the UI hides or disables those sections for ANT.
+     */
+    private fun antReading(data: AntRealtime): BatteryReading {        val basic = BmsBasicInfo(
+            totalVoltage = data.totalVoltage,
+            // ANT reports current with the opposite sign (positive while discharging);
+            // the rest of the app treats positive as charging.
+            current = -data.current,
+            remainingCapacity = data.remainingCapacity,
+            nominalCapacity = data.nominalCapacity,
+            cycles = 0,
+            productionDate = "",
+            soc = data.soc,
+            firmwareVersion = "",
+            chargeOn = data.chargeMosOn,
+            dischargeOn = data.dischargeMosOn,
+            cellCount = data.cells.size,
+            balancing = emptyList(),
+            protections = emptyList(),
+            temperatures = data.temperatures,
+        )
+        return BatteryReading(
+            basic = basic,
+            cells = data.cells,
+            receivedAt = System.currentTimeMillis(),
+            antRealtime = data,
+        )
     }
 
     suspend fun command(id: UUID, payload: List<Int>, cmd: Int, timeoutMs: Long = 3_000): BmsFrame {
@@ -287,13 +350,33 @@ object BleCentral {
         return link.command(payload, cmd, timeoutMs)
     }
 
-    private class GattLink(private val id: UUID, private val device: BluetoothDevice) {
+    /** Debug demo entry point for the synthetic ANT battery (see [DemoBattery]). */
+    internal fun antReadingForDemo(data: AntRealtime): BatteryReading = antReading(data)
+
+    /** ANT control write: one frame, ack frame back (cmd = request + 0x10). */
+    suspend fun antCommand(id: UUID, payload: List<Int>, responseCmd: Int, timeoutMs: Long = 3_000): AntFrame {
+        val link = links[id] ?: throw BleError.NotConnected
+        return link.commandAnt(payload, responseCmd, timeoutMs)
+    }
+
+    private class GattLink(
+        private val id: UUID,
+        private val device: BluetoothDevice,
+        private val type: BmsType,
+    ) {
+        /** ANT only: the device advertises an old-protocol name (see [BmsType.isLegacyAnt]). */
+        val isLegacyAnt: Boolean get() = isLegacyAntDevice(device)
+
         @Volatile private var gatt: BluetoothGatt? = null
         @Volatile private var writeChar: BluetoothGattCharacteristic? = null
         @Volatile private var notifyChar: BluetoothGattCharacteristic? = null
-        private val parser = BmsFrameParser()
+        private val parser: BmsFrameParser? =
+            if (type == BmsType.XIAOXIANG) BmsFrameParser() else null
+        private val antParser: AntFrameParser? =
+            if (type == BmsType.ANT) AntFrameParser() else null
         private val writeMutex = Mutex()
         private val waiters = ConcurrentHashMap<Int, CompletableDeferred<BmsFrame>>()
+        private val antWaiters = ConcurrentHashMap<Int, CompletableDeferred<AntFrame>>()
         @Volatile private var nameWaiter: CompletableDeferred<BmsFrame>? = null
 
         // One barrier per handshake step, each resolved by the matching GATT callback.
@@ -327,13 +410,16 @@ object BleCentral {
                     servicesReady.complete(false)
                     return
                 }
-                val service = gatt.getService(serviceUuid)
-                notifyChar = service?.getCharacteristic(notifyUuid)
-                writeChar = service?.getCharacteristic(writeUuid)
+                val service = gatt.getService(type.serviceUuid)
+                notifyChar = service?.getCharacteristic(type.notifyUuid)
+                writeChar = service?.getCharacteristic(type.writeUuid)
+                // ANT has a single FFE1 characteristic for both directions; XiaoXiang
+                // needs FF01 (notify) and FF02 (write) to be present.
                 val found = notifyChar != null && writeChar != null
                 Log.i(
                     TAG,
-                    "services discovered: FF01=${notifyChar != null} FF02=${writeChar != null} " +
+                    "services discovered ($type): notify=${notifyChar != null} " +
+                        "write=${writeChar != null} " +
                         "all=${gatt.services?.map { it.uuid.toString().substring(4, 8) }}",
                 )
                 servicesReady.complete(found)
@@ -428,7 +514,7 @@ object BleCentral {
                 if (started) {
                     when (withTimeoutOrNull(6_000) { servicesReady.await() }) {
                         true -> return true
-                        // The device answered but has no FF00/FF01/FF02: wrong device.
+                        // The device answered but has no expected service/characteristics: wrong device.
                         false -> return false
                         // No callback at all: worth one more request.
                         null -> Log.w(TAG, "no onServicesDiscovered callback")
@@ -450,15 +536,17 @@ object BleCentral {
         }
 
         private suspend fun negotiateMtu(g: BluetoothGatt) {
-            // Basic info is a 43-byte frame, so 23-byte MTU means chunked notifications. Best
-            // effort: if the exchange is refused we keep the default and reassemble chunks.
+            // ANT app forces MTU 512 to reduce notification fragmentation on the 152-byte
+            // status frame; XiaoXiang fits in 247 (default-ish) and a larger MTU is harmless
+            // but some stacks refuse it.
+            val wanted = if (type == BmsType.ANT) 512 else 247
             val requested = try {
-                g.requestMtu(247)
+                g.requestMtu(wanted)
             } catch (e: Exception) {
                 false
             }
             if (!requested) {
-                Log.i(TAG, "requestMtu(247) refused")
+                Log.i(TAG, "requestMtu($wanted) refused")
                 return
             }
             Log.i(TAG, "mtu settled: ${withTimeoutOrNull(2_000) { mtuSettled.await() }}")
@@ -475,7 +563,7 @@ object BleCentral {
             if (!registered) return false
             val cccd = notify.getDescriptor(cccdUuid)
             if (cccd == null) {
-                Log.w(TAG, "FF01 has no CCCD; notifications stay unsubscribed")
+                Log.w(TAG, "${type.notifyUuid} has no CCCD; notifications stay unsubscribed")
                 return true
             }
             val written = try {
@@ -507,6 +595,13 @@ object BleCentral {
         private fun route(raw: List<Byte>?) {
             if (raw.isNullOrEmpty()) return
             val bytes = raw.map { it.toInt() and 0xFF }
+            val ant = antParser
+            if (ant != null) {
+                for (frame in ant.push(bytes)) {
+                    antWaiters[frame.cmd]?.let { if (!it.isCompleted) it.complete(frame) }
+                }
+                return
+            }
             if (bytes.size >= 4 && bytes[0] == 0xFF && bytes[1] == 0xAA) {
                 val ack = BmsCodec.parseNameResponse(bytes)
                 if (ack != null) {
@@ -514,7 +609,8 @@ object BleCentral {
                 }
                 return
             }
-            for (frame in parser.push(bytes)) {
+            val frames = parser?.push(bytes) ?: return
+            for (frame in frames) {
                 waiters[frame.cmd]?.let { if (!it.isCompleted) it.complete(frame) }
             }
         }
@@ -522,13 +618,13 @@ object BleCentral {
         private fun failAll(error: BleError) {
             for ((_, w) in waiters) if (!w.isCompleted) w.completeExceptionally(error)
             waiters.clear()
+            for ((_, w) in antWaiters) if (!w.isCompleted) w.completeExceptionally(error)
+            antWaiters.clear()
             nameWaiter?.let { if (!it.isCompleted) it.completeExceptionally(error) }
             nameWaiter = null
         }
 
         suspend fun command(payload: List<Int>, cmd: Int, timeoutMs: Long): BmsFrame {
-            val char = writeChar ?: throw BleError.NotConnected
-            val g = gatt ?: throw BleError.NotConnected
             val waiter = CompletableDeferred<BmsFrame>()
             waiters[cmd]?.let { if (!it.isCompleted) it.completeExceptionally(BleError.NoResponse) }
             val isName = payload.size >= 2 && payload[0] == 0xFF && payload[1] == 0xAA
@@ -539,30 +635,7 @@ object BleCentral {
                 } else {
                     waiters[cmd] = waiter
                 }
-                writeMutex.withLock {
-                    val bytes = payload.map { it.toByte() }.toByteArray()
-                    val ok = if (Build.VERSION.SDK_INT >= 33) {
-                        val noResponse = (char.properties and BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE) != 0
-                        val type = if (noResponse) {
-                            BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE
-                        } else {
-                            BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
-                        }
-                        g.writeCharacteristic(char, bytes, type) == 0
-                    } else {
-                        @Suppress("DEPRECATION")
-                        char.writeType = if ((char.properties and BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE) != 0) {
-                            BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE
-                        } else {
-                            BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
-                        }
-                        @Suppress("DEPRECATION")
-                        char.value = bytes
-                        @Suppress("DEPRECATION")
-                        g.writeCharacteristic(char)
-                    }
-                    if (!ok) throw BleError.WriteFailed
-                }
+                write(payload)
                 try {
                     withTimeout(timeoutMs) { waiter.await() }
                 } catch (e: TimeoutCancellationException) {
@@ -573,6 +646,65 @@ object BleCentral {
             } finally {
                 waiters.remove(cmd, waiter)
                 if (nameWaiter === waiter) nameWaiter = null
+            }
+        }
+
+        /** ANT: one write, one complete frame back on the same characteristic. */
+        suspend fun commandAnt(payload: List<Int>, responseCmd: Int, timeoutMs: Long): AntFrame {
+            // A lost notification leaves half a frame behind; start every poll clean so a
+            // truncated burst cannot stall the reassembler.
+            antParser?.reset()
+            val waiter = CompletableDeferred<AntFrame>()
+            antWaiters[responseCmd]?.let {
+                if (!it.isCompleted) it.completeExceptionally(BleError.NoResponse)
+            }
+            return try {
+                antWaiters[responseCmd] = waiter
+                write(payload)
+                try {
+                    withTimeout(timeoutMs) { waiter.await() }
+                } catch (e: TimeoutCancellationException) {
+                    throw BleError.NoResponse
+                }
+            } finally {
+                antWaiters.remove(responseCmd, waiter)
+            }
+        }
+
+        private suspend fun write(payload: List<Int>) {
+            val char = writeChar ?: throw BleError.NotConnected
+            val g = gatt ?: throw BleError.NotConnected
+            writeMutex.withLock {
+                val bytes = payload.map { it.toByte() }.toByteArray()
+                val ok = if (Build.VERSION.SDK_INT >= 33) {
+                    g.writeCharacteristic(char, bytes, writeType(char)) == 0
+                } else {
+                    @Suppress("DEPRECATION")
+                    char.writeType = writeType(char)
+                    @Suppress("DEPRECATION")
+                    char.value = bytes
+                    @Suppress("DEPRECATION")
+                    g.writeCharacteristic(char)
+                }
+                if (!ok) throw BleError.WriteFailed
+            }
+        }
+
+        /**
+         * ANT expects a write **with response** on FFE1; the XiaoXiang stack keeps
+         * its original no-response preference, which is what its hardware accepted.
+         */
+        private fun writeType(char: BluetoothGattCharacteristic): Int {
+            val noResponse =
+                (char.properties and BluetoothGattCharacteristic.PROPERTY_WRITE_NO_RESPONSE) != 0
+            val withResponse =
+                (char.properties and BluetoothGattCharacteristic.PROPERTY_WRITE) != 0
+            return if (type == BmsType.ANT && withResponse) {
+                BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
+            } else if (noResponse) {
+                BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE
+            } else {
+                BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
             }
         }
 

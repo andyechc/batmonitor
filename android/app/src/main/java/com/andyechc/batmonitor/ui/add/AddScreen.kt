@@ -63,6 +63,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.andyechc.batmonitor.R
 import com.andyechc.batmonitor.ble.BatteryScanner
+import com.andyechc.batmonitor.ble.BmsType
 import com.andyechc.batmonitor.ble.ScannedDevice
 import com.andyechc.batmonitor.ble.isLikelyBattery
 import com.andyechc.batmonitor.data.BatteryStore
@@ -281,7 +282,12 @@ fun AddScreen(
                 DeviceRow(device = device, onSelect = {
                     scope.launch {
                         scanner.stop()
-                        store.add(device.id, device.name, device.address)
+                        store.add(
+                            device.id,
+                            device.name,
+                            device.address,
+                            device.type ?: BmsType.XIAOXIANG,
+                        )
                         onDone()
                     }
                 })

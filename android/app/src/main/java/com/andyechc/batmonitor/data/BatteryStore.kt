@@ -3,6 +3,7 @@ package com.andyechc.batmonitor.data
 import android.content.Context
 import android.content.SharedPreferences
 import com.andyechc.batmonitor.ble.BatteryReading
+import com.andyechc.batmonitor.ble.BmsType
 import org.json.JSONArray
 import org.json.JSONObject
 import java.util.UUID
@@ -16,6 +17,8 @@ data class SavedBattery(
      * without it a fresh process cannot connect until a scan finds the battery again.
      */
     val address: String? = null,
+    /** Protocol family. Older saves predate the field, so they load as XiaoXiang. */
+    val type: BmsType = BmsType.XIAOXIANG,
 )
 
 data class BatterySnapshot(
@@ -64,13 +67,19 @@ class BatteryStore(context: Context) {
         saveSnapshots()
     }
 
-    fun add(id: UUID, name: String, address: String? = null) {
+    fun add(
+        id: UUID,
+        name: String,
+        address: String? = null,
+        type: BmsType = BmsType.XIAOXIANG,
+    ) {
         if (battery(id) != null) return
         batteries = batteries + SavedBattery(
             id = id,
             name = name,
             addedAt = System.currentTimeMillis(),
             address = address,
+            type = type,
         )
         save()
     }
@@ -95,6 +104,7 @@ class BatteryStore(context: Context) {
             o.put("name", b.name)
             o.put("addedAt", b.addedAt)
             b.address?.let { o.put("address", it) }
+            o.put("type", b.type.name)
             array.put(o)
         }
         prefs.edit().putString(KEY_BATTERIES, array.toString()).apply()
@@ -128,6 +138,7 @@ class BatteryStore(context: Context) {
                     name = o.getString("name"),
                     addedAt = o.optLong("addedAt", 0L),
                     address = o.optString("address", "").takeIf { it.isNotBlank() },
+                    type = BmsType.fromStorage(o.optString("type", "")),
                 )
             }
         } catch (_: Exception) {

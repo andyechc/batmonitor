@@ -21,6 +21,168 @@
     <string name="add_scanning">Buscando baterías cerca…</string>
     <string name="add_searchprompt">Nombre, ID Bluetooth o dBm</string>
     <string name="add_title">Añadir batería</string>
+    <string-array name="ant_balance_states">
+        <item>Apagado</item>
+        <item>Balanceo extremo</item>
+        <item>Diferencia de voltaje en carga</item>
+        <item>Temperatura de balanceo excedida</item>
+        <item>Balanceo automático</item>
+        <item>Balanceo manual</item>
+    </string-array>
+    <string-array name="ant_battery_types">
+        <item>Litio ternario</item>
+        <item>LiFePO4</item>
+        <item>Litio titanato (LTO)</item>
+        <item>Personalizado</item>
+        <item>Sin configurar</item>
+        <item>Sodio</item>
+    </string-array>
+    <string-array name="ant_ch_mos_states">
+        <item>Cerrado</item>
+        <item>Abierto</item>
+        <item>Celda sobrevoltaje</item>
+        <item>Protección de corriente</item>
+        <item>Batería llena</item>
+        <item>Voltaje del paquete excedido</item>
+        <item>Temperatura de batería excedida</item>
+        <item>Temperatura del MOS excedida</item>
+        <item>Corriente anómala</item>
+        <item>Cable de balanceo suelto</item>
+        <item>Placa sobrecalentada</item>
+        <item>Fallo al abrir</item>
+        <item>Tubo de descarga anómalo</item>
+        <item>En espera</item>
+        <item>Cierre manual</item>
+        <item>Sobrevoltaje nivel 2</item>
+        <item>Protección por temperatura baja</item>
+        <item>Diferencia de voltaje excedida</item>
+        <item>Error de autocomprobación</item>
+    </string-array>
+    <string-array name="ant_dis_mos_states">
+        <item>Cerrado</item>
+        <item>Abierto</item>
+        <item>Celda bajovoltaje</item>
+        <item>Protección de corriente</item>
+        <item>Sobrecorriente nivel 2</item>
+        <item>Paquete bajovoltaje</item>
+        <item>Temperatura de batería excedida</item>
+        <item>Temperatura del MOS excedida</item>
+        <item>Corriente anómala</item>
+        <item>Cable de balanceo suelto</item>
+        <item>Placa sobrecalentada</item>
+        <item>Cargador conectado</item>
+        <item>Protección de cortocircuito</item>
+        <item>Tubo de descarga anómalo</item>
+        <item>Fallo al abrir</item>
+        <item>Cierre manual</item>
+        <item>Celda bajovoltaje nivel 2</item>
+        <item>Protección por temperatura baja</item>
+        <item>Diferencia de voltaje excedida</item>
+        <item>Error de autocomprobación</item>
+    </string-array>
+    <string-array name="ant_protections">
+        <item>Protección: tipo de celda</item>
+        <item>Protección: celda sobrevoltaje</item>
+        <item>Protección: celda sobrevoltaje nivel 2</item>
+        <item>Protección: paquete sobrevoltaje</item>
+        <item>Protección: celda bajovoltaje</item>
+        <item>Protección: celda bajovoltaje nivel 2</item>
+        <item>Protección: paquete bajovoltaje</item>
+        <item>Protección: diferencia entre celdas</item>
+        <item>Protección: temperatura alta en carga</item>
+        <item>Protección: temperatura alta en descarga</item>
+        <item>Protección: MOS temperatura alta</item>
+        <item>Protección: temperatura baja en carga</item>
+        <item>Protección: temperatura baja en descarga</item>
+        <item>Protección: sobrecorriente de carga</item>
+        <item>Protección: sobrecorriente de descarga</item>
+        <item>Protección: sobrecorriente de descarga nivel 2</item>
+        <item>Protección: cortocircuito</item>
+        <item>MOS descarga 1 apagado manual</item>
+        <item>MOS descarga 2 apagado manual</item>
+        <item>MOS descarga 3 apagado manual</item>
+        <item>MOS descarga 4 apagado manual</item>
+        <item>MOS carga 1 apagado manual</item>
+        <item>MOS carga 2 apagado manual</item>
+        <item>MOS carga 3 apagado manual</item>
+        <item>MOS carga 4 apagado manual</item>
+        <item>Línea abierta</item>
+        <item>Error de corriente</item>
+        <item>Error MOS de descarga</item>
+        <item>Error MOS de carga</item>
+        <item>Error de comunicación interna</item>
+        <item>Fallo de precarga</item>
+        <item>Arrancando</item>
+        <item>Comprobación 1</item>
+        <item>Comprobación 2</item>
+        <item>Cargador conectado</item>
+        <item>DTU perdido</item>
+        <item>Prevención de ignición</item>
+        <item>Comprobación 3</item>
+        <item>Actualización de firmware requerida</item>
+        <item>Fallo de precarga del relé</item>
+        <item>Relé pegado</item>
+        <item>Fusible de descarga anómalo</item>
+        <item>Fusible de carga anómalo</item>
+        <item>Módulo perdido</item>
+        <item>Dispositivo caducado</item>
+    </string-array>
+    <string-array name="ant_system_states">
+        <item>Ninguno</item>
+        <item>En reposo</item>
+        <item>Cargando</item>
+        <item>En espera</item>
+        <item>Descargando</item>
+        <item>Fallo</item>
+    </string-array>
+    <string-array name="ant_warnings">
+        <item>Aviso: celda sobrevoltaje</item>
+        <item>Aviso: paquete sobrevoltaje</item>
+        <item>Aviso: celda bajovoltaje</item>
+        <item>Aviso: paquete bajovoltaje</item>
+        <item>Aviso: diferencia entre celdas</item>
+        <item>Aviso: temperatura alta en carga</item>
+        <item>Aviso: temperatura alta en descarga</item>
+        <item>Aviso: temperatura baja en carga</item>
+        <item>Aviso: temperatura baja en descarga</item>
+        <item>Aviso: MOS temperatura alta</item>
+        <item>Aviso: sobrecorriente de carga</item>
+        <item>Aviso: sobrecorriente de descarga</item>
+        <item>Aviso: SOC bajo nivel 1</item>
+        <item>Aviso: SOC bajo nivel 2</item>
+        <item>Aviso: voltaje de celda incorrecto</item>
+        <item>Aviso: número de celdas incorrecto</item>
+        <item>Aviso: fallo de precarga</item>
+        <item>Batería llena</item>
+        <item>Cargando</item>
+        <item>Descargando</item>
+        <item>Cargador CAN conectado</item>
+        <item>Cargador RS485 conectado</item>
+        <item>Cargador conectado</item>
+        <item>MOS de carga activado</item>
+        <item>MOS de descarga activado</item>
+        <item>Balanceo activo</item>
+        <item>En reposo</item>
+        <item>Límite de balanceo</item>
+        <item>Balanceo por diferencia</item>
+        <item>Balanceo automático</item>
+        <item>Balanceo con temperatura alta</item>
+        <item>Protección de voltaje celda/paquete</item>
+        <item>Protección de temperatura</item>
+        <item>Error del sistema</item>
+        <item>DTU perdido</item>
+        <item>Prueba de balanceo</item>
+        <item>Calefacción eléctrica</item>
+        <item>Salida forzada</item>
+        <item>Bluetooth apagado</item>
+        <item>Precarga del relé</item>
+        <item>Precarga del MOS</item>
+        <item>Relé de carga activado</item>
+        <item>Relé de descarga activado</item>
+        <item>Error de cristal (XTAL)</item>
+        <item>Carga forzada</item>
+    </string-array>
+    <string name="ant_nowarnings">Sin avisos</string>
     <string name="app_home">Inicio</string>
     <string name="ble_bluetoothoff">Activa Bluetooth para conectar con la batería</string>
     <string name="ble_invaliddata">Respuesta de datos inválida</string>
@@ -65,7 +227,19 @@
     <string name="device_noprotections">Sin protecciones activas</string>
     <string name="device_norecentreading">Conecta para obtener la primera lectura</string>
     <string name="device_capacity_remaining">%1$s de %2$s Ah</string>
+    <string name="device_balancestate">Balanceo</string>
+    <string name="device_balancetemperature">Temperatura de balanceo</string>
+    <string name="device_batterytype">Tipo de batería</string>
+    <string name="device_chargeremaining">Tiempo restante de carga</string>
+    <string name="device_chmosstate">MOS de carga</string>
+    <string name="device_dischargeremaining">Tiempo restante de descarga</string>
+    <string name="device_dismosstate">MOS de descarga</string>
+    <string name="device_legacy_ant">Esta batería usa el protocolo ANT antiguo, aún no soportado.</string>
+    <string name="device_mostemperature">Temperatura MOS</string>
     <string name="device_nominalcapacity">Capacidad nominal</string>
+    <string name="device_soh">SOH</string>
+    <string name="device_systemstate">Estado del sistema</string>
+    <string name="device_warnings">Avisos</string>
     <string name="device_off">Desactivada</string>
     <string name="device_on">Activada</string>
     <string name="device_protections">Protecciones</string>
@@ -97,6 +271,7 @@
     <string name="device_taptomonitor">Toca para ver en vivo</string>
     <string name="device_temperatures">Temperaturas</string>
     <string name="device_timetofull">Completa en %s</string>
+    <string name="device_unsupported">Esta función no está disponible para este BMS</string>
     <string name="help_balance_body">El BMS iguala el voltaje de las celdas. Tarda un rato y es seguro dejarlo trabajar.</string>
     <string name="help_balance_title">Balance automático</string>
     <string name="help_cells_body">Voltaje de cada celda. Celdas parejas significan un paquete sano.</string>

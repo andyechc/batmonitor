@@ -26,8 +26,14 @@ internal fun mergeScannedDevices(
             else -> device.name
         }
         val address = device.address.ifBlank { existing.address }
+        // The type often arrives with the service UUIDs in a later packet.
+        val type = device.type ?: existing.type
         current.map {
-            if (it.id == device.id) it.copy(name = name, rssi = device.rssi, address = address) else it
+            if (it.id == device.id) {
+                it.copy(name = name, rssi = device.rssi, address = address, type = type)
+            } else {
+                it
+            }
         }
     }
     // Descending numeric order: strongest signal (closest) first.
@@ -37,11 +43,10 @@ internal fun mergeScannedDevices(
 /** Heuristic: devices that look like a BMS (iOS only ever sees FF00-advertisers; on Android
  *  XiaoXiang/JBD units often advertise without that UUID, so we also match by name). */
 fun isLikelyBattery(device: ScannedDevice): Boolean {
-    if (device.serviceUuids.any { it.toString().equals("0000ff00-0000-1000-8000-00805f9b34fb", ignoreCase = true) }) {
-        return true
-    }
+    // Service UUIDs and names recognized by the protocol layer (FF00 or FFE0).
+    if (BmsType.detect(device.name, device.serviceUuids) != null) return true
     val name = device.name.lowercase()
-    val keywords = listOf("jbd", "xiaoxiang", "xiao xiang", "jikong", "jk bms", "spp", "bms", "battery", "andy")
+    val keywords = listOf("spp", "bms", "battery", "andy")
     return keywords.any { name.contains(it) }
 }
 

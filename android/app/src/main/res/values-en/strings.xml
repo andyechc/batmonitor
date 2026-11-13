@@ -21,6 +21,168 @@
     <string name="add_scanning">Searching for nearby batteries…</string>
     <string name="add_searchprompt">Name, Bluetooth ID or dBm</string>
     <string name="add_title">Add battery</string>
+    <string-array name="ant_balance_states">
+        <item>Off</item>
+        <item>Extreme balancing</item>
+        <item>Voltage difference while charging</item>
+        <item>Balancing temperature exceeded</item>
+        <item>Automatic balancing</item>
+        <item>Manual balancing</item>
+    </string-array>
+    <string-array name="ant_battery_types">
+        <item>Ternary lithium</item>
+        <item>LiFePO4</item>
+        <item>Lithium titanate (LTO)</item>
+        <item>Custom</item>
+        <item>Not configured</item>
+        <item>Sodium</item>
+    </string-array>
+    <string-array name="ant_ch_mos_states">
+        <item>Closed</item>
+        <item>Open</item>
+        <item>Cell overvoltage</item>
+        <item>Current protection</item>
+        <item>Battery full</item>
+        <item>Total voltage exceeded</item>
+        <item>Battery temperature exceeded</item>
+        <item>Power-stage temperature exceeded</item>
+        <item>Abnormal current</item>
+        <item>Balancing wire loose</item>
+        <item>Board overheated</item>
+        <item>Failed to open</item>
+        <item>Abnormal discharge tube</item>
+        <item>Waiting</item>
+        <item>Manual close</item>
+        <item>Level-2 overvoltage</item>
+        <item>Low-temperature protection</item>
+        <item>Voltage difference exceeded</item>
+        <item>Self-test error</item>
+    </string-array>
+    <string-array name="ant_dis_mos_states">
+        <item>Closed</item>
+        <item>Open</item>
+        <item>Cell undervoltage</item>
+        <item>Current protection</item>
+        <item>Overcurrent (level 2)</item>
+        <item>Pack undervoltage</item>
+        <item>Battery temperature exceeded</item>
+        <item>Power-stage temperature exceeded</item>
+        <item>Abnormal current</item>
+        <item>Balancing wire loose</item>
+        <item>Board overheated</item>
+        <item>Charger connected</item>
+        <item>Short-circuit protection</item>
+        <item>Abnormal discharge tube</item>
+        <item>Failed to open</item>
+        <item>Manual close</item>
+        <item>Undervoltage (level 2)</item>
+        <item>Low-temperature protection</item>
+        <item>Voltage difference exceeded</item>
+        <item>Self-test error</item>
+    </string-array>
+    <string-array name="ant_protections">
+        <item>Cell type protection</item>
+        <item>Cell overvoltage</item>
+        <item>Cell overvoltage (level 2)</item>
+        <item>Pack overvoltage</item>
+        <item>Cell undervoltage</item>
+        <item>Cell undervoltage (level 2)</item>
+        <item>Pack undervoltage</item>
+        <item>Cell difference</item>
+        <item>High temperature while charging</item>
+        <item>High temperature while discharging</item>
+        <item>MOS high temperature</item>
+        <item>Low temperature while charging</item>
+        <item>Low temperature while discharging</item>
+        <item>Charge overcurrent</item>
+        <item>Discharge overcurrent</item>
+        <item>Discharge overcurrent (level 2)</item>
+        <item>Short circuit</item>
+        <item>Manual discharge MOS 1 off</item>
+        <item>Manual discharge MOS 2 off</item>
+        <item>Manual discharge MOS 3 off</item>
+        <item>Manual discharge MOS 4 off</item>
+        <item>Manual charge MOS 1 off</item>
+        <item>Manual charge MOS 2 off</item>
+        <item>Manual charge MOS 3 off</item>
+        <item>Manual charge MOS 4 off</item>
+        <item>Open line</item>
+        <item>Current error</item>
+        <item>Discharge MOS error</item>
+        <item>Charge MOS error</item>
+        <item>Internal communication error</item>
+        <item>Precharge failure</item>
+        <item>Starting</item>
+        <item>Check 1</item>
+        <item>Check 2</item>
+        <item>Charger connected</item>
+        <item>DTU lost</item>
+        <item>Ignition prevention</item>
+        <item>Check 3</item>
+        <item>Firmware upgrade required</item>
+        <item>Relay precharge failure</item>
+        <item>Relay stuck</item>
+        <item>Abnormal discharge fuse</item>
+        <item>Abnormal charge fuse</item>
+        <item>Module loss</item>
+        <item>Device expired</item>
+    </string-array>
+    <string-array name="ant_system_states">
+        <item>None</item>
+        <item>Idle</item>
+        <item>Charging</item>
+        <item>Standby</item>
+        <item>Discharging</item>
+        <item>Fault</item>
+    </string-array>
+    <string-array name="ant_warnings">
+        <item>Cell overvoltage warning</item>
+        <item>Pack overvoltage warning</item>
+        <item>Cell undervoltage warning</item>
+        <item>Pack undervoltage warning</item>
+        <item>Cell difference warning</item>
+        <item>High temperature while charging</item>
+        <item>High temperature while discharging</item>
+        <item>Low temperature while charging</item>
+        <item>Low temperature while discharging</item>
+        <item>MOS high temperature</item>
+        <item>Charge overcurrent warning</item>
+        <item>Discharge overcurrent warning</item>
+        <item>SOC low, level 1</item>
+        <item>SOC low, level 2</item>
+        <item>Wrong cell voltage</item>
+        <item>Wrong cell count</item>
+        <item>Precharge failure</item>
+        <item>Battery full</item>
+        <item>Charging</item>
+        <item>Discharging</item>
+        <item>CAN charger input</item>
+        <item>RS485 charger input</item>
+        <item>Charger input</item>
+        <item>Charge MOS on</item>
+        <item>Discharge MOS on</item>
+        <item>Balancing on</item>
+        <item>Sleeping</item>
+        <item>Balancing limit</item>
+        <item>Balancing difference</item>
+        <item>Automatic balancing</item>
+        <item>Balancing high temperature</item>
+        <item>Cell/pack voltage protection</item>
+        <item>Temperature protection</item>
+        <item>System error</item>
+        <item>DTU lost</item>
+        <item>Balancing test</item>
+        <item>Electric heating</item>
+        <item>Forced output</item>
+        <item>Bluetooth off</item>
+        <item>Relay precharging</item>
+        <item>MOS precharging</item>
+        <item>Charge relay on</item>
+        <item>Discharge relay on</item>
+        <item>Crystal (XTAL) error</item>
+        <item>Forced charging</item>
+    </string-array>
+    <string name="ant_nowarnings">No warnings</string>
     <string name="app_home">Home</string>
     <string name="ble_bluetoothoff">Turn on Bluetooth to connect to the battery</string>
     <string name="ble_invaliddata">Invalid data response</string>
@@ -65,7 +227,19 @@
     <string name="device_noprotections">No active protections</string>
     <string name="device_norecentreading">Connect to get the first reading</string>
     <string name="device_capacity_remaining">%1$s of %2$s Ah</string>
+    <string name="device_balancestate">Balancing</string>
+    <string name="device_balancetemperature">Balancing temperature</string>
+    <string name="device_batterytype">Battery type</string>
+    <string name="device_chargeremaining">Charge time remaining</string>
+    <string name="device_chmosstate">Charge MOS</string>
+    <string name="device_dischargeremaining">Discharge time remaining</string>
+    <string name="device_dismosstate">Discharge MOS</string>
+    <string name="device_legacy_ant">This battery uses the legacy ANT protocol, not supported yet.</string>
+    <string name="device_mostemperature">MOS temperature</string>
     <string name="device_nominalcapacity">Nominal capacity</string>
+    <string name="device_soh">SOH</string>
+    <string name="device_systemstate">System state</string>
+    <string name="device_warnings">Warnings</string>
     <string name="device_off">Off</string>
     <string name="device_on">On</string>
     <string name="device_protections">Protections</string>
@@ -97,6 +271,7 @@
     <string name="device_taptomonitor">Tap to monitor live</string>
     <string name="device_temperatures">Temperatures</string>
     <string name="device_timetofull">Full in %s</string>
+    <string name="device_unsupported">This feature is not available for this BMS</string>
     <string name="help_balance_body">The BMS evens out cell voltages. It takes a while and is safe to leave running.</string>
     <string name="help_balance_title">Auto balance</string>
     <string name="help_cells_body">Voltage of each cell. Even cells mean a healthy pack.</string>

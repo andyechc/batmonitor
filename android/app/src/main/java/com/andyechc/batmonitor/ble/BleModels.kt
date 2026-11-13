@@ -1,6 +1,7 @@
 package com.andyechc.batmonitor.ble
 
 import com.andyechc.batmonitor.protocol.BmsBasicInfo
+import com.andyechc.batmonitor.protocol.ant.AntRealtime
 import java.util.UUID
 
 /**
@@ -14,9 +15,21 @@ data class ScannedDevice(
     val rssi: Int,
     val address: String = "",
     val serviceUuids: List<UUID> = emptyList(),
+    /** Protocol family detected from the advertisement; null while unknown. */
+    val type: BmsType? = null,
 )
 
-data class BatteryReading(val basic: BmsBasicInfo, val cells: List<Double>, val receivedAt: Long)
+data class BatteryReading(
+    val basic: BmsBasicInfo,
+    val cells: List<Double>,
+    val receivedAt: Long,
+    /**
+     * Full ANT real-time snapshot (`cmd 0x11`) when the battery is an ANT BMS;
+     * null for XiaoXiang. The fields the shared [basic] model does not carry
+     * (protection/warning masks, enums, remaining times) live here.
+     */
+    val antRealtime: AntRealtime? = null,
+)
 
 sealed class BleError : Exception() {
     data object BluetoothOff : BleError()
@@ -27,4 +40,10 @@ sealed class BleError : Exception() {
     data object WriteFailed : BleError()
     data object InvalidData : BleError()
     data object ScanFailed : BleError()
+
+    /** The feature exists for XiaoXiang/JBD but not for this BMS family (ANT). */
+    data object Unsupported : BleError()
+
+    /** An ANT unit still on the old protocol (`AA 55` frames), which we cannot decode. */
+    data object LegacyAnt : BleError()
 }

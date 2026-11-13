@@ -88,6 +88,7 @@ import com.andyechc.batmonitor.ble.BatteryMonitor
 import com.andyechc.batmonitor.ble.BleCentral
 import com.andyechc.batmonitor.ble.BatteryReading
 import com.andyechc.batmonitor.ble.BleError
+import com.andyechc.batmonitor.ble.BmsType
 import com.andyechc.batmonitor.ble.MonitorStatus
 import com.andyechc.batmonitor.data.BatteryStore
 import com.andyechc.batmonitor.ui.components.BatteryDashboardSkeleton
@@ -120,8 +121,11 @@ fun DetailScreen(batteryId: UUID, store: BatteryStore, onBack: () -> Unit) {
     store.changes.collectAsState()
     val battery = store.battery(batteryId)
     val currentName = battery?.name ?: ""
+    val batteryType = battery?.type ?: BmsType.XIAOXIANG
 
-    val monitor = remember(batteryId) { BatteryMonitor(context.applicationContext, batteryId) }
+    val monitor = remember(batteryId) {
+        BatteryMonitor(context.applicationContext, batteryId, batteryType)
+    }
     val monitorStatus by monitor.status.collectAsState()
     val monitorReading by monitor.reading.collectAsState()
     val monitorMessage by monitor.message.collectAsState()
@@ -136,7 +140,12 @@ fun DetailScreen(batteryId: UUID, store: BatteryStore, onBack: () -> Unit) {
     var menuOpen by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
 
-    val isLive = monitor.isLive
+    // Derived from the collected status (not monitor.isLive): a plain read never
+    // invalidates this scope, so isLive would freeze once a reading arrives.
+    val isLive = monitorStatus == MonitorStatus.LIVE
+    // Clear-protection is a XiaoXiang-only command; ANT has switches + balance.
+    val supportsControls = batteryType == BmsType.XIAOXIANG
+    val supportsBalance = supportsControls || batteryType == BmsType.ANT
 
     LaunchedEffect(batteryId) {
         // The saved MAC lets the first attempt connect straight away instead of rescanning.
@@ -161,9 +170,16 @@ fun DetailScreen(batteryId: UUID, store: BatteryStore, onBack: () -> Unit) {
 
     fun applySwitch(target: SwitchTarget) {
         val basic = monitorReading?.basic ?: return
+        // ANT moves one MOS at a time (cmd 0x51); XiaoXiang writes both bits.
+        if (batteryType == BmsType.ANT) {
+            val on = if (target == SwitchTarget.CHARGE) !basic.chargeOn else !basic.dischargeOn
+            perform { monitor.antSetMos(target == SwitchTarget.CHARGE, on) }
+            return
+        }
+        // Toggle the target switch and keep the other as it is now (iOS parity).
         val (charge, discharge) = when (target) {
-            SwitchTarget.CHARGE -> true to basic.dischargeOn
-            SwitchTarget.DISCHARGE -> basic.chargeOn to true
+            SwitchTarget.CHARGE -> (!basic.chargeOn) to basic.dischargeOn
+            SwitchTarget.DISCHARGE -> basic.chargeOn to (!basic.dischargeOn)
         }
         perform { monitor.setSwitches(charge, discharge) }
     }
@@ -197,14 +213,22 @@ fun DetailScreen(batteryId: UUID, store: BatteryStore, onBack: () -> Unit) {
                             DropdownMenuItem(
                                 text = { Text(stringResource(R.string.device_balance), color = Theme.colors.text) },
                                 leadingIcon = { Icon(Icons.Filled.Tune, contentDescription = null, tint = Theme.colors.text) },
-                                enabled = isLive,
-                                onClick = { menuOpen = false; perform { monitor.balance() } },
+                                enabled = isLive && supportsBalance,
+                                onClick = {
+                                    menuOpen = false
+                                    if (batteryType == BmsType.ANT) {
+                                        val balancing = monitorReading?.antRealtime?.balancing ?: false
+                                        perform { monitor.antSetBalance(!balancing) }
+                                    } else {
+                                        perform { monitor.balance() }
+                                    }
+                                },
                                 colors = MenuDefaults.itemColors(textColor = Theme.colors.text, disabledTextColor = Theme.colors.muted),
                             )
                             DropdownMenuItem(
                                 text = { Text(stringResource(R.string.device_clearprotection), color = Theme.colors.text) },
                                 leadingIcon = { Icon(Icons.Filled.Shield, contentDescription = null, tint = Theme.colors.text) },
-                                enabled = isLive,
+                                enabled = isLive && supportsControls,
                                 onClick = { menuOpen = false; perform { monitor.clearProtection() } },
                                 colors = MenuDefaults.itemColors(textColor = Theme.colors.text, disabledTextColor = Theme.colors.muted),
                             )
@@ -277,9 +301,14 @@ fun DetailScreen(batteryId: UUID, store: BatteryStore, onBack: () -> Unit) {
                         status = monitorStatus,
                         statusMessage = monitorMessage,
                         onInfo = { infoTopic = it },
+                        bmsType = batteryType,
                     )
                     DetailTab.CELLS -> CellsTab(reading = reading, onInfo = { infoTopic = it })
-                    DetailTab.STATUS -> StatusTab(reading = reading, onInfo = { infoTopic = it })
+                    DetailTab.STATUS -> StatusTab(
+                        reading = reading,
+                        onInfo = { infoTopic = it },
+                        bmsType = batteryType,
+                    )
                     DetailTab.CONTROL -> ControlTab(
                         batteryId = batteryId,
                         reading = reading,
@@ -287,6 +316,7 @@ fun DetailScreen(batteryId: UUID, store: BatteryStore, onBack: () -> Unit) {
                         busy = busy,
                         message = message,
                         currentName = currentName,
+                        bmsType = batteryType,
                         onSwitch = { target, on ->
                             if (on) {
                                 applySwitch(target)
@@ -295,6 +325,7 @@ fun DetailScreen(batteryId: UUID, store: BatteryStore, onBack: () -> Unit) {
                             }
                         },
                         onBalance = { perform { monitor.balance() } },
+                        onAntBalance = { on -> perform { monitor.antSetBalance(on) } },
                         onClear = { perform { monitor.clearProtection() } },
                         onRename = { renaming = true },
                         onRemove = { pendingRemove = true },
